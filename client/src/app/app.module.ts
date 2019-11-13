@@ -1,3 +1,5 @@
+import { FooterComponent } from './shared/components/footer/footer.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { RegisterComponent } from './components/register/register.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
@@ -16,7 +18,7 @@ import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
-	declarations: [ AppComponent, UsersComponent, SignInComponent, RegisterComponent, HomepageComponent ],
+	declarations: [ NavbarComponent, FooterComponent, AppComponent, UsersComponent, SignInComponent, RegisterComponent, HomepageComponent ],
 	imports: [
 		AppRoutingModule,
 		BrowserModule,
