@@ -1,7 +1,7 @@
+import { AuthenticationService } from './authentication.service';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';
-import { resolve } from 'url';
+import { AngularFireDatabase } from '@angular/fire/database';
 
 @Injectable({
 	providedIn: 'root'
@@ -15,6 +15,10 @@ export class BorrowerService {
 
 	public getAllLoans() {
 		return this.angularFireStore.collection('currentLoans').snapshotChanges();
+	}
+
+	public getLoanRequests() {
+		return this.angularFireStore.collection('loanRequests').snapshotChanges();
 	}
 
 	public deleteLoan(loanId: string): void {

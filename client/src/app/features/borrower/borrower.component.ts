@@ -1,7 +1,7 @@
 import { NotificatorService } from './../../core/services/notificator.service';
 import { AuthenticationService } from './../../core/services/authentication.service';
 import { BorrowerService } from './../../core/services/borrower.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from 'firebase';
 
@@ -12,7 +12,8 @@ import { User } from 'firebase';
 })
 export class BorrowerComponent implements OnInit {
 	public addLoanForm: FormGroup;
-	public currentLoans: Array<any>;
+	public currentLoans = [];
+	public loanRequests = [];
 	public toggleAddLoan = false;
 	public user: User;
 
@@ -38,6 +39,15 @@ export class BorrowerComponent implements OnInit {
 
 		this.authService.loggedUser$.subscribe((res) => {
 			this.user = res;
+		});
+
+		this.borrowerService.getLoanRequests().subscribe((data) => {
+			this.loanRequests = data
+				.filter((e) => {
+					const userData = e.payload.doc.get('$userId');
+					return userData === this.user.uid;
+				})
+				.map((filteredData) => filteredData.payload.doc.data());
 		});
 
 		this.addLoanForm = this.formBuilder.group({

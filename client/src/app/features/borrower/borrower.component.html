@@ -211,7 +211,8 @@
                                         <h4 class="card-title">Loan Requests(pending)</h4>
                                     </div>
                                     <!-- Here to make ngFor!!! -->
-                                    <div class="card-body" >
+                                    <div *ngIf="this.loanRequests">
+                                    <div class="card-body" *ngFor="let loanRequest of this.loanRequests">
                                         <ul class="list-unstyled" style="border: 2px solid gray; padding: 5px;">
                                             Request: 
                                             <li>
@@ -219,14 +220,15 @@
                                                             <div class="card-body">
                                                                 <div class="d-flex justify-content-between">
                                                                     <div>
-                                                                        <p>Date: </p>
-                                                                        <p>Amount: </p>
-                                                                        <p>Period: </p>
-                                                                        <p>Partial: </p>
+                                                                        <p>Date: {{this.loanRequest.date}}</p>
+                                                                        <p>Amount: {{this.loanRequest.amount}}</p>
+                                                                        <p>Period: {{this.loanRequest.period}}</p>
+                                                                        <!-- <p>Partial: </p> -->
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <button class="btn btn-warning col-6"><b>Edit</b></button>
+                                                            <button class="btn btn-danger col-6"><b>Delete</b></button>
                                                         </div>
                                             </li>
                                             <li>
@@ -250,9 +252,8 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <div class="card-footer">
-                                        <button class="btn btn-primary btn-block"><b>Get Started</b></button>
-                                    </div>
+                                </div>
+
                                 </div>
                             </div>
                         </div>
