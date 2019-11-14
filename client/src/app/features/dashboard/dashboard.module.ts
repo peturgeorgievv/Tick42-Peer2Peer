@@ -6,8 +6,21 @@ import { DashboardRouterModule } from './dashboard-routing.module';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
-	declarations: [ DashboardComponent ],
-	imports: [ CommonModule, SharedModule, DashboardRouterModule ],
-	exports: [ DashboardComponent, RouterModule ]
+  declarations: [DashboardComponent],
+  imports: [CommonModule, SharedModule, DashboardRouterModule],
+  exports: [DashboardComponent, RouterModule]
 })
-export class DashboardModule {}
+export class DashboardModule {
+  public mockUser = {
+
+    username: 'Bai Ivan',
+    firstName: 'Ivan',
+    secondName: 'Ivanov',
+
+    investments: 5000,
+    currBalance: 1000,
+    debt: 200
+
+  };
+
+}
