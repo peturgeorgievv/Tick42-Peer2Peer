@@ -1,1 +1,259 @@
-<p>borrower works!</p>
+<div class="row row-card-no-pd">
+        <div class="col-md-4 col-xs-12 col-sm-12">
+            <div class="card card-stats card-round">
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="icon-big text-center">
+                                <i class="flaticon-chart-pie text-warning"></i>
+                            </div>
+                        </div>
+                        <div class="col-7 col-stats">
+                            <div class="numbers">
+                                <p class="card-category">Current Balance</p>
+                                <h4 class="card-title">$ 500</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-12 col-sm-12">
+            <div class="card card-stats card-round">
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="icon-big text-center">
+                                <i class="flaticon-coins text-success"></i>
+                            </div>
+                        </div>
+                        <div class="col-7 col-stats">
+                            <div class="numbers">
+                                <p class="card-category">Total Debt</p>
+                                <h4 class="card-title">$ 1600</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-12 col-sm-12">
+            <div class="card card-stats card-round">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="icon-big text-center">
+                                <i class="flaticon-error text-danger"></i>
+                            </div>
+                        </div>
+                        <div class="col-7 col-stats">
+                            <div class="numbers">
+                                <p class="card-category">Total Investment</p>
+                                <h4 class="card-title">$ 160000</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+
+    <button class="btn btn-primary btn-block" (click)="this.toggleAddLoan = !this.toggleAddLoan"><b>ADD LOAN</b></button>
+    <div class="row justify-content-center align-items-center mb-5" *ngIf="this.toggleAddLoan">
+    <div class="col-md-4 pl-md-0 pr-md-0">
+            <div class="card card-pricing">
+                <div class="card-header">
+                    <h4 class="card-title">Add Loan</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li>
+                                <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                        <form
+                                                        [formGroup]="addLoanForm"
+                                                        (ngSubmit)="this.createLoan(this.addLoanForm.value)"
+                                                      >
+                                                      Please enter your Loan preferences:
+                                                      <div class="row">
+                                                            <div class="form-group text-left col">
+                                                              <label for="exampleCoverphoto"><br/>From which date you are available: </label>
+                                                              <input
+                                                                type="date"
+                                                                name="bday"
+                                                                max="3000-12-31"
+                                                                min="1000-01-01"
+                                                                class="form-control"
+                                                                id="ban-due"
+                                                                placeholder="Enter valid Date"
+                                                                formControlName="date"
+                                                              />
+                                                            </div>
+                                                          </div>
+                                                        <div class="row">
+                                                          <div class="form-group text-left col">
+                                                            <label for="exampleInputEmail1">Amount: </label>
+                                                            <input
+                                                              type="number"
+                                                              class="form-control"
+                                                              id="loan-amount"
+                                                              placeholder=" Enter your prefered amount"
+                                                              formControlName="amount"
+                                                            />
+                                                          </div>
+                                                        </div>
+                                                        <div class="row">
+                                                          <div class="form-group text-left col">
+                                                            <label for="exampleInputEmail1">Period: </label>
+                                                            <input
+                                                              type="number"
+                                                              class="form-control"
+                                                              id="loan-amount"
+                                                              placeholder=" Enter your prefered period of months"
+                                                              formControlName="period"
+                                                            />
+                                                          </div>
+                                                        </div>
+                                                        <button
+                                                          type="submit"
+                                                          class="btn btn-primary d-flex align-items-start font-weight-bolder"
+                                                          [disabled]="addLoanForm.invalid"
+                                                        >
+                                                          Submit Loan
+                                                        </button>
+                                                      </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div> 
+    <div class="row">
+
+					<div class="justify-content-center align-items-center mb-1 col-md-6 col-sm-12 col-xs-12">
+						<div class="col-12">
+							<div class="card card-pricing">
+								<div class="card-header">
+									<h4 class="card-title">Current Loans</h4>
+                                </div>
+                                <!-- Here to be ngFor!!! -->
+                                <div *ngIf="this.currentLoans">
+								<div class="card-body" *ngFor="let loan of this.currentLoans">
+                                    <ul class="list-unstyled" style="border: 2px solid gray; padding: 5px;">
+                                        Loan: 
+										<li>
+                                                <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="d-flex justify-content-between">
+                                                                <div>
+                                                                    <p>Investor: {{this.loan.investor}}</p>
+                                                                    <p>Next Due Date: {{this.loan.dueDate}}</p>
+                                                                    <p>Due Installment: {{this.loan.dueInstallment}}</p>
+                                                                    <p>Overdue Installments: {{this.loan.overdueInstallments}}</p>
+                                                                    <p>Payments Left: {{this.loan.paymentsLeft}}</p>
+                                                                    <p>Penalty: {{this.loan.penalty}}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+										</li>
+                                        <li>
+                                                <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="d-flex justify-content-between">
+                                                                <div>
+                                                                    <p><b>To pay:</b></p>
+                                                                </div>
+                                                                <h3 class="text-info fw-bold">$170</h3>
+                                                            </div>
+                                                            <div class="progress progress-sm">
+                                                                <div class="progress-bar bg-info w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-between mt-2">
+                                                                <p class="text-muted mb-0">75%</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                        </li>
+                                        <li>
+                                                <div class="card">
+                                                        <div class="card-body pb-0">
+                                                            <div class="h3 fw-bold float-right text-primary">{{this.loan.interestRate}}</div>
+                                                            <p> <b>Interest rate:</b> </p>
+                                                            <div class="pull-in sparkline-fix">
+                                                                <div id="lineChart"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                        </li>
+                                        <button class="btn btn-primary btn-block"><b>Pay</b></button>
+									</ul>
+								</div>
+								</div>
+							</div>
+                        </div>
+                        <br />
+                    </div>
+   
+    
+                    <div class="justify-content-center align-items-center mb-1 col-md-6 col-sm-12 col-xs-12">
+                            <div class="col-12">
+                                <div class="card card-pricing">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Loan Requests(pending)</h4>
+                                    </div>
+                                    <!-- Here to make ngFor!!! -->
+                                    <div class="card-body" >
+                                        <ul class="list-unstyled" style="border: 2px solid gray; padding: 5px;">
+                                            Request: 
+                                            <li>
+                                                    <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="d-flex justify-content-between">
+                                                                    <div>
+                                                                        <p>Date: </p>
+                                                                        <p>Amount: </p>
+                                                                        <p>Period: </p>
+                                                                        <p>Partial: </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <button class="btn btn-warning col-6"><b>Edit</b></button>
+                                                        </div>
+                                            </li>
+                                            <li>
+                                                <h5>Investor: </h5>
+                                                <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="d-flex justify-content-between">
+                                                                <div>
+                                                                    <p>Date: </p>
+                                                                    <p>Amount: </p>
+                                                                    <p>Period: </p>
+                                                                    <p>Penalty: </p>
+                                                                    <p>Installments: </p>
+                                                                    <p>Partial: </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <button class="btn btn-primary col-6"><b>Accept</b></button>
+                                                        <button class="btn btn-danger col-6"><b>Reject</b></button>
+                                                    </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button class="btn btn-primary btn-block"><b>Get Started</b></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    </div>   

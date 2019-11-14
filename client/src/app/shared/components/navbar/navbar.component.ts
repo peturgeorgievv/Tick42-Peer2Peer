@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs';
 import { AuthenticationService } from './../../../core/services/authentication.service';
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { User } from 'firebase';
@@ -9,7 +8,7 @@ import { User } from 'firebase';
 	styleUrls: [ './navbar.component.css' ]
 })
 export class NavbarComponent implements OnInit, OnChanges {
-	public user;
+	public user: User;
 
 	constructor(public authService: AuthenticationService) {}
 

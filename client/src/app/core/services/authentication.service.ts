@@ -3,7 +3,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { User } from 'firebase';
 import { Router } from '@angular/router';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
 @Injectable({
 	providedIn: 'root'
@@ -11,11 +10,7 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 export class AuthenticationService {
 	private readonly user$: BehaviorSubject<User> = new BehaviorSubject(null);
 
-	constructor(
-		private angularFireAuth: AngularFireAuth,
-		private angularFireStore: AngularFirestore,
-		private readonly router: Router
-	) {}
+	constructor(private angularFireAuth: AngularFireAuth, private readonly router: Router) {}
 
 	public get loggedUser$(): Observable<User> {
 		return this.user$.asObservable();
