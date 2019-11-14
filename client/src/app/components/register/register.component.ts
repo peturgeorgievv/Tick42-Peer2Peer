@@ -13,7 +13,7 @@ export class RegisterComponent implements OnInit {
 	constructor(public authenticationService: AuthenticationService) {}
 
 	signUp() {
-		this.authenticationService.SignUp(this.email, this.password);
+		this.authenticationService.signUp(this.email, this.password);
 		this.email = '';
 		this.password = '';
 	}
