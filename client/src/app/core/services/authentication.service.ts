@@ -10,7 +10,19 @@ import { Router } from '@angular/router';
 export class AuthenticationService {
 	private readonly user$: BehaviorSubject<User> = new BehaviorSubject(null);
 
-	constructor(private angularFireAuth: AngularFireAuth, private readonly router: Router) {}
+	constructor(private angularFireAuth: AngularFireAuth, private readonly router: Router) {
+		this.angularFireAuth.authState.subscribe((user) => {
+			if (user) {
+				this.user$.next(user);
+				localStorage.setItem('user', JSON.stringify(user));
+				JSON.parse(localStorage.getItem('user'));
+			} else {
+				this.user$.next(null);
+				localStorage.setItem('user', null);
+				JSON.parse(localStorage.getItem('user'));
+			}
+		});
+	}
 
 	public get loggedUser$(): Observable<User> {
 		return this.user$.asObservable();
@@ -42,6 +54,7 @@ export class AuthenticationService {
 	public signOut() {
 		this.angularFireAuth.auth.signOut().then((res) => {
 			this.user$.next(null);
+			localStorage.removeItem('user');
 			this.router.navigate([ '/' ]);
 		});
 	}
