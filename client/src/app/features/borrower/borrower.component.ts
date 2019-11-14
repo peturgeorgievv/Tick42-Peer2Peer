@@ -1,3 +1,4 @@
+import { NotificatorService } from './../../core/services/notificator.service';
 import { AuthenticationService } from './../../core/services/authentication.service';
 import { BorrowerService } from './../../core/services/borrower.service';
 import { Component, OnInit } from '@angular/core';
@@ -18,7 +19,8 @@ export class BorrowerComponent implements OnInit {
 	constructor(
 		private readonly borrowerService: BorrowerService,
 		public authService: AuthenticationService,
-		private readonly formBuilder: FormBuilder
+		private readonly formBuilder: FormBuilder,
+		private readonly notificatorService: NotificatorService
 	) {}
 
 	public ngOnInit() {
@@ -48,10 +50,18 @@ export class BorrowerComponent implements OnInit {
 	public createLoan(loanData): void {
 		console.log(loanData);
 		console.log(this.user.uid);
-		this.borrowerService.createLoanRequest({
-			$userId: this.user.uid,
-			...loanData
-		});
+		this.borrowerService
+			.createLoanRequest({
+				$userId: this.user.uid,
+				...loanData
+			})
+			.then(() => {
+				this.toggleAddLoan = !this.toggleAddLoan;
+				this.notificatorService.success('Your loan have been added to pending requests!');
+			})
+			.catch(() => {
+				this.notificatorService.error('Oops, something went wrong!');
+			});
 	}
 
 	public deleteLoan(id: string): void {
