@@ -10,17 +10,4 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, SharedModule, DashboardRouterModule],
   exports: [DashboardComponent, RouterModule]
 })
-export class DashboardModule {
-  public mockUser = {
-
-    username: 'Bai Ivan',
-    firstName: 'Ivan',
-    secondName: 'Ivanov',
-
-    investments: 5000,
-    currBalance: 1000,
-    debt: 200
-
-  };
-
-}
+export class DashboardModule { }

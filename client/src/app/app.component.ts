@@ -9,7 +9,4 @@ import { AuthenticationService } from './core/services/authentication.service';
 export class AppComponent {
 	constructor(public authenticationService: AuthenticationService) {}
 
-	signOut() {
-		this.authenticationService.SignOut();
-	}
 }
