@@ -9,19 +9,47 @@ import { AngularFireDatabase } from '@angular/fire/database';
 export class BorrowerService {
 	constructor(private angularFireStore: AngularFirestore, private db: AngularFireDatabase) {}
 
+	public getUserLoans(userId) {
+		return this.angularFireStore
+			.collection('loans', (ref) => ref.where('$userId', '==', userId).where('status', '==', 'current'))
+			.get();
+	}
+
+	public getUserRequests(userId) {
+		return this.angularFireStore
+			.collection('loans', (ref) => ref.where('$userId', '==', userId).where('status', '==', 'request'))
+			.get();
+	}
+
+	public getUserSuggestions(requestId) {
+		console.log(requestId);
+		return this.angularFireStore
+			.collection('loans', (ref) => ref.where('$requestId', '==', requestId).where('status', '==', 'suggestion'))
+			.get();
+	}
+
 	public createLoanRequest(loanData) {
-		return this.angularFireStore.collection('loanRequests').add(loanData);
+		return this.angularFireStore.collection('loans').add(loanData);
 	}
 
-	public getAllLoans() {
-		return this.angularFireStore.collection('currentLoans').snapshotChanges();
+	public acceptLoanRequest(loanData) {
+		return this.angularFireStore.collection('loans').add(loanData);
 	}
 
-	public getLoanRequests() {
-		return this.angularFireStore.collection('loanRequests').snapshotChanges();
+	public deleteLoanRequest(requestId) {
+		return this.angularFireStore
+			.collection('loans', (ref) => ref.where('$requestId', '==', requestId).where('status', '==', 'suggestion'))
+			.get()
+			.subscribe((snaphost) => {
+				snaphost.forEach((docs) => {
+					this.angularFireStore.collection('loans').doc(docs.id).delete();
+				});
+			});
 	}
 
-	public deleteLoan(loanId: string): void {
-		this.angularFireStore.doc('currentLoans/' + loanId).delete();
+	public deleteLoanSuggestion(requestId) {
+		return this.angularFireStore.collection('loans').doc(requestId).get().subscribe((data) => {
+			this.angularFireStore.collection('loans').doc(data.id).delete();
+		});
 	}
 }

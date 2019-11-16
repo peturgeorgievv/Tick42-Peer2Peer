@@ -8,20 +8,28 @@ import { Router } from '@angular/router';
 	providedIn: 'root'
 })
 export class AuthenticationService {
+	private readonly isLoggedInSubject$ = new BehaviorSubject<boolean>(null);
+
 	private readonly user$: BehaviorSubject<User> = new BehaviorSubject(null);
 
 	constructor(private angularFireAuth: AngularFireAuth, private readonly router: Router) {
 		this.angularFireAuth.authState.subscribe((user) => {
 			if (user) {
 				this.user$.next(user);
+				this.isLoggedInSubject$.next(true);
 				localStorage.setItem('user', JSON.stringify(user));
 				JSON.parse(localStorage.getItem('user'));
 			} else {
 				this.user$.next(null);
+				this.isLoggedInSubject$.next(null);
 				localStorage.setItem('user', null);
 				JSON.parse(localStorage.getItem('user'));
 			}
 		});
+	}
+
+	public get isLoggedIn$(): Observable<boolean> {
+		return this.isLoggedInSubject$.asObservable();
 	}
 
 	public get loggedUser$(): Observable<User> {
