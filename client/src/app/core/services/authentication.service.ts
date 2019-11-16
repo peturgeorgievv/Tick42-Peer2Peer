@@ -8,9 +8,9 @@ import { Router } from '@angular/router';
 	providedIn: 'root'
 })
 export class AuthenticationService {
-	private readonly isLoggedInSubject$ = new BehaviorSubject<boolean>(null);
+	private readonly isLoggedInSubject$ = new BehaviorSubject<boolean>(this.isUserLoggedIn());
 
-	private readonly user$: BehaviorSubject<User> = new BehaviorSubject(null);
+	private readonly user$: BehaviorSubject<User> = new BehaviorSubject(this.loggedUser());
 
 	constructor(private angularFireAuth: AngularFireAuth, private readonly router: Router) {
 		this.angularFireAuth.authState.subscribe((user) => {
@@ -26,6 +26,25 @@ export class AuthenticationService {
 				JSON.parse(localStorage.getItem('user'));
 			}
 		});
+	}
+
+	private isUserLoggedIn(): boolean {
+		const value = localStorage.getItem('user');
+		const res = value && value !== 'undefined' ? value : null;
+		return !!res;
+	}
+
+	private loggedUser(): User {
+		try {
+			const value = JSON.parse(localStorage.getItem('user'));
+			const res = value && value !== 'undefined' ? value : null;
+			return res;
+		} catch (error) {
+			// in case of storage tampering
+			this.isLoggedInSubject$.next(false);
+
+			return null;
+		}
 	}
 
 	public get isLoggedIn$(): Observable<boolean> {
