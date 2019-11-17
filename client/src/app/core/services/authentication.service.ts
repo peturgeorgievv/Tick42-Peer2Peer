@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { User } from 'firebase';
 import { Router } from '@angular/router';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
 	providedIn: 'root'
@@ -12,7 +13,11 @@ export class AuthenticationService {
 
 	private readonly user$: BehaviorSubject<User> = new BehaviorSubject(this.loggedUser());
 
-	constructor(private angularFireAuth: AngularFireAuth, private readonly router: Router) {
+	constructor(
+		private angularFireAuth: AngularFireAuth,
+		private angularFireStore: AngularFirestore,
+		private readonly router: Router
+	) {
 		this.angularFireAuth.authState.subscribe((user) => {
 			if (user) {
 				this.user$.next(user);
@@ -60,6 +65,9 @@ export class AuthenticationService {
 			.createUserWithEmailAndPassword(email, password)
 			.then((res) => {
 				console.log('Logged successfully', res);
+				this.angularFireStore
+					.collection('users')
+					.add({ $userId: res.user.uid, currentBalance: 0, totalDebt: 0, totalInvestment: 0 });
 			})
 			.catch((error) => {
 				console.log('Something is wrong:', error.message);

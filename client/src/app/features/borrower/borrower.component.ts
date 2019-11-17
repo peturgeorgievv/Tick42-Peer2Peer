@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from 'firebase';
 import { Subscription } from 'rxjs';
+import * as moment from 'moment';
 
 @Component({
 	selector: 'app-borrower',
@@ -53,10 +54,12 @@ export class BorrowerComponent implements OnInit {
 						console.log(docs.data());
 						console.log(docs.id);
 						this.loanSuggestions.push({
-							$requestId: docs.id,
+							// $requestId: docs.id,
 							...docs.data()
 						});
 					});
+					console.log(this.loanSuggestions);
+					console.log(this.loanRequests);
 				});
 			});
 		});
@@ -72,8 +75,8 @@ export class BorrowerComponent implements OnInit {
 		this.borrowerService
 			.acceptLoanRequest({
 				$userId: this.user.uid,
-				dueInstallment: new Date().toLocaleDateString(),
-				nextDueDate: new Date().toLocaleDateString(),
+				dueInstallment: moment(new Date()).add(1, 'M').format('YYYY-MM-DD'),
+				nextDueDate: moment(new Date()).add(1, 'M').format('YYYY-MM-DD'),
 				overdueInstallments: 0,
 				installmentLeft: suggestion.amount,
 				...suggestion,
