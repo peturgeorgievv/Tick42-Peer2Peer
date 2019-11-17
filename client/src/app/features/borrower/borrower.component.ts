@@ -34,28 +34,29 @@ export class BorrowerComponent implements OnInit {
 
 	public ngOnInit() {
 		this.borrowerService.getUserLoans(this.user.uid).subscribe((querySnapshot) => {
+			this.currentLoans = [];
 			querySnapshot.forEach((doc) => {
 				this.currentLoans.push({
-					id: doc.id,
-					...doc.data()
+					id: doc.payload.doc.id,
+					...doc.payload.doc.data()
 				});
 			});
 		});
 
 		this.borrowerService.getUserRequests(this.user.uid).subscribe((querySnapshot) => {
+			this.loanRequests = [];
+			this.loanSuggestions = [];
 			querySnapshot.forEach((doc) => {
 				this.loanRequests.push({
-					$requestId: doc.id,
-					...doc.data()
+					$requestId: doc.payload.doc.id,
+					...doc.payload.doc.data()
 				});
-				// Have to fix! Displaying all suggestions on all requests
-				this.borrowerService.getUserSuggestions(doc.id).subscribe((snaphost) => {
+				this.borrowerService.getUserSuggestions(doc.payload.doc.id).subscribe((snaphost) => {
 					snaphost.forEach((docs) => {
-						console.log(docs.data());
-						console.log(docs.id);
+						console.log(docs.payload.doc.data());
 						this.loanSuggestions.push({
 							// $requestId: docs.id,
-							...docs.data()
+							...doc.payload.doc.data()
 						});
 					});
 					console.log(this.loanSuggestions);
@@ -107,10 +108,6 @@ export class BorrowerComponent implements OnInit {
 			.then((ref) => {
 				console.log(ref.id);
 				this.borrowerService.addRequestIdToLoan(ref.id);
-				this.loanRequests.push({
-					$requestId: ref.id,
-					...loanData
-				});
 				this.notificatorService.success('Your loan have been added to pending requests!');
 			})
 			.catch(() => {
