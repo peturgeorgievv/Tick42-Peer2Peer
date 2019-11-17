@@ -1,10 +1,9 @@
 import { NotificatorService } from './../../core/services/notificator.service';
 import { AuthenticationService } from './../../core/services/authentication.service';
 import { BorrowerService } from './../../core/services/borrower.service';
-import { Component, OnInit, OnChanges, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from 'firebase';
-import { LoanRequestDTO } from 'src/app/common/models/loan-request.dto';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -35,7 +34,6 @@ export class BorrowerComponent implements OnInit {
 	public ngOnInit() {
 		this.borrowerService.getUserLoans(this.user.uid).subscribe((querySnapshot) => {
 			querySnapshot.forEach((doc) => {
-				console.log(doc.data());
 				this.currentLoans.push({
 					id: doc.id,
 					...doc.data()
@@ -97,16 +95,18 @@ export class BorrowerComponent implements OnInit {
 	}
 
 	public createLoanReq(loanData): void {
-		console.log(loanData);
 		this.borrowerService
 			.createLoanRequest({
 				$userId: this.user.uid,
 				status: 'request',
 				...loanData
 			})
-			.then(() => {
+			.then((ref) => {
+				console.log(ref.id);
 				this.toggleAddLoan = !this.toggleAddLoan;
+				this.borrowerService.addRequestIdToLoan(ref.id);
 				this.loanRequests.push({
+					$requestId: ref.id,
 					$userId: this.user.uid,
 					status: 'request',
 					...loanData

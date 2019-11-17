@@ -1,3 +1,4 @@
+<div *ngIf="this.user">
 <div class="row row-card-no-pd">
         <div class="col-md-4 col-xs-12 col-sm-12">
             <div class="card card-stats card-round">
@@ -220,9 +221,9 @@
                                                             <div class="card-body">
                                                                 <div class="d-flex justify-content-between">
                                                                     <div>
-                                                                        <p>Date: {{this.loanRequest.dueDate}}</p>
-                                                                        <p>Amount: {{this.loanRequest.amount}}</p>
-                                                                        <p>Period: {{this.loanRequest.period}}</p>
+                                                                        <p>Date: <b>{{this.loanRequest.dueDate}}</b></p>
+                                                                        <p>Amount: <b>{{this.loanRequest.amount}}</b></p>
+                                                                        <p>Period: <b>{{this.loanRequest.period}}</b></p>
                                                                         <!-- <p>Partial: </p> -->
                                                                     </div>
                                                                 </div>
@@ -264,3 +265,4 @@
                             </div>
                         </div>
     </div>   
+</div>

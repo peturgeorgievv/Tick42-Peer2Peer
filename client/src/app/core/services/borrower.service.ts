@@ -22,7 +22,6 @@ export class BorrowerService {
 	}
 
 	public getUserSuggestions(requestId) {
-		console.log(requestId);
 		return this.angularFireStore
 			.collection('loans', (ref) => ref.where('$requestId', '==', requestId).where('status', '==', 'suggestion'))
 			.get();
@@ -30,6 +29,10 @@ export class BorrowerService {
 
 	public createLoanRequest(loanData) {
 		return this.angularFireStore.collection('loans').add(loanData);
+	}
+
+	public addRequestIdToLoan(refId: string) {
+		return this.angularFireStore.collection('loans').doc(refId).set({ $requestId: refId }, { merge: true });
 	}
 
 	public acceptLoanRequest(loanData) {
