@@ -56,7 +56,7 @@ export class BorrowerComponent implements OnInit {
 						console.log(docs.payload.doc.data());
 						this.loanSuggestions.push({
 							// $requestId: docs.id,
-							...doc.payload.doc.data()
+							...docs.payload.doc.data()
 						});
 					});
 					console.log(this.loanSuggestions);
@@ -73,6 +73,7 @@ export class BorrowerComponent implements OnInit {
 	}
 
 	public acceptRequest(suggestion): void {
+		console.log(suggestion);
 		this.borrowerService
 			.acceptLoanRequest({
 				$userId: this.user.uid,
