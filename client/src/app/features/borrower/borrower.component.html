@@ -60,83 +60,8 @@
     </div>
     <br/>
 
-    <button class="btn btn-primary btn-block" (click)="this.toggleAddLoan = !this.toggleAddLoan"><b>ADD LOAN</b></button>
-    <div class="row justify-content-center align-items-center mb-5" *ngIf="this.toggleAddLoan">
-    <div class="col-md-4 pl-md-0 pr-md-0">
-            <div class="card card-pricing">
-                <div class="card-header">
-                    <h4 class="card-title">Add Loan</h4>
-                </div>
-                <div class="card-body">
-                    <ul class="list-unstyled">
-                        <li>
-                                <div class="card">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between">
-                                                <div>
-                                                        <form
-                                                        [formGroup]="addLoanForm"
-                                                        (ngSubmit)="this.createLoanReq(this.addLoanForm.value)"
-                                                      >
-                                                      Please enter your Loan preferences:
-                                                      <div class="row">
-                                                            <div class="form-group text-left col">
-                                                              <label for="exampleCoverphoto"><br/>From which date you are available: </label>
-                                                              <input
-                                                                type="date"
-                                                                name="bday"
-                                                                max="3000-12-31"
-                                                                min="1000-01-01"
-                                                                class="form-control"
-                                                                id="ban-due"
-                                                                placeholder="Enter valid Date"
-                                                                formControlName="dueDate"
-                                                              />
-                                                            </div>
-                                                          </div>
-                                                        <div class="row">
-                                                          <div class="form-group text-left col">
-                                                            <label for="exampleInputEmail1">Amount: </label>
-                                                            <input
-                                                              type="number"
-                                                              class="form-control"
-                                                              id="loan-amount"
-                                                              placeholder=" Enter your prefered amount"
-                                                              formControlName="amount"
-                                                            />
-                                                          </div>
-                                                        </div>
-                                                        <div class="row">
-                                                          <div class="form-group text-left col">
-                                                            <label for="exampleInputEmail1">Period: </label>
-                                                            <input
-                                                              type="number"
-                                                              class="form-control"
-                                                              id="loan-amount"
-                                                              placeholder=" Enter your prefered period of months"
-                                                              formControlName="period"
-                                                            />
-                                                          </div>
-                                                        </div>
-                                                        <button
-                                                          type="submit"
-                                                          class="btn btn-primary d-flex align-items-start font-weight-bolder"
-                                                          [disabled]="addLoanForm.invalid"
-                                                        >
-                                                          Submit Loan
-                                                        </button>
-                                                      </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                        </li>
-                    </ul>
-                </div>
-
-            </div>
-        </div>
-    </div> 
+    <button type="button" class="btn btn-primary btn-block col-12" data-toggle="modal" data-target="#createLoanModal"><b>Create Loan Request</b></button>
+    <app-create-loan-modal (createLoanRequest)="this.createLoanReq($event)"></app-create-loan-modal>
     <div class="row">
 
 					<div class="justify-content-center align-items-center mb-1 col-md-6 col-sm-12 col-xs-12">
