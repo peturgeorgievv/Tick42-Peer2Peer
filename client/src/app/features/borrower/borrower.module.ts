@@ -4,9 +4,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BorrowerRouterModule } from './borrower-routing.module';
 import { CreateLoanModalComponent } from './create-loan-modal/create-loan-modal.component';
+import { AddPaymentModalComponent } from './add-payment-modal/add-payment-modal.component';
 
 @NgModule({
-	declarations: [ BorrowerComponent, CreateLoanModalComponent ],
+	declarations: [ BorrowerComponent, CreateLoanModalComponent, AddPaymentModalComponent ],
 	imports: [ CommonModule, SharedModule, BorrowerRouterModule ],
 	exports: [ BorrowerComponent ]
 })

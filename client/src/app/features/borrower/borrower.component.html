@@ -122,7 +122,8 @@
                                                         </div>
                                                     </div>
                                         </li>
-                                        <button class="btn btn-primary btn-block"><b>Pay</b></button>
+                                        <button type="button" class="btn btn-primary btn-block col-12" data-toggle="modal" data-target="#createPayment"><b>Pay</b></button>
+                                        <app-add-payment-modal (createPayment)="this.createLoanReq($event)"></app-add-payment-modal>
 									</ul>
 								</div>
 								</div>
@@ -148,7 +149,6 @@
                                                             <div class="card-body">
                                                                 <div class="d-flex justify-content-between">
                                                                     <div>
-                                                                        <p>Date: <b>{{this.loanRequest.dueDate}}</b></p>
                                                                         <p>Amount: <b>{{this.loanRequest.amount}}</b></p>
                                                                         <p>Period: <b>{{this.loanRequest.period}}</b></p>
                                                                         <!-- <p>Partial: </p> -->

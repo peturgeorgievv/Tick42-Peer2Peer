@@ -1,4 +1,4 @@
-<div class="modal fade" id="createLoanModal" tabindex="-1" role="dialog" aria-labelledby="#createLoanModal" aria-hidden="true">
+<div class="modal fade" id="createPayment" tabindex="-1" role="dialog" aria-labelledby="#createPayment" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -11,20 +11,10 @@
         <div class="modal-body">
           <form 
           class="container"
-          [formGroup]="this.createLoan"
-          (ngSubmit)="this.emitLoanData(this.createLoan.value)">
+          [formGroup]="this.addPayment"
+          (ngSubmit)="this.emitLoanData(this.addPayment.value)">
           <div class="row">
-            <div class="form-group col-6">
-                <label for="exampleInputEmail1">Period: </label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="loan-amount"
-                  placeholder=" Enter your prefered period of months"
-                  formControlName="period"
-                />
-            </div>
-            <div class="form-group col-6">
+            <div class="form-group col-12">
                 <label for="exampleInputEmail1">Amount: </label>
                 <input
                   type="number"
@@ -34,10 +24,20 @@
                   formControlName="amount"
                 />
             </div>
+            <div class="form-group col-12">
+                <label for="exampleInputEmail1">Next Due Date: </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="loan-amount"
+                  placeholder=" Enter your prefered period of months"
+                  formControlName="nextDueDate"
+                />
+            </div>
         </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" [disabled]="createLoan.invalid" class="btn btn-primary">Submit Loan</button>
+                <button type="submit" [disabled]="addPayment.invalid" class="btn btn-primary">Submit Loan</button>
             </div>
         </form>
     </div>

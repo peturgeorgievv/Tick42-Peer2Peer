@@ -15,7 +15,6 @@ export class CreateLoanModalComponent implements OnInit {
 
 	ngOnInit() {
 		this.createLoan = this.formBuilder.group({
-			dueDate: [ '', [ Validators.required ] ],
 			period: [ '', [ Validators.required ] ],
 			amount: [ '', [ Validators.required ] ]
 		});

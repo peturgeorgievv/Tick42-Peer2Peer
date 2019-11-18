@@ -55,7 +55,6 @@ export class BorrowerComponent implements OnInit {
 					snaphost.forEach((docs) => {
 						console.log(docs.payload.doc.data());
 						this.loanSuggestions.push({
-							// $requestId: docs.id,
 							...docs.payload.doc.data()
 						});
 					});
