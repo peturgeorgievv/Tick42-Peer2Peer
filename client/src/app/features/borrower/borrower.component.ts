@@ -17,7 +17,6 @@ export class BorrowerComponent implements OnInit {
 	public currentLoans = [];
 	public loanRequests = [];
 	public loanSuggestions = [];
-	public toggleAddLoan = false;
 	public user: User;
 	private userSubscription: Subscription;
 
@@ -45,21 +44,19 @@ export class BorrowerComponent implements OnInit {
 
 		this.borrowerService.getUserRequests(this.user.uid).subscribe((querySnapshot) => {
 			this.loanRequests = [];
-			this.loanSuggestions = [];
+
 			querySnapshot.forEach((doc) => {
 				this.loanRequests.push({
-					$requestId: doc.payload.doc.id,
 					...doc.payload.doc.data()
 				});
-				this.borrowerService.getUserSuggestions(doc.payload.doc.id).subscribe((snaphost) => {
-					snaphost.forEach((docs) => {
-						console.log(docs.payload.doc.data());
-						this.loanSuggestions.push({
-							...docs.payload.doc.data()
-						});
-					});
-					console.log(this.loanSuggestions);
-					console.log(this.loanRequests);
+			});
+		});
+		this.borrowerService.getUserSuggestions().subscribe((snaphost) => {
+			this.loanSuggestions = [];
+			snaphost.forEach((docs) => {
+				console.log(docs.payload.doc.data());
+				this.loanSuggestions.push({
+					...docs.payload.doc.data()
 				});
 			});
 		});
@@ -71,16 +68,38 @@ export class BorrowerComponent implements OnInit {
 		});
 	}
 
+	public calculateInstallment(amount, interestRate, period) {
+		return (amount * interestRate / 100 / period + amount / period).toFixed(2);
+	}
+
+	public calculateNextDueDate(dueDate) {
+		const currMonth = moment().month();
+		const dueDateMonth = moment(dueDate).month();
+		const nextDueDate = moment(dueDate).add(currMonth - dueDateMonth + 1, 'M').format('YYYY-MM-DD');
+		return nextDueDate;
+	}
+
+	public calculateOverdue(dueDate, amount, penalty, interestRate, period) {
+		const currDueDate = this.calculateNextDueDate(dueDate);
+		const currDateDay = moment().date();
+		const currDueDateDay = moment(currDueDate).date();
+
+		const overdue = ((currDateDay - currDueDateDay) *
+			penalty *
+			Number(this.calculateInstallment(amount, interestRate, period))).toFixed(2);
+		return overdue;
+
+		// const currDateMonth = moment().month();
+		// const currDueDateMonth = moment(currDueDate).month();
+	}
+
 	public acceptRequest(suggestion): void {
 		console.log(suggestion);
 		this.borrowerService
 			.acceptLoanRequest({
-				$userId: this.user.uid,
-				dueInstallment: moment(new Date()).add(1, 'M').format('YYYY-MM-DD'),
-				nextDueDate: moment(new Date()).add(1, 'M').format('YYYY-MM-DD'),
-				overdueInstallments: 0,
-				installmentLeft: suggestion.amount,
+				date: moment().format('YYYY-MM-DD'),
 				...suggestion,
+				$userId: this.user.uid,
 				status: 'current'
 			})
 			.then(() => {
@@ -89,13 +108,13 @@ export class BorrowerComponent implements OnInit {
 			});
 	}
 
-	public rejectSuggestion(suggestion): void {
-		this.borrowerService.deleteLoanSuggestion(suggestion.$requestId);
+	public rejectSuggestion(suggestionId): void {
+		this.borrowerService.deleteLoanSuggestion(suggestionId);
 	}
 
 	public deleteRequest(requestId): void {
-		this.borrowerService.deleteLoanRequest(requestId);
 		this.borrowerService.deleteLoanSuggestion(requestId);
+		this.borrowerService.deleteLoanRequest(requestId);
 	}
 
 	public createLoanReq(loanData): void {

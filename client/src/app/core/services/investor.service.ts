@@ -16,4 +16,8 @@ export class InvestorService {
 	public createLoanSuggestion(loanData) {
 		return this.angularFireStore.collection('loans').add(loanData);
 	}
+
+	public addSuggestionId(refId) {
+		return this.angularFireStore.collection('loans').doc(refId).set({ $suggestionId: refId }, { merge: true });
+	}
 }

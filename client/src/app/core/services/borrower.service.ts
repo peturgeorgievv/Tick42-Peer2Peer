@@ -21,9 +21,9 @@ export class BorrowerService {
 			.snapshotChanges();
 	}
 
-	public getUserSuggestions(requestId) {
+	public getUserSuggestions() {
 		return this.angularFireStore
-			.collection('loans', (ref) => ref.where('$requestId', '==', requestId).where('status', '==', 'suggestion'))
+			.collection('loans', (ref) => ref.where('status', '==', 'suggestion'))
 			.snapshotChanges();
 	}
 
@@ -40,19 +40,37 @@ export class BorrowerService {
 	}
 
 	public deleteLoanRequest(requestId) {
+		console.log(requestId);
 		return this.angularFireStore
-			.collection('loans', (ref) => ref.where('$requestId', '==', requestId).where('status', '==', 'suggestion'))
+			.collection('loans', (ref) => ref.where('$requestId', '==', requestId).where('status', '==', 'request'))
 			.snapshotChanges()
 			.subscribe((snaphost) => {
 				snaphost.forEach((docs) => {
 					this.angularFireStore.collection('loans').doc(docs.payload.doc.id).delete();
 				});
+				this.angularFireStore
+					.collection('loans', (ref) =>
+						ref.where('status', '==', 'suggestion').where('$requestId', '==', requestId)
+					)
+					.snapshotChanges()
+					.subscribe((snaphost) => {
+						snaphost.forEach((docs) => {
+							this.angularFireStore.collection('loans').doc(docs.payload.doc.id).delete();
+						});
+					});
 			});
 	}
 
-	public deleteLoanSuggestion(requestId) {
-		return this.angularFireStore.collection('loans').doc(requestId).snapshotChanges().subscribe((data) => {
-			this.angularFireStore.collection('loans').doc(data.payload.id).delete();
-		});
+	public deleteLoanSuggestion(suggestionId) {
+		return this.angularFireStore
+			.collection('loans', (ref) =>
+				ref.where('status', '==', 'suggestion').where('$suggestionId', '==', suggestionId)
+			)
+			.snapshotChanges()
+			.subscribe((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					this.angularFireStore.collection('loans').doc(doc.payload.doc.id).delete();
+				});
+			});
 	}
 }

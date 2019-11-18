@@ -15,8 +15,8 @@ export class InvestorComponent implements OnInit {
 	public loanRequests = [];
 	public user: User;
 	private userSubscription: Subscription;
-	public loanRequestId;
-	public loanUserId;
+	public loanReqId;
+	public loanUser;
 
 	constructor(
 		private readonly investorService: InvestorService,
@@ -31,10 +31,7 @@ export class InvestorComponent implements OnInit {
 	ngOnInit() {
 		this.investorService.getAllLoanRequests().subscribe((snaphost) => {
 			snaphost.forEach((docs) => {
-				console.log(docs.payload.doc.data());
-				console.log(docs.payload.doc.id);
 				this.loanRequests.push({
-					$requestId: docs.payload.doc.id,
 					...docs.payload.doc.data()
 				});
 				console.log(this.loanRequests);
@@ -42,20 +39,25 @@ export class InvestorComponent implements OnInit {
 		});
 	}
 
-	public createSuggestion(suggsetion, userId, reqId) {
-		console.log(suggsetion, userId, reqId);
+	public loanRequestId(reqId: string) {
+		return (this.loanReqId = reqId);
+	}
+	public loanUserId(userId: string) {
+		return (this.loanUser = userId);
+	}
+
+	public createSuggestion(suggsetion): void {
 		this.investorService
 			.createLoanSuggestion({
-				$requestId: reqId,
+				$requestId: this.loanReqId,
 				$investorId: this.user.uid,
-				$userId: userId,
+				$userId: this.loanUser,
 				status: 'suggestion',
 				...suggsetion
 			})
-			.then(() => console.log('added suggestion'))
+			.then((ref) => this.investorService.addSuggestionId(ref.id))
 			.catch(() => {
 				this.notificatorService.error('Oops, something went wrong!');
 			});
-		console.log(suggsetion, userId, reqId);
 	}
 }
