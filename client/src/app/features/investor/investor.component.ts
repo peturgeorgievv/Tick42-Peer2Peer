@@ -29,11 +29,11 @@ export class InvestorComponent implements OnInit {
 	ngOnInit() {
 		this.investorService.getAllLoanRequests().subscribe((snaphost) => {
 			snaphost.forEach((docs) => {
-				console.log(docs.data());
-				console.log(docs.id);
+				console.log(docs.payload.doc.data());
+				console.log(docs.payload.doc.id);
 				this.loanRequests.push({
-					$requestId: docs.id,
-					...docs.data()
+					$requestId: docs.payload.doc.id,
+					...docs.payload.doc.data()
 				});
 				console.log(this.loanRequests);
 			});
@@ -41,7 +41,6 @@ export class InvestorComponent implements OnInit {
 	}
 
 	public createSuggestion(suggsetion, userId, reqId) {
-		// this.loanRequests.find((data) => data.$requestId ===)
 		this.investorService
 			.createLoanSuggestion({
 				$requestId: reqId,

@@ -15,19 +15,9 @@
           (ngSubmit)="this.emitSuggsetion(this.addLoanSuggestion.value)">
           <div class="row">
             <div class="form-group col-6">
-              <label for="recipient-name" class="col-form-label">Installments Per Month:</label>
-              <input type="number" class="form-control" id="recipient-name" formControlName="installment">
-            </div>
-            <div class="form-group col-6">
-              <label for="recipient-name" class="col-form-label">Interest Rate Per Month:</label>
+              <label for="recipient-name" class="col-form-label">Interest Rate</label>
               <input type="number" class="form-control" id="recipient-name" formControlName="interestRate">
             </div>
-        </div>
-        <div class="row">
-        <div class="form-group col-6">
-          <label for="recipient-name" class="col-form-label">Payments Due Date:</label>
-          <input type="text" class="form-control" id="recipient-name" formControlName="dueDate">
-        </div>
             <div class="form-group col-6">
               <label for="recipient-name" class="col-form-label">Penalty Per Day:</label>
               <input type="number" class="form-control" id="recipient-name" formControlName="penalty">
@@ -45,7 +35,7 @@
         </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Send message</button>
+                <button type="submit" class="btn btn-primary">Send Suggestion</button>
             </div>
         </form>
     </div>

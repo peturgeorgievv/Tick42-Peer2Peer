@@ -15,10 +15,8 @@ export class ProposeModalComponent implements OnInit {
 
 	ngOnInit() {
 		this.addLoanSuggestion = this.formBuilder.group({
-			installment: [ '', [ Validators.required ] ],
 			interestRate: [ '', [ Validators.required ] ],
 			penalty: [ '', [ Validators.required ] ],
-			dueDate: [ '', [ Validators.required ] ],
 			period: [ '', [ Validators.required ] ],
 			amount: [ '', [ Validators.required ] ]
 		});
