@@ -1,3 +1,4 @@
+import { DashboardService } from './../../core/services/dashboard.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -8,6 +9,10 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
 
+  userData;
+
+  constructor(private readonly dashboardService: DashboardService) { }
+
   public mockUser = {
     username: 'The Nigerian Prince',
     investments: 5000,
@@ -16,6 +21,23 @@ export class DashboardComponent implements OnInit {
   };
 
   ngOnInit() {
+
   }
+
+  createDeposit(data) {
+    console.log(data.amount);
+
+    this.dashboardService.getUser(userId).subscribe((querySnapshot) => {
+      querySnapshot.forEach(doc => {
+        this.userData = doc.payload.doc.data();
+        console.log(this.userData);
+
+      });
+
+      // this.dashboardService
+    });
+  }
+
+
 
 }

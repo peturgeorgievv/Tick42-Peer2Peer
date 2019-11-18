@@ -15,9 +15,10 @@
     </div>
     <ul type="none">
       <li>
-        <button type="button" class="btn btn-outline-success waves-effect">
+        <button type="button" class="btn btn-outline-success waves-effect" data-toggle="modal" data-target="#createDepositModal">
           Deposit
         </button>
+        <app-create-deposit (createDepositRequest)="this.createDeposit($event)"></app-create-deposit>
       </li>
       <li>
         <button type="button" class="btn btn-outline-success waves-effect">
