@@ -132,7 +132,7 @@
             </div>
             <!-- Here to make ngFor!!! -->
             <!-- <div *ngIf="this.loanRequests"> -->
-            <div class="card-body" *ngFor="let loanRequest of this.loanRequests">
+            <div class="card-body" *ngFor="let loanRequest of this.loanRequests; let i = index">
                 <ul class="list-unstyled" style="border: 2px solid gray; padding: 5px;">
                     Request: 
                     <li>
@@ -143,11 +143,12 @@
                                                 <p>Name: <b>{{this.loanRequest.$userId}}</b></p>
                                                 <p>Total Amount: <b>{{this.loanRequest.amount}}</b></p>
                                                 <p>Target Period: <b>{{this.loanRequest.period}}</b></p>
+                                                <p>Target Period: <b>{{this.loanRequest.$requestId}}</b></p>
                                                 <!-- <p>Partial: </p> -->
+                                                <button type="button" (click)="this.loanRequestId = this.loanRequest.$requestId && this.loanUserId = this.loanRequest.$userId" class="btn btn-warning col-6" data-toggle="modal" data-target="#exampleModal"><b>Propose</b></button>
+                                                <app-propose-modal (createSuggestion)="this.createSuggestion($event, this.loanUserId, this.loanRequestId)"></app-propose-modal>
                                             </div>
                                         </div>
-                                        <button type="button" class="btn btn-warning col-6" data-toggle="modal" data-target="#exampleModal"><b>Propose</b></button>
-                                        <app-propose-modal (createSuggestion)="this.createSuggestion($event, this.loanRequest.$userId, this.loanRequest.$requestId)"></app-propose-modal>
                                         <!-- <button class="btn btn-danger col-6" (click)="this.deleteRequest(this.loanRequest.$requestId)"><b>Delete</b></button> -->
                                     </div>
                                 </div>

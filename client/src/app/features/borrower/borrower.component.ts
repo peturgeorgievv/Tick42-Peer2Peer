@@ -106,7 +106,6 @@ export class BorrowerComponent implements OnInit {
 				...loanData
 			})
 			.then((ref) => {
-				console.log(ref.id);
 				this.borrowerService.addRequestIdToLoan(ref.id);
 				this.notificatorService.success('Your loan have been added to pending requests!');
 			})

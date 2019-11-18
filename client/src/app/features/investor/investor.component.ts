@@ -1,7 +1,7 @@
 import { NotificatorService } from './../../core/services/notificator.service';
 import { AuthenticationService } from './../../core/services/authentication.service';
 import { InvestorService } from './../../core/services/investor.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User } from 'firebase';
 
@@ -15,6 +15,8 @@ export class InvestorComponent implements OnInit {
 	public loanRequests = [];
 	public user: User;
 	private userSubscription: Subscription;
+	public loanRequestId;
+	public loanUserId;
 
 	constructor(
 		private readonly investorService: InvestorService,
@@ -41,6 +43,7 @@ export class InvestorComponent implements OnInit {
 	}
 
 	public createSuggestion(suggsetion, userId, reqId) {
+		console.log(suggsetion, userId, reqId);
 		this.investorService
 			.createLoanSuggestion({
 				$requestId: reqId,

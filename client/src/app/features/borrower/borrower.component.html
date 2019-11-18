@@ -149,8 +149,8 @@
                                                             <div class="card-body">
                                                                 <div class="d-flex justify-content-between">
                                                                     <div>
-                                                                        <p>Amount: <b>{{this.loanRequest.amount}}</b></p>
-                                                                        <p>Period: <b>{{this.loanRequest.period}}</b></p>
+                                                                        <p>Amount: <b>{{this.loanRequest.amount}} $</b></p>
+                                                                        <p>Period: <b>{{this.loanRequest.period}} Months</b></p>
                                                                         <!-- <p>Partial: </p> -->
                                                                     </div>
                                                                 </div>
@@ -168,11 +168,11 @@
                                                         <div class="card-body">
                                                             <div class="d-flex justify-content-between">
                                                                 <div>
-                                                                    <p>Date: {{this.suggestion.dueDate}}</p>
-                                                                    <p>Amount: {{this.suggestion.amount}}</p>
-                                                                    <p>Period: {{this.suggestion.period}}</p>
-                                                                    <p>Penalty: {{this.suggestion.penalty}}</p>
-                                                                    <p>Installments: {{this.suggestion.installment}}</p>
+                                                                    <p>Amount: {{this.suggestion.amount}} $</p>
+                                                                    <p>Period: {{this.suggestion.period}} Months</p>
+                                                                    <p>Installments: {{(((this.suggestion.amount * this.suggestion.interestRate / 100) / this.suggestion.period) + (this.suggestion.amount / this.suggestion.period)).toFixed(2) }} $</p>
+                                                                    <p>Interest Rate: {{this.suggestion.interestRate}} %</p>
+                                                                    <p>Penalty Rate Per Day: {{this.suggestion.penalty}} %</p>
                                                                     <!-- <p>Partial: {{this.suggestion.partial}}</p> -->
                                                                 </div>
                                                             </div>
