@@ -1,0 +1,61 @@
+<div class="modal fade" id="createLoanModal" tabindex="-1" role="dialog" aria-labelledby="#createLoanModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Please enter your Loan preferences:</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+  
+        <div class="modal-body">
+          <form 
+          class="container"
+          [formGroup]="this.createLoan"
+          (ngSubmit)="this.emitLoanData(this.createLoan.value)">
+          <div class="row">
+            <div class="form-group col-6">
+                <label for="exampleInputEmail1">Period: </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="loan-amount"
+                  placeholder=" Enter your prefered period of months"
+                  formControlName="period"
+                />
+            </div>
+            <div class="form-group col-6">
+                <label for="exampleInputEmail1">Amount: </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="loan-amount"
+                  placeholder=" Enter your prefered amount"
+                  formControlName="amount"
+                />
+            </div>
+        </div>
+        <div class="row">
+        <div class="form-group col-6">
+            <label for="exampleCoverphoto"><br/>From when to start: </label>
+            <input
+              type="date"
+              name="bday"
+              max="3000-12-31"
+              min="1000-01-01"
+              class="form-control"
+              id="ban-due"
+              placeholder="Enter valid Date"
+              formControlName="dueDate"
+            />
+        </div>
+        </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" [disabled]="createLoan.invalid" class="btn btn-primary">Submit Loan</button>
+            </div>
+        </form>
+    </div>
+      </div>
+    </div>
+  </div>

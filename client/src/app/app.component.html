@@ -1,11 +1,16 @@
 <div>
 
     <div>
-        <app-navbar></app-navbar>
+        <app-navbar
+            [loggedIn]="loggedIn"
+            [user]="user"
+        >
+        </app-navbar>
     </div>
 
 <div>
 <router-outlet></router-outlet>
+<ngx-spinner></ngx-spinner>
 </div>
 
 </div>

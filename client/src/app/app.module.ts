@@ -1,3 +1,4 @@
+import { CoreModule } from './core/core.module';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
@@ -17,19 +18,44 @@ import { UsersComponent } from './features/users/users.component';
 import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { GoogleComponent } from './components/sign-in/google/google.component';
+import { SpinnerIntercerptorService } from './interceptors/spinner-interceptor.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 @NgModule({
-	declarations: [ NavbarComponent, FooterComponent, AppComponent, UsersComponent, SignInComponent, RegisterComponent, HomepageComponent, GoogleComponent ],
+	declarations: [
+		NavbarComponent,
+		FooterComponent,
+		AppComponent,
+		UsersComponent,
+		SignInComponent,
+		RegisterComponent,
+		HomepageComponent,
+		GoogleComponent
+	],
 	imports: [
 		AppRoutingModule,
 		BrowserModule,
+		BrowserAnimationsModule,
+		AngularFontAwesomeModule,
 		AngularFireModule.initializeApp(environment.firebaseConfig),
 		AngularFireAuthModule,
 		AngularFireDatabaseModule,
 		AngularFirestoreModule,
-		SharedModule
+		SharedModule,
+		CoreModule,
+		NgxSpinnerModule
 	],
-	providers: [ AuthenticationService ],
+	providers: [
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: SpinnerIntercerptorService,
+			multi: true
+		},
+		AuthenticationService,
+	],
 	bootstrap: [ AppComponent ]
 })
 export class AppModule {}

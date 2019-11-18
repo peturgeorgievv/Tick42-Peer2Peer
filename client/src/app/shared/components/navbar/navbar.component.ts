@@ -1,6 +1,5 @@
-import { Observable } from 'rxjs';
 import { AuthenticationService } from './../../../core/services/authentication.service';
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { User } from 'firebase';
 
 @Component({
@@ -9,21 +8,14 @@ import { User } from 'firebase';
 	styleUrls: [ './navbar.component.css' ]
 })
 export class NavbarComponent implements OnInit, OnChanges {
-	public user;
+	@Input() loggedIn: boolean;
+	@Input() user: User;
 
 	constructor(public authService: AuthenticationService) {}
 
-	ngOnInit() {
-		this.authService.loggedUser$.subscribe((res) => {
-			this.user = res;
-		});
-	}
+	ngOnInit() {}
 
-	ngOnChanges() {
-		this.authService.loggedUser$.subscribe((res) => {
-			this.user = res;
-		});
-	}
+	ngOnChanges() {}
 
 	public signOut(): void {
 		this.authService.signOut();
