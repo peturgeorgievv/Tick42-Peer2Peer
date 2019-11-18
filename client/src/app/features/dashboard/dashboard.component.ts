@@ -24,19 +24,20 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  createDeposit(data) {
-    console.log(data.amount);
+  // createDeposit(data) {
+  //   console.log(data.amount);
 
-    this.dashboardService.getUser(userId).subscribe((querySnapshot) => {
-      querySnapshot.forEach(doc => {
-        this.userData = doc.payload.doc.data();
-        console.log(this.userData);
+  //   this.dashboardService.getUser(userId).subscribe((querySnapshot) => {
+  //     querySnapshot.forEach(doc => {
+  //       this.userData = doc.payload.doc.data();
+  //       console.log(this.userData);
 
-      });
+  //     });
 
-      // this.dashboardService
-    });
-  }
+  //     // this.dashboardService
+  //   });
+  // }
+}
 
 
 
