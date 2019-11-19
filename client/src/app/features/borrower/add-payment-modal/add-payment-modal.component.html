@@ -11,33 +11,30 @@
         <div class="modal-body">
           <form 
           class="container"
-          [formGroup]="this.addPayment"
-          (ngSubmit)="this.emitLoanData(this.addPayment.value)">
+          (submit)="this.emitLoanData()"
+         >
           <div class="row">
-            <div class="form-group col-12">
+            <div class="form-group col-6">
                 <label for="exampleInputEmail1">Amount: </label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="loan-amount"
-                  placeholder=" Enter your prefered amount"
-                  formControlName="amount"
-                />
+                <div> <b>{{this.calcInstallment(this.loanFullData.amount, this.loanFullData.interestRate, this.loanFullData.period)}} $</b></div>
+            </div>
+            <div class="form-group col-6">
+                <label for="exampleInputEmail1">Overdue: </label>
+                <div> <b>{{this.calcOverdue(this.loanFullData.date, this.loanFullData.amount, this.loanFullData.penalty, this.loanFullData.interestRate, this.loanFullData.period)}}</b></div>
             </div>
             <div class="form-group col-12">
-                <label for="exampleInputEmail1">Next Due Date: </label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="loan-amount"
-                  placeholder=" Enter your prefered period of months"
-                  formControlName="nextDueDate"
-                />
+                <label for="exampleInputEmail1">Total: </label>
+<div> <b>{{this.calcInstallment(this.loanFullData.amount, this.loanFullData.interestRate, this.loanFullData.period) +
+   this.calcOverdue(this.loanFullData.date, this.loanFullData.amount, this.loanFullData.penalty, this.loanFullData.interestRate, this.loanFullData.period)}}</b></div>
             </div>
+            <div class="form-group col-12">
+              <label for="exampleInputEmail1">Next Due Date: </label>
+              <div> <b>{{this.calcNextDueDate(this.loanFullData.date)}}</b></div>
+          </div>
         </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" [disabled]="addPayment.invalid" class="btn btn-primary">Submit Loan</button>
+                <button type="submit" id="submitPayment" class="btn btn-primary">Submit Payment</button>
             </div>
         </form>
     </div>

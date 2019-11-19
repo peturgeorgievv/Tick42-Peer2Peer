@@ -35,8 +35,17 @@ export class BorrowerService {
 		return this.angularFireStore.collection('loans').doc(refId).set({ $requestId: refId }, { merge: true });
 	}
 
+	public createPayment(data) {
+		return this.angularFireStore.collection('loansHistory').add(data);
+	}
+
 	public acceptLoanRequest(loanData) {
 		return this.angularFireStore.collection('loans').add(loanData);
+	}
+
+	public getAllPayments(reqId, userId) {
+		return this.angularFireStore.collection('loansHistory', ref => ref.where('$requestId', '==', reqId).where('$userId', '==', userId))
+			.snapshotChanges();
 	}
 
 	public deleteLoanRequest(requestId) {
@@ -53,8 +62,8 @@ export class BorrowerService {
 						ref.where('status', '==', 'suggestion').where('$requestId', '==', requestId)
 					)
 					.snapshotChanges()
-					.subscribe((snaphost) => {
-						snaphost.forEach((docs) => {
+					.subscribe((snapshot) => {
+						snapshot.forEach((docs) => {
 							this.angularFireStore.collection('loans').doc(docs.payload.doc.id).delete();
 						});
 					});

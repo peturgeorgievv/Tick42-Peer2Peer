@@ -1,0 +1,30 @@
+<div class="modal fade" id="showPaymentsModal" tabindex="-1" role="dialog" aria-labelledby="showPaymentsModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="showPaymentsModal"><i>Your PAYMENTS</i></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card" *ngFor="let payment of this.loanPayments">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p>Amount Paid: <b>{{this.payment.amount}} $</b></p>
+                        <p>Date Paid: <b>{{this.payment.date}}</b></p>
+                        <p>Overdue Paid: <b>{{this.payment.overdue}}</b></p>
+                        <!-- <p>Partial: {{this.suggestion.partial}}</p> -->
+                    </div>
+                </div>
+            </div>
+            <br/>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
