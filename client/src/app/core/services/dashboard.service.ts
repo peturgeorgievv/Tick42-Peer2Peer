@@ -7,11 +7,17 @@ import { Injectable } from '@angular/core';
 })
 export class DashboardService {
 
-  constructor(private angularFireStore: AngularFirestore) { }
+  constructor(
+    private angularFireStore: AngularFirestore,
+    private db: AngularFireDatabase
+  ) { }
 
   public getUser(userId: string) {
-    return this.angularFireStore.collection('users', (ref) => ref.where('$userId', '==', userId))
+    return this.angularFireStore
+      .collection('users', (ref) => ref.where('$userId', '==', userId))
       .snapshotChanges();
   }
 
+
 }
+
