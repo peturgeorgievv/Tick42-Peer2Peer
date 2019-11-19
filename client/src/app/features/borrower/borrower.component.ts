@@ -26,6 +26,8 @@ export class BorrowerComponent implements OnInit {
 	private userSubscription: Subscription;
 	public loanFullData;
 	public paymentsData = [];
+	public allPayments = [];
+	public amountPaid = 0;
 
 	constructor(
 		private readonly borrowerService: BorrowerService,
@@ -68,13 +70,23 @@ export class BorrowerComponent implements OnInit {
 			});
 		});
 
+		this.borrowerService.getAllPayments(this.user.uid).subscribe((snaphost) => {
+			this.allPayments = [];
+			snaphost.forEach((docs) => {
+				console.log(docs.payload.doc.data());
+				this.allPayments.push({
+					...docs.payload.doc.data()
+				});
+			});
+			console.log(this.allPayments);
+		});
+
 		this.addLoanForm = this.formBuilder.group({
 			amount: [ '', [ Validators.required ] ],
 			dueDate: [ '', [ Validators.required ] ],
 			period: [ '', [ Validators.required ] ]
 		});
 
-		
 	}
 
 	public calcInstallment(amount, interestRate, period) {
@@ -108,19 +120,38 @@ export class BorrowerComponent implements OnInit {
 			});
 	}
 
+	public sumOfHistoryAmounts(obj) {
+		return this.allPayments.reduce((acc, data) => {
+			if (data.$requestId === obj.$requestId) {
+			return acc += data.amount;
+		}
+			return acc;
+	}, 0);
+	}
+
 	public rejectSuggestion(suggestionId): void {
 		this.borrowerService.deleteLoanSuggestion(suggestionId);
 	}
-	
-	public getPayments(reqId, userId): void {
-		this.borrowerService.getAllPayments(reqId, userId).subscribe((querySnapshot) => {
+
+	public getPayments(reqId, userId) {
+		this.borrowerService.getPayments(reqId, userId).subscribe((querySnapshot) => {
 			this.paymentsData = [];
+			this.amountPaid = 0;
 			querySnapshot.forEach((doc) => {
 				console.log(doc.payload.doc.id);
 				console.log(doc.payload.doc.data());
 				this.paymentsData.push(doc.payload.doc.data());
 			});
+			console.log(this.paymentsData);
+			this.paymentsData.map(data => this.amountPaid += data.amount);
+			console.log(this.amountPaid);
+			return this.amountPaid;
 		});
+	}
+
+	public getCurrentLoanHistory(reqId, userId): void {
+		console.log(reqId, userId)
+		// this.borrowerService.getLoanHistory(reqId, userId);
 	}
 
 	public deleteRequest(requestId): void {
