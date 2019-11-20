@@ -8,13 +8,15 @@
         </button>
       </div>
       <div class="modal-body">
+        <div *ngIf="!this.loanPayments.length"> You don't have any payments yet!</div>
         <div class="card" *ngFor="let payment of this.loanPayments">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
                         <p>Amount Paid: <b>{{(this.payment.amount).toFixed(2)}} $</b></p>
+                        <p>Overdue Paid: <b>{{(this.payment.overdue).toFixed(2)}} $</b></p>
+                        <p>Total Paid: <b>{{(this.payment.amount + this.payment.overdue).toFixed(2)}} $</b></p>
                         <p>Date Paid: <b>{{this.payment.date}}</b></p>
-                        <p>Overdue Paid: <b>{{(this.payment.overdue).toFixed(2)}}</b></p>
                         <!-- <p>Partial: {{this.suggestion.partial}}</p> -->
                     </div>
                 </div>

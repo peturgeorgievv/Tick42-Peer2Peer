@@ -1,0 +1,17 @@
+.btn {
+	background-color: #8b728e;
+	color: white;
+}
+
+.btn:hover {
+	background-color: #694873;
+	color: white;
+}
+
+.my-progress-bar {
+	background-color: #85b79d;
+}
+
+.crate-req-btn {
+	margin-bottom: 10px;
+}

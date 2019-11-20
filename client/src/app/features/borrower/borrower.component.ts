@@ -48,9 +48,17 @@ export class BorrowerComponent implements OnInit {
 		this.borrowerService.getUserLoans(this.user.uid).subscribe((querySnapshot) => {
 			this.currentLoans = [];
 			querySnapshot.forEach((doc) => {
-				this.currentLoans.push({
-					id: doc.payload.doc.id,
-					...doc.payload.doc.data()
+				const currentUser: any = doc.payload.doc.data();
+				this.borrowerService.getUser(currentUser.$investorId).subscribe((е) => {
+					е.forEach((docs) => {
+						this.userDocData = docs.data();
+						console.log(this.userDocData);
+					});
+					this.currentLoans.push({
+						id: doc.payload.doc.id,
+						email: this.userDocData.email,
+						...doc.payload.doc.data()
+					});
 				});
 			});
 		});
@@ -84,14 +92,6 @@ export class BorrowerComponent implements OnInit {
 			});
 			console.log(this.allPayments);
 		});
-
-		// this.borrowerService.getUser(this.user.uid).subscribe((е) => {
-		// 	е.forEach((docs) => {
-		// 		this.userDocData = docs.data();
-		// 		console.log(this.userDocData);
-		// 		console.log(this.user);
-		// 	});
-		// });
 
 		this.addLoanForm = this.formBuilder.group({
 			amount: [ '', [ Validators.required ] ],

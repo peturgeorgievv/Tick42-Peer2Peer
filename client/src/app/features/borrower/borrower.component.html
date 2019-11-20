@@ -1,67 +1,5 @@
 <div *ngIf="this.user">
-<div class="row row-card-no-pd">
-        <div class="col-md-4 col-xs-12 col-sm-12">
-            <div class="card card-stats card-round">
-                <div class="card-body ">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="icon-big text-center">
-                                <i class="flaticon-chart-pie text-warning"></i>
-                            </div>
-                        </div>
-                        <div class="col-7 col-stats">
-                            <div class="numbers">
-                                <p class="card-category">Current Balance</p>
-                                <h4 class="card-title">$ 500</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-xs-12 col-sm-12">
-            <div class="card card-stats card-round">
-                <div class="card-body ">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="icon-big text-center">
-                                <i class="flaticon-coins text-success"></i>
-                            </div>
-                        </div>
-                        <div class="col-7 col-stats">
-                            <div class="numbers">
-                                <p class="card-category">Total Debt</p>
-                                <h4 class="card-title">$ 1600</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 col-xs-12 col-sm-12">
-            <div class="card card-stats card-round">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="icon-big text-center">
-                                <i class="flaticon-error text-danger"></i>
-                            </div>
-                        </div>
-                        <div class="col-7 col-stats">
-                            <div class="numbers">
-                                <p class="card-category">Total Investment</p>
-                                <h4 class="card-title">$ 160000</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <br/>
-
-    <button type="button" class="btn btn-primary btn-block col-12" data-toggle="modal" data-target="#createLoanModal"><b>Create Loan Request</b></button>
-    <app-create-loan-modal (createLoanRequest)="this.createLoanReq($event)"></app-create-loan-modal>
     <div class="row">
 
 					<div class="justify-content-center align-items-center mb-1 col-md-6 col-sm-12 col-xs-12">
@@ -80,7 +18,7 @@
                                                         <div class="card-body">
                                                             <div class="d-flex justify-content-between">
                                                                 <div>
-                                                                    <p>Investor: <b>{{this.loan.$investorId}}</b></p>
+                                                                    <p>Investor: <b>{{this.loan.email}}</b></p>
                                                                     <p>Due Date: <b>{{this.loan.date}}</b></p>
                                                                     <p>Total Amount: <b>{{(this.loan.amount).toFixed(2)}} $</b></p>
                                                                     <p>Next Due Date: <b>{{this.calcNextDueDate(this.loan.date, this.historyAmountsLength(this.loan))}}</b></p>
@@ -103,10 +41,10 @@
                                                                 <div>
                                                                     <p><b>Left to pay:</b></p>
                                                                 </div>
-                                                                <h3 class="text-info fw-bold">{{(this.loan.amount - this.sumOfHistoryAmounts(this.loan)).toFixed(2)}} $</h3>
+                                                                <h3 class="fw-bold">{{(this.loan.amount - this.sumOfHistoryAmounts(this.loan)).toFixed(2)}} $</h3>
                                                             </div>
                                                             <div class="progress progress-sm">
-                                                                <div class="progress-bar bg-info" role="progressbar" [style.width.%]="(((this.loan.amount - this.sumOfHistoryAmounts(this.loan)) / this.loan.amount) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                <div class="progress-bar my-progress-bar" role="progressbar" [style.width.%]="(((this.loan.amount - this.sumOfHistoryAmounts(this.loan)) / this.loan.amount) * 100)" aria-valuemin="0" aria-valuemax="100"></div>
                                                             </div>
                                                             <div class="d-flex justify-content-between mt-2">
                                                                 <p class="text-muted mb-0">{{(((this.loan.amount - this.sumOfHistoryAmounts(this.loan)) / this.loan.amount) * 100).toFixed(2)}} %</p>
@@ -117,7 +55,7 @@
                                         <li>
                                                 <div class="card">
                                                         <div class="card-body pb-0">
-                                                            <div class="h3 fw-bold float-right text-primary">{{this.loan.interestRate}} %</div>
+                                                            <div class="h3 fw-bold float-right">{{this.loan.interestRate}} %</div>
                                                             <p> <b>Interest rate:</b> </p>
                                                             <div class="pull-in sparkline-fix">
                                                                 <div id="lineChart"></div>
@@ -128,10 +66,10 @@
                                         
                                         <button type="button" 
                                         (click)="this.loanData(this.loan)"
-                                        class="btn btn-primary btn-block col-12" data-toggle="modal" data-target="#createPayment"><b>Pay</b></button>
+                                        class="btn btn-block col-12" data-toggle="modal" data-target="#createPayment"><b>Pay</b></button>
                                         <app-add-payment-modal *ngIf="this.loanFullData" [loanFullData]="this.loanFullData" (createPayment)="this.createPayment($event)"></app-add-payment-modal>
 
-                                        <button type="button" class="btn btn-primary btn-block col-12" (click)="this.loanData(this.loan) && this.getPayments(this.loan.$requestId, this.loan.$userId)" data-toggle="modal" data-target="#showPaymentsModal">
+                                        <button type="button" class="btn btn-block col-12" (click)="this.loanData(this.loan) && this.getPayments(this.loan.$requestId, this.loan.$userId)" data-toggle="modal" data-target="#showPaymentsModal">
                                             <b>Show payments</b>
                                           </button>
                                           <app-show-payments *ngIf="this.loanFullData" [loanPayments]="this.paymentsData"></app-show-payments>
@@ -145,7 +83,11 @@
    
     
                     <div class="justify-content-center align-items-center mb-1 col-md-6 col-sm-12 col-xs-12">
-                            <div class="col-12">
+                        
+                        <div class="col-12">
+                                <button type="button" class="btn col-12 crate-req-btn" data-toggle="modal" data-target="#createLoanModal"><b>Create Loan Request</b></button>
+                                <app-create-loan-modal (createLoanRequest)="this.createLoanReq($event)"></app-create-loan-modal>
+
                                 <div class="card card-pricing">
                                     <div class="card-header">
                                         <h4 class="card-title">Loan Requests(pending)</h4>
@@ -164,17 +106,17 @@
                                                                         <!-- <p>Partial: </p> -->
                                                                     </div>
                                                                 </div>
-                                                                <button class="btn btn-warning col-6"><b>Edit</b></button>
-                                                                <button class="btn btn-danger col-6" (click)="this.deleteRequest(this.loanRequest.$requestId)"><b>Delete</b></button>
+                                                                <button class="btn col-6"><b>Edit</b></button>
+                                                                <button class="btn col-6" (click)="this.deleteRequest(this.loanRequest.$requestId)"><b>Delete</b></button>
                                                             </div>
                                                         </div>
                                             </li>
                                             <li>
 
                                                 <!-- Here to make ngFor for investor!!! -->
-                                                <div *ngFor="let suggestion of this.loanSuggestions; let i = index">
+                                                <div *ngFor="let suggestion of this.loanSuggestions">
                                                     <div *ngIf="suggestion.$requestId === this.loanRequest.$requestId">
-                                                <h5>Investor: {{this.suggestion.$investorId}}   {{this.i}}</h5>
+                                                <h5>Investor: {{this.suggestion.email}}</h5>
                                                 <div class="card">
                                                         <div class="card-body">
                                                             <div class="d-flex justify-content-between">
@@ -187,8 +129,8 @@
                                                                     <!-- <p>Partial: {{this.suggestion.partial}}</p> -->
                                                                 </div>
                                                             </div>
-                                                                <button class="btn btn-primary col-6" (click)="this.acceptRequest(this.suggestion)"><b>Accept</b></button>
-                                                                <button class="btn btn-danger col-6" (click)="this.rejectSuggestion(this.suggestion.$suggestionId)"><b>Reject</b></button>
+                                                                <button class="btn col-6" (click)="this.acceptRequest(this.suggestion)"><b>Accept</b></button>
+                                                                <button class="btn col-6" (click)="this.rejectSuggestion(this.suggestion.$suggestionId)"><b>Reject</b></button>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -1,4 +1,4 @@
-      <nav class="navbar navbar-expand-lg navbar-light bg-primary full-navbar" *ngIf="!loggedIn">
+      <nav class="navbar navbar-expand-lg navbar-light full-navbar" *ngIf="!loggedIn">
         <a class="navbar-brand font-weight-bolder" [routerLink]="['/']"
           ><span class="navbar-text">P2P LendIt</span>
 </a>
@@ -36,8 +36,8 @@
       </nav>
 
       
-      <nav class="navbar navbar-expand-lg navbar-light bg-primary full-navbar" *ngIf="loggedIn">
-        <a class="navbar-brand font-weight-bolder" [routerLink]="['/dashboard']"
+      <nav class="navbar navbar-expand-lg navbar-light full-navbar" *ngIf="loggedIn">
+        <a class="navbar-brand font-weight-bolder color:#000000" [routerLink]="['/dashboard']"
           ><span class="navbar-text">P2P LendIt</span>
 </a>
         <button
@@ -84,4 +84,20 @@
           </form>
         </div>
       </nav>
+      <nav class="navbar secondary-navbar navbar-expand-lg navbar-light color:#000000">
+          <a class="navbar-brand" href="#"></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+              <div class="user-info">Balance:</div>
+              <div class="user-info">Debts:</div>
+              <div class="user-info">Investments:</div>
+            </form>
+          </div>
+        </nav>
       

@@ -33,6 +33,10 @@ export class AuthenticationService {
 		});
 	}
 
+	public getUser() {
+		return this.angularFireAuth.user;
+	}
+
 	private isUserLoggedIn(): boolean {
 		const value = localStorage.getItem('user');
 		const res = value && value !== 'undefined' ? value : null;
@@ -67,7 +71,7 @@ export class AuthenticationService {
 				console.log('Logged successfully', res);
 				this.angularFireStore
 					.collection('users')
-					.add({ $userId: res.user.uid, currentBalance: 0, totalDebt: 0, totalInvestment: 0 });
+					.add({ $userId: res.user.uid, currentBalance: 0, totalDebt: 0, totalInvestment: 0, email });
 			})
 			.catch((error) => {
 				console.log('Something is wrong:', error.message);
