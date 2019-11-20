@@ -7,11 +7,25 @@ import { Injectable } from '@angular/core';
 })
 export class DashboardService {
 
-  constructor(private angularFireStore: AngularFirestore) { }
+  constructor(
+    private angularFireStore: AngularFirestore,
+    private db: AngularFireDatabase
+  ) { }
 
   public getUser(userId: string) {
-    return this.angularFireStore.collection('users', (ref) => ref.where('$userId', '==', userId))
-      .snapshotChanges();
+    return this.angularFireStore
+      .collection('users', (ref) => ref.where('$userId', '==', userId))
+      .snapshotChanges()
+      .subscribe(
+        (е) => {
+          е.forEach((docs) => {
+            console.log(docs.payload.doc.data());
+
+          });
+        }
+      );
   }
 
+
 }
+

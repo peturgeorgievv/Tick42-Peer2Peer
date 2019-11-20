@@ -1,37 +1,49 @@
 import { DashboardService } from './../../core/services/dashboard.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from 'firebase';
+import { Subscription } from 'rxjs';
+import { AuthenticationService } from './../../core/services/authentication.service';
+
 
 @Component({
-	selector: 'app-dashboard',
-	templateUrl: './dashboard.component.html',
-	styleUrls: [ './dashboard.component.css' ]
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-	userData;
+  public userData;
+  public user: User;
+  private userSubscription: Subscription;
 
-	constructor(private readonly dashboardService: DashboardService) {}
+  public mockUser = {
+    username: 'The Nigerian Prince',
+    investments: 5000,
+    currBalance: 1000,
+    currDebt: 200
+  };
 
-	public mockUser = {
-		username: 'The Nigerian Prince',
-		investments: 5000,
-		currBalance: 1000,
-		currDebt: 200
-	};
+  constructor(
+    private readonly dashboardService: DashboardService,
+    public authService: AuthenticationService,
+  ) {
+    this.userSubscription = this.authService.loggedUser$.subscribe((res) => {
+      return (this.user = res);
+    });
+  }
 
-	ngOnInit() {}
+  ngOnInit() { }
 
-	// createDeposit(data) {
-	//   console.log(data.amount);
+  createDeposit(data) {
+    console.log(data.amount);
+    // this.dashboardService.getUser(this.user.uid).subscribe();
 
-	//   this.dashboardService.getUser(userId).subscribe((querySnapshot) => {
-	//     querySnapshot.forEach(doc => {
-	//       this.userData = doc.payload.doc.data();
-	//       console.log(this.userData);
+    console.log(this.dashboardService.getUser(this.user.uid));
+    // this.dashboardService.getUser(this.user.uid)
+  }
 
-	//     });
+  createWithdraw(data) {
+    console.log(data.amount);
+  }
 
-	//     // this.dashboardService
-	//   });
-	// }
 }
