@@ -27,12 +27,8 @@ export class AddPaymentModalComponent implements OnInit {
 		return calculateInstallment(amount, interestRate, period);
 	}
 
-	public calcNextDueDate(dueDate) {
-		return calculateNextDueDate(dueDate);
-	}
-
-	public calcOverdue(dueDate, amount, penalty, interestRate, period) {
-		return calculateOverdue(dueDate, amount, penalty, interestRate, period);
+	public calcOverdue(dueDate, amount, penalty, interestRate, period, payments) {
+		return calculateOverdue(dueDate, amount, penalty, interestRate, period, payments);
 	}
 
 	public emitLoanData() {
@@ -51,7 +47,8 @@ export class AddPaymentModalComponent implements OnInit {
 				this.loanFullData.amount,
 				this.loanFullData.penalty,
 				this.loanFullData.interestRate,
-				this.loanFullData.period
+				this.loanFullData.period,
+				0
 			)
 		};
 

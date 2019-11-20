@@ -24,13 +24,9 @@
             </div>
             <div class="form-group col-12">
                 <label for="exampleInputEmail1">Total: </label>
-<div> <b>{{this.calcInstallment(this.loanFullData.amount, this.loanFullData.interestRate, this.loanFullData.period) +
-   this.calcOverdue(this.loanFullData.date, this.loanFullData.amount, this.loanFullData.penalty, this.loanFullData.interestRate, this.loanFullData.period)}}</b></div>
+<div> <b>{{(this.calcInstallment(this.loanFullData.amount, this.loanFullData.interestRate, this.loanFullData.period) +
+   this.calcOverdue(this.loanFullData.date, this.loanFullData.amount, this.loanFullData.penalty, this.loanFullData.interestRate, this.loanFullData.period)).toFixed(2)}}</b></div>
             </div>
-            <div class="form-group col-12">
-              <label for="exampleInputEmail1">Next Due Date: </label>
-              <div> <b>{{this.calcNextDueDate(this.loanFullData.date)}}</b></div>
-          </div>
         </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

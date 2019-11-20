@@ -83,10 +83,11 @@
                                                                     <p>Investor: <b>{{this.loan.$investorId}}</b></p>
                                                                     <p>Due Date: <b>{{this.loan.date}}</b></p>
                                                                     <p>Total Amount: <b>{{(this.loan.amount).toFixed(2)}} $</b></p>
-                                                                    <p>Next Due Date: <b>{{this.calcNextDueDate(this.loan.date)}}</b></p>
+                                                                    <p>Next Due Date: <b>{{this.calcNextDueDate(this.loan.date, this.historyAmountsLength(this.loan))}}</b></p>
                                                                     <p>Installment: <b>{{this.calcInstallment(this.loan.amount, this.loan.interestRate, this.loan.period).toFixed(2)}} $</b></p>
                                                                     <p>Overdue Installments: <b>{{this.calcOverdue(this.loan.date, this.loan.amount, this.loan.penalty, this.loan.interestRate, this.loan.period).toFixed(2)}} $</b></p>
                                                                     <p>Payments Left: <b>{{(this.loan.amount - this.sumOfHistoryAmounts(this.loan)).toFixed(2)}} $</b></p>
+
                                                                     <p>Penalty: <b>{{this.loan.penalty}} %</b></p>
                                                                     <!-- <p>Penalty: <b>{{this.getCurrentLoanHistory(this.loan.$requestId, this.loan.$userId)}} %</b></p> -->
 

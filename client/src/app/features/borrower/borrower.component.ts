@@ -86,19 +86,18 @@ export class BorrowerComponent implements OnInit {
 			dueDate: [ '', [ Validators.required ] ],
 			period: [ '', [ Validators.required ] ]
 		});
-
 	}
 
 	public calcInstallment(amount, interestRate, period) {
 		return calculateInstallment(amount, interestRate, period);
 	}
 
-	public calcNextDueDate(dueDate) {
-		return calculateNextDueDate(dueDate);
+	public calcNextDueDate(dueDate, payments) {
+		return calculateNextDueDate(dueDate, payments);
 	}
 
-	public calcOverdue(dueDate, amount, penalty, interestRate, period) {
-		return calculateOverdue(dueDate, amount, penalty, interestRate, period);
+	public calcOverdue(dueDate, amount, penalty, interestRate, period, payments) {
+		return calculateOverdue(dueDate, amount, penalty, interestRate, period, payments);
 	}
 
 	public loanData(obj) {
@@ -115,6 +114,7 @@ export class BorrowerComponent implements OnInit {
 				status: 'current'
 			})
 			.then(() => {
+				this.borrowerService.addDebtToUser(this.user.uid).subscribe();
 				this.borrowerService.deleteLoanSuggestion(suggestion.$requestId);
 				this.borrowerService.deleteLoanRequest(suggestion.$requestId);
 			});
@@ -123,10 +123,19 @@ export class BorrowerComponent implements OnInit {
 	public sumOfHistoryAmounts(obj) {
 		return this.allPayments.reduce((acc, data) => {
 			if (data.$requestId === obj.$requestId) {
-			return acc += data.amount;
-		}
+				return (acc += data.amount);
+			}
 			return acc;
-	}, 0);
+		}, 0);
+	}
+
+	public historyAmountsLength(obj) {
+		return this.allPayments.reduce((acc, data) => {
+			if (data.$requestId === obj.$requestId) {
+				return (acc += 1);
+			}
+			return acc;
+		}, 0);
 	}
 
 	public rejectSuggestion(suggestionId): void {
@@ -143,14 +152,15 @@ export class BorrowerComponent implements OnInit {
 				this.paymentsData.push(doc.payload.doc.data());
 			});
 			console.log(this.paymentsData);
-			this.paymentsData.map(data => this.amountPaid += data.amount);
+			this.paymentsData.map((data) => (this.amountPaid += data.amount));
 			console.log(this.amountPaid);
+			console.log(this.paymentsData.length);
 			return this.amountPaid;
 		});
 	}
 
 	public getCurrentLoanHistory(reqId, userId): void {
-		console.log(reqId, userId)
+		console.log(reqId, userId);
 		// this.borrowerService.getLoanHistory(reqId, userId);
 	}
 

@@ -44,30 +44,20 @@ export class BorrowerService {
 	}
 
 	public getPayments(reqId, userId) {
-		return this.angularFireStore.collection('loansHistory', ref => ref.where('$requestId', '==', reqId).where('$userId', '==', userId))
+		return this.angularFireStore
+			.collection('loansHistory', (ref) => ref.where('$requestId', '==', reqId).where('$userId', '==', userId))
 			.snapshotChanges();
 	}
 
 	public getAllPayments(userId) {
-		return this.angularFireStore.collection('loansHistory', ref => ref.where('$userId', '==', userId))
+		return this.angularFireStore
+			.collection('loansHistory', (ref) => ref.where('$userId', '==', userId))
 			.snapshotChanges();
 	}
 
-	// public getLoanHistory(reqId, userId) {
-	// 	return this.angularFireStore.collection('loansHistory', ref => ref.where('$requestId', '==', reqId).where('$userId', '==', userId))
-	// 		.snapshotChanges().subscribe((querySnapshot) => {
-	// 			querySnapshot.forEach((doc) => {
-	// 				console.log(doc.payload.doc.id);
-	// 						console.log(doc.payload.doc.data());
-	// 				this.angularFireStore.collection('loans', ref => ref.where('$requestId', '==', reqId)).snapshotChanges().subscribe((snapshot) => {
-	// 					snapshot.forEach((docs) => {
-	// 						console.log(docs.payload.doc.id);
-	// 						console.log(docs.payload.doc.data());
-	// 					});
-	// 				});
-	// 			});
-	// 		});
-	// }
+	public addDebtToUser(userId) {
+		return this.angularFireStore.collection('users', (ref) => ref.where('$userId', '==', userId)).get();
+	}
 
 	public deleteLoanRequest(requestId) {
 		console.log(requestId);
