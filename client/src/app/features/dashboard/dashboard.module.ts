@@ -5,9 +5,10 @@ import { CommonModule } from '@angular/common';
 import { DashboardRouterModule } from './dashboard-routing.module';
 import { RouterModule } from '@angular/router';
 import { CreateDepositComponent } from './create-deposit/create-deposit.component';
+import { CreateWithdrawComponent } from './create-withdraw/create-withdraw.component';
 
 @NgModule({
-  declarations: [DashboardComponent, CreateDepositComponent],
+  declarations: [DashboardComponent, CreateDepositComponent, CreateWithdrawComponent],
   imports: [CommonModule, SharedModule, DashboardRouterModule],
   exports: [DashboardComponent, RouterModule]
 })
