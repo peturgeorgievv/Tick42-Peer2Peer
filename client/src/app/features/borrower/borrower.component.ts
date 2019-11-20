@@ -6,6 +6,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from 'firebase';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
+import {
+	calculateInstallment,
+	calculateNextDueDate,
+	calculateOverdue
+} from '../../common/calculate-functions/calculate-func';
 
 @Component({
 	selector: 'app-borrower',
@@ -19,6 +24,10 @@ export class BorrowerComponent implements OnInit {
 	public loanSuggestions = [];
 	public user: User;
 	private userSubscription: Subscription;
+	public loanFullData;
+	public paymentsData = [];
+	public allPayments = [];
+	public amountPaid = 0;
 
 	constructor(
 		private readonly borrowerService: BorrowerService,
@@ -61,36 +70,39 @@ export class BorrowerComponent implements OnInit {
 			});
 		});
 
+		this.borrowerService.getAllPayments(this.user.uid).subscribe((snaphost) => {
+			this.allPayments = [];
+			snaphost.forEach((docs) => {
+				console.log(docs.payload.doc.data());
+				this.allPayments.push({
+					...docs.payload.doc.data()
+				});
+			});
+			console.log(this.allPayments);
+		});
+
 		this.addLoanForm = this.formBuilder.group({
 			amount: [ '', [ Validators.required ] ],
 			dueDate: [ '', [ Validators.required ] ],
 			period: [ '', [ Validators.required ] ]
 		});
+
 	}
 
-	public calculateInstallment(amount, interestRate, period) {
-		return (amount * interestRate / 100 / period + amount / period).toFixed(2);
+	public calcInstallment(amount, interestRate, period) {
+		return calculateInstallment(amount, interestRate, period);
 	}
 
-	public calculateNextDueDate(dueDate) {
-		const currMonth = moment().month();
-		const dueDateMonth = moment(dueDate).month();
-		const nextDueDate = moment(dueDate).add(currMonth - dueDateMonth + 1, 'M').format('YYYY-MM-DD');
-		return nextDueDate;
+	public calcNextDueDate(dueDate) {
+		return calculateNextDueDate(dueDate);
 	}
 
-	public calculateOverdue(dueDate, amount, penalty, interestRate, period) {
-		const currDueDate = this.calculateNextDueDate(dueDate);
-		const currDateDay = moment().date();
-		const currDueDateDay = moment(currDueDate).date();
+	public calcOverdue(dueDate, amount, penalty, interestRate, period) {
+		return calculateOverdue(dueDate, amount, penalty, interestRate, period);
+	}
 
-		const overdue = ((currDateDay - currDueDateDay) *
-			penalty *
-			Number(this.calculateInstallment(amount, interestRate, period))).toFixed(2);
-		return overdue;
-
-		// const currDateMonth = moment().month();
-		// const currDueDateMonth = moment(currDueDate).month();
+	public loanData(obj) {
+		return (this.loanFullData = obj);
 	}
 
 	public acceptRequest(suggestion): void {
@@ -108,8 +120,38 @@ export class BorrowerComponent implements OnInit {
 			});
 	}
 
+	public sumOfHistoryAmounts(obj) {
+		return this.allPayments.reduce((acc, data) => {
+			if (data.$requestId === obj.$requestId) {
+			return acc += data.amount;
+		}
+			return acc;
+	}, 0);
+	}
+
 	public rejectSuggestion(suggestionId): void {
 		this.borrowerService.deleteLoanSuggestion(suggestionId);
+	}
+
+	public getPayments(reqId, userId) {
+		this.borrowerService.getPayments(reqId, userId).subscribe((querySnapshot) => {
+			this.paymentsData = [];
+			this.amountPaid = 0;
+			querySnapshot.forEach((doc) => {
+				console.log(doc.payload.doc.id);
+				console.log(doc.payload.doc.data());
+				this.paymentsData.push(doc.payload.doc.data());
+			});
+			console.log(this.paymentsData);
+			this.paymentsData.map(data => this.amountPaid += data.amount);
+			console.log(this.amountPaid);
+			return this.amountPaid;
+		});
+	}
+
+	public getCurrentLoanHistory(reqId, userId): void {
+		console.log(reqId, userId)
+		// this.borrowerService.getLoanHistory(reqId, userId);
 	}
 
 	public deleteRequest(requestId): void {
@@ -131,5 +173,14 @@ export class BorrowerComponent implements OnInit {
 			.catch(() => {
 				this.notificatorService.error('Oops, something went wrong!');
 			});
+	}
+
+	public createPayment(data): void {
+		console.log(data);
+		this.borrowerService
+			.createPayment({
+				...data
+			})
+			.then(() => this.notificatorService.success('You have paid successefully!'));
 	}
 }
