@@ -55,8 +55,12 @@ export class BorrowerService {
 			.snapshotChanges();
 	}
 
-	public addDebtToUser(userId) {
+	public getUser(userId) {
 		return this.angularFireStore.collection('users', (ref) => ref.where('$userId', '==', userId)).get();
+	}
+
+	public getUserDocData(userId) {
+		return this.angularFireStore.collection('users').doc(userId);
 	}
 
 	public deleteLoanRequest(requestId) {

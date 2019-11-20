@@ -22,11 +22,15 @@ export class BorrowerComponent implements OnInit {
 	public currentLoans = [];
 	public loanRequests = [];
 	public loanSuggestions = [];
+
+	public userDocData;
 	public user: User;
 	private userSubscription: Subscription;
+
 	public loanFullData;
 	public paymentsData = [];
 	public allPayments = [];
+	public currentData;
 	public amountPaid = 0;
 
 	constructor(
@@ -81,6 +85,14 @@ export class BorrowerComponent implements OnInit {
 			console.log(this.allPayments);
 		});
 
+		// this.borrowerService.getUser(this.user.uid).subscribe((е) => {
+		// 	е.forEach((docs) => {
+		// 		this.userDocData = docs.data();
+		// 		console.log(this.userDocData);
+		// 		console.log(this.user);
+		// 	});
+		// });
+
 		this.addLoanForm = this.formBuilder.group({
 			amount: [ '', [ Validators.required ] ],
 			dueDate: [ '', [ Validators.required ] ],
@@ -114,7 +126,20 @@ export class BorrowerComponent implements OnInit {
 				status: 'current'
 			})
 			.then(() => {
-				this.borrowerService.addDebtToUser(this.user.uid).subscribe();
+				this.borrowerService.getUser(this.user.uid).subscribe((е) => {
+					е.forEach((docs) => {
+						this.currentData = docs.data();
+						this.currentData.totalDebt += suggestion.amount;
+						this.currentData.currentBalance += suggestion.amount;
+						this.borrowerService.getUserDocData(docs.id).set(
+							{
+								totalDebt: +this.currentData.totalDebt.toFixed(2),
+								currentBalance: +this.currentData.currentBalance.toFixed(2)
+							},
+							{ merge: true }
+						);
+					});
+				});
 				this.borrowerService.deleteLoanSuggestion(suggestion.$requestId);
 				this.borrowerService.deleteLoanRequest(suggestion.$requestId);
 			});
@@ -147,21 +172,11 @@ export class BorrowerComponent implements OnInit {
 			this.paymentsData = [];
 			this.amountPaid = 0;
 			querySnapshot.forEach((doc) => {
-				console.log(doc.payload.doc.id);
-				console.log(doc.payload.doc.data());
 				this.paymentsData.push(doc.payload.doc.data());
 			});
-			console.log(this.paymentsData);
 			this.paymentsData.map((data) => (this.amountPaid += data.amount));
-			console.log(this.amountPaid);
-			console.log(this.paymentsData.length);
 			return this.amountPaid;
 		});
-	}
-
-	public getCurrentLoanHistory(reqId, userId): void {
-		console.log(reqId, userId);
-		// this.borrowerService.getLoanHistory(reqId, userId);
 	}
 
 	public deleteRequest(requestId): void {
@@ -191,6 +206,22 @@ export class BorrowerComponent implements OnInit {
 			.createPayment({
 				...data
 			})
-			.then(() => this.notificatorService.success('You have paid successefully!'));
+			.then(() => {
+				this.borrowerService.getUser(this.user.uid).subscribe((е) => {
+					е.forEach((docs) => {
+						this.currentData = docs.data();
+						this.currentData.totalDebt -= data.amount;
+						this.currentData.currentBalance -= data.amount;
+						this.borrowerService.getUserDocData(docs.id).set(
+							{
+								totalDebt: +this.currentData.totalDebt.toFixed(2),
+								currentBalance: +this.currentData.currentBalance.toFixed(2)
+							},
+							{ merge: true }
+						);
+					});
+				});
+				this.notificatorService.success('You have paid successefully!');
+			});
 	}
 }

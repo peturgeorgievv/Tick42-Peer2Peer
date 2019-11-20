@@ -12,9 +12,9 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <p>Amount Paid: <b>{{this.payment.amount}} $</b></p>
+                        <p>Amount Paid: <b>{{(this.payment.amount).toFixed(2)}} $</b></p>
                         <p>Date Paid: <b>{{this.payment.date}}</b></p>
-                        <p>Overdue Paid: <b>{{this.payment.overdue}}</b></p>
+                        <p>Overdue Paid: <b>{{(this.payment.overdue).toFixed(2)}}</b></p>
                         <!-- <p>Partial: {{this.suggestion.partial}}</p> -->
                     </div>
                 </div>
