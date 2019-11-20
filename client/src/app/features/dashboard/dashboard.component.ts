@@ -17,13 +17,6 @@ export class DashboardComponent implements OnInit {
   private userSubscription: Subscription;
   private currentData;
 
-  public mockUser = {
-    username: 'The Nigerian Prince',
-    investments: 5000,
-    currBalance: 1000,
-    currDebt: 200
-  };
-
   constructor(
     private readonly dashboardService: DashboardService,
     public authService: AuthenticationService,
@@ -33,17 +26,22 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.dashboardService.getUser(this.user.uid).subscribe((
+      e => {
+        e.forEach((docs) => {
+          this.userData = docs.data();
+        }
+        );
+      }
+    ));
+  }
 
   createDeposit(data) {
-    console.log(data.amount);
     this.dashboardService.getUser(this.user.uid).subscribe((
       (е) => {
         е.forEach((docs) => {
           this.currentData = docs.data();
-          console.log(this.currentData);
-          console.log(docs.id);
-
           this.currentData.currentBalance += data.amount;
           this.dashboardService
             .addOrRemoveMoney(docs.id)
@@ -54,14 +52,10 @@ export class DashboardComponent implements OnInit {
   }
 
   createWithdraw(data) {
-    console.log(data.amount);
     this.dashboardService.getUser(this.user.uid).subscribe((
       (e) => {
         e.forEach((docs) => {
           this.currentData = docs.data();
-          console.log(this.currentData);
-          console.log(docs.id);
-
           this.currentData.currentBalance -= data.amount;
           this.dashboardService
             .addOrRemoveMoney(docs.id).
