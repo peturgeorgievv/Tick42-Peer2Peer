@@ -15,7 +15,15 @@ export class DashboardService {
   public getUser(userId: string) {
     return this.angularFireStore
       .collection('users', (ref) => ref.where('$userId', '==', userId))
-      .snapshotChanges();
+      .snapshotChanges()
+      .subscribe(
+        (е) => {
+          е.forEach((docs) => {
+            console.log(docs.payload.doc.data());
+
+          });
+        }
+      );
   }
 
 

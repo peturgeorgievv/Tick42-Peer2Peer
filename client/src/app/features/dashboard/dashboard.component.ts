@@ -36,8 +36,10 @@ export class DashboardComponent implements OnInit {
 
   createDeposit(data) {
     console.log(data.amount);
-    console.log(this.user);
-    this.dashboardService.getUser(this.user.uid).subscribe();
+    // this.dashboardService.getUser(this.user.uid).subscribe();
+
+    console.log(this.dashboardService.getUser(this.user.uid));
+    // this.dashboardService.getUser(this.user.uid)
   }
 
   createWithdraw(data) {
