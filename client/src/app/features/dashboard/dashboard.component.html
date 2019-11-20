@@ -1,15 +1,15 @@
-<div class="container-fluid my-3">
+<div class="container-fluid my-3" *ngIf="userData">
   <div class="row">
     <div class="col-md-4">
       <div class="card border-success mb-3">
         <div class="card-body text-success">
           <h6 class="card-title">Account Balance</h6>
           <hr />
-          <p class="card-text">User: {{ this.mockUser.username }}</p>
+          <p class="card-text">User: {{ this.userData.email }}</p>
           <p class="card-text">
-            Current balance: {{ this.mockUser.currBalance }}
+            Current balance: {{ this.userData.currentBalance }}
           </p>
-          <p class="card-text">Current debt: {{ this.mockUser.currDebt }}</p>
+          <p class="card-text">Current debt: {{ this.userData.totalDebt }}</p>
         </div>
       </div>
     </div>
