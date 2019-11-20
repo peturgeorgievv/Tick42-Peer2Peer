@@ -10,6 +10,7 @@ import { User } from 'firebase';
 export class NavbarComponent implements OnInit, OnChanges {
 	@Input() loggedIn: boolean;
 	@Input() user: User;
+	@Input() userBalanceData;
 
 	constructor(public authService: AuthenticationService) {}
 

@@ -8,6 +8,10 @@
 
 .secondary-navbar {
 	color: white;
-	font-weight: bolder;
+	font-weight: 400;
 	background-color: #87608b;
+}
+
+.balance-nums {
+	font-weight: bolder;
 }
