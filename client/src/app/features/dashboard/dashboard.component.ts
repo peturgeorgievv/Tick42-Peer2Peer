@@ -15,6 +15,7 @@ export class DashboardComponent implements OnInit {
   public userData;
   public user: User;
   private userSubscription: Subscription;
+  private currentData;
 
   public mockUser = {
     username: 'The Nigerian Prince',
@@ -36,14 +37,38 @@ export class DashboardComponent implements OnInit {
 
   createDeposit(data) {
     console.log(data.amount);
-    // this.dashboardService.getUser(this.user.uid).subscribe();
+    this.dashboardService.getUser(this.user.uid).subscribe((
+      (е) => {
+        е.forEach((docs) => {
+          this.currentData = docs.data();
+          console.log(this.currentData);
+          console.log(docs.id);
 
-    console.log(this.dashboardService.getUser(this.user.uid));
-    // this.dashboardService.getUser(this.user.uid)
+          this.currentData.currentBalance += data.amount;
+          this.dashboardService
+            .addOrRemoveMoney(docs.id)
+            .set({ currentBalance: this.currentData.currentBalance }, { merge: true });
+        });
+      }
+    ));
   }
 
   createWithdraw(data) {
     console.log(data.amount);
+    this.dashboardService.getUser(this.user.uid).subscribe((
+      (e) => {
+        e.forEach((docs) => {
+          this.currentData = docs.data();
+          console.log(this.currentData);
+          console.log(docs.id);
+
+          this.currentData.currentBalance -= data.amount;
+          this.dashboardService
+            .addOrRemoveMoney(docs.id).
+            set({ currentBalance: this.currentData.currentBalance }, { merge: true });
+        });
+      }
+    ));
   }
 
 }

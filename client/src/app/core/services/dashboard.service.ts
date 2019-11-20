@@ -14,17 +14,13 @@ export class DashboardService {
 
   public getUser(userId: string) {
     return this.angularFireStore
-      .collection('users', (ref) => ref.where('$userId', '==', userId))
-      .snapshotChanges()
-      .subscribe(
-        (е) => {
-          е.forEach((docs) => {
-            console.log(docs.payload.doc.data());
-
-          });
-        }
-      );
+      .collection('users', (ref) => ref.where('$userId', '==', userId)).get();
   }
+
+  public addOrRemoveMoney(userId) {
+    return this.angularFireStore.collection('users').doc(userId);
+  }
+
 
 
 }
