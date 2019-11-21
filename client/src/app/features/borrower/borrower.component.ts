@@ -1,3 +1,6 @@
+import { AllPaymentsDTO } from './../../common/models/all-payments.dto';
+import { LoanSuggestionDTO } from './../../common/models/loan-suggestion.dto';
+import { LoanRequestDTO } from './../../common/models/loan-request.dto';
 import { NotificatorService } from './../../core/services/notificator.service';
 import { AuthenticationService } from './../../core/services/authentication.service';
 import { BorrowerService } from './../../core/services/borrower.service';
@@ -9,7 +12,8 @@ import * as moment from 'moment';
 import {
 	calculateInstallment,
 	calculateNextDueDate,
-	calculateOverdue
+	calculateOverdue,
+	calculateEndOfContractDate
 } from '../../common/calculate-functions/calculate-func';
 
 @Component({
@@ -18,37 +22,38 @@ import {
 	styleUrls: [ './borrower.component.css' ]
 })
 export class BorrowerComponent implements OnInit, OnDestroy {
-	public addLoanForm: FormGroup;
-	public currentLoans = [];
-	public loanRequests = [];
-	public loanSuggestions = [];
-
-	public userDocData;
-	public user: User;
 	private userSubscription: Subscription;
 	private userLoansSubscription: Subscription;
 	private userRequestsSubscription: Subscription;
 	private userSuggestionsSubscription: Subscription;
 	private userPaymentsSubscription: Subscription;
 
+	public addLoanForm: FormGroup;
+	public currentLoans = [];
+	public loanRequests: LoanRequestDTO[] = [];
+	public loanSuggestions: LoanSuggestionDTO[] = [];
+
+	public userDocData;
+	public user: User;
+
 	public loanFullData;
-	public paymentsData = [];
-	public allPayments = [];
+	public paymentsData: AllPaymentsDTO[] = [];
+	public allPayments: AllPaymentsDTO[] = [];
 	public currentData;
 	public amountPaid = 0;
 
 	constructor(
 		private readonly borrowerService: BorrowerService,
-		public authService: AuthenticationService,
+		private readonly notificatorService: NotificatorService,
 		private readonly formBuilder: FormBuilder,
-		private readonly notificatorService: NotificatorService
+		public authService: AuthenticationService
 	) {
 		this.userSubscription = this.authService.loggedUser$.subscribe((res) => {
 			return (this.user = res);
 		});
 	}
 
-	public ngOnInit() {
+	public ngOnInit(): void {
 		this.userLoansSubscription = this.borrowerService.getUserLoans(this.user.uid).subscribe((querySnapshot) => {
 			this.currentLoans = [];
 			querySnapshot.forEach((doc) => {
@@ -69,35 +74,38 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 
 		this.userRequestsSubscription = this.borrowerService
 			.getUserRequests(this.user.uid)
-			.subscribe((querySnapshot) => {
+			.subscribe((querySnapshot: LoanRequestDTO[]) => {
 				this.loanRequests = [];
-				querySnapshot.forEach((doc) => {
+				querySnapshot.forEach((doc: LoanRequestDTO) => {
 					this.loanRequests.push({
 						...doc
 					});
 				});
 			});
 
-		this.userSuggestionsSubscription = this.borrowerService.getUserSuggestions().subscribe((snaphost) => {
-			this.loanSuggestions = [];
-			snaphost.forEach((docs) => {
-				console.log(docs);
-				this.loanSuggestions.push({
-					...docs
+		this.userSuggestionsSubscription = this.borrowerService
+			.getUserSuggestions()
+			.subscribe((snaphost: LoanSuggestionDTO[]) => {
+				this.loanSuggestions = [];
+				snaphost.forEach((docs: LoanSuggestionDTO) => {
+					console.log(docs);
+					this.loanSuggestions.push({
+						...docs
+					});
 				});
 			});
-		});
 
-		this.userPaymentsSubscription = this.borrowerService.getAllPayments(this.user.uid).subscribe((snaphost) => {
-			this.allPayments = [];
-			snaphost.forEach((docs) => {
-				console.log(docs.payload.doc.data());
-				this.allPayments.push({
-					...docs.payload.doc.data()
+		this.userPaymentsSubscription = this.borrowerService
+			.getAllPayments(this.user.uid)
+			.subscribe((snaphost: AllPaymentsDTO[]) => {
+				this.allPayments = [];
+				snaphost.forEach((docs: AllPaymentsDTO) => {
+					this.allPayments.push({
+						...docs
+					});
 				});
+				console.log(this.allPayments);
 			});
-			console.log(this.allPayments);
-		});
 
 		this.addLoanForm = this.formBuilder.group({
 			amount: [ '', [ Validators.required ] ],
@@ -106,7 +114,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	public ngOnDestroy() {
+	public ngOnDestroy(): void {
 		this.userSubscription.unsubscribe();
 		this.userLoansSubscription.unsubscribe();
 		this.userRequestsSubscription.unsubscribe();
@@ -114,19 +122,27 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 		this.userPaymentsSubscription.unsubscribe();
 	}
 
-	public calcInstallment(amount, interestRate, period) {
-		return calculateInstallment(amount, interestRate, period);
+	public endOfContract(dueDate: string, period: number): string {
+		return calculateEndOfContractDate(dueDate, period);
 	}
 
-	public calcNextDueDate(dueDate, payments) {
+	public calcNextDueDate(dueDate: string, payments: number) {
 		return calculateNextDueDate(dueDate, payments);
 	}
 
-	public calcOverdue(dueDate, amount, penalty, interestRate, period, payments) {
+	public calcOverdue(
+		dueDate: string,
+		amount: number,
+		penalty: number,
+		interestRate: number,
+		period: number,
+		payments: number
+	): number {
 		return calculateOverdue(dueDate, amount, penalty, interestRate, period, payments);
 	}
 
 	public loanData(obj) {
+		console.log(obj);
 		return (this.loanFullData = obj);
 	}
 
@@ -135,6 +151,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 		this.borrowerService
 			.acceptLoanRequest({
 				date: moment().format('YYYY-MM-DD'),
+				installment: calculateInstallment(suggestion.amount, suggestion.interestRate, suggestion.period),
 				...suggestion,
 				$userId: this.user.uid,
 				status: 'current'
@@ -177,23 +194,23 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 		}, 0);
 	}
 
-	public rejectSuggestion(suggestionId): void {
+	public rejectSuggestion(suggestionId: string): void {
 		this.borrowerService.deleteLoanSuggestion(suggestionId);
 	}
 
-	public getPayments(reqId, userId) {
-		this.borrowerService.getPayments(reqId, userId).subscribe((querySnapshot) => {
+	public getPayments(reqId: string, userId: string) {
+		this.borrowerService.getPayments(reqId, userId).subscribe((querySnapshot: AllPaymentsDTO[]) => {
 			this.paymentsData = [];
 			this.amountPaid = 0;
-			querySnapshot.forEach((doc) => {
-				this.paymentsData.push(doc.payload.doc.data());
+			querySnapshot.forEach((doc: AllPaymentsDTO) => {
+				this.paymentsData.push(doc);
 			});
 			this.paymentsData.map((data) => (this.amountPaid += data.amount));
 			return this.amountPaid;
 		});
 	}
 
-	public deleteRequest(requestId): void {
+	public deleteRequest(requestId: string): void {
 		this.borrowerService.deleteLoanSuggestion(requestId);
 		this.borrowerService.deleteLoanRequest(requestId);
 	}
@@ -214,8 +231,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 			});
 	}
 
-	public createPayment(data): void {
-		console.log(data);
+	public createPayment(data: AllPaymentsDTO): void {
 		this.borrowerService
 			.createPayment({
 				...data

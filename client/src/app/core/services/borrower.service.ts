@@ -9,13 +9,13 @@ import { AngularFireDatabase } from '@angular/fire/database';
 export class BorrowerService {
 	constructor(private angularFireStore: AngularFirestore, private db: AngularFireDatabase) {}
 
-	public getUserLoans(userId) {
+	public getUserLoans(userId: string) {
 		return this.angularFireStore
 			.collection('loans', (ref) => ref.where('$userId', '==', userId).where('status', '==', 'current'))
 			.snapshotChanges();
 	}
 
-	public getUserRequests(userId) {
+	public getUserRequests(userId: string) {
 		return this.angularFireStore
 			.collection('loans', (ref) => ref.where('$userId', '==', userId).where('status', '==', 'request'))
 			.valueChanges();
@@ -43,27 +43,27 @@ export class BorrowerService {
 		return this.angularFireStore.collection('loans').add(loanData);
 	}
 
-	public getPayments(reqId, userId) {
+	public getPayments(reqId: string, userId: string) {
 		return this.angularFireStore
 			.collection('loansHistory', (ref) => ref.where('$requestId', '==', reqId).where('$userId', '==', userId))
-			.snapshotChanges();
+			.valueChanges();
 	}
 
-	public getAllPayments(userId) {
+	public getAllPayments(userId: string) {
 		return this.angularFireStore
 			.collection('loansHistory', (ref) => ref.where('$userId', '==', userId))
-			.snapshotChanges();
+			.valueChanges();
 	}
 
-	public getUser(userId) {
+	public getUser(userId: string) {
 		return this.angularFireStore.collection('users', (ref) => ref.where('$userId', '==', userId)).get();
 	}
 
-	public getUserDocData(userId) {
+	public getUserDocData(userId: string) {
 		return this.angularFireStore.collection('users').doc(userId);
 	}
 
-	public deleteLoanRequest(requestId) {
+	public deleteLoanRequest(requestId: string) {
 		console.log(requestId);
 		return this.angularFireStore
 			.collection('loans', (ref) => ref.where('$requestId', '==', requestId).where('status', '==', 'request'))
@@ -85,7 +85,7 @@ export class BorrowerService {
 			});
 	}
 
-	public deleteLoanSuggestion(suggestionId) {
+	public deleteLoanSuggestion(suggestionId: string) {
 		return this.angularFireStore
 			.collection('loans', (ref) =>
 				ref.where('status', '==', 'suggestion').where('$suggestionId', '==', suggestionId)
