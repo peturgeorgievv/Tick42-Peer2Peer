@@ -17,7 +17,7 @@
                 style="border: 2px solid gray; padding: 5px;"
               >
                 Loan:
-                <li>
+                <li >
                   <div class="card">
                     <div class="card-body">
                       <div class="d-flex justify-content-between">
@@ -42,11 +42,11 @@
                           </p>
                           <p>
                             Total Amount Without Interest:
-                            <b>{{ this.loan.amount.toFixed(2) }} $</b>
+                            <b>{{ this.loan.amount | number: "1.2-2" }} $</b>
                           </p>
                           <p>
                             Total Amount:
-                            <b>{{ this.loan.amount.toFixed(2) }} $</b>
+                            <b>{{ this.loan.amount | number: "1.2-2" }} $</b>
                           </p>
                           <p>
                             Installment:
@@ -68,7 +68,7 @@
                                   this.loan.interestRate,
                                   this.loan.period,
                                   this.sumOfHistoryAmounts(this.loan)
-                                ).toFixed(2)
+                                ) | number: "1.2-2"
                               }}
                               $</b
                             >
@@ -83,7 +83,14 @@
                   </div>
                 </li>
                 <li>
-                  <div class="card">
+                  <div class="card" [style.background-color]="this.calcOverdue(
+                    this.loan.date,
+                    this.loan.amount,
+                    this.loan.penalty,
+                    this.loan.interestRate,
+                    this.loan.period,
+                    this.sumOfHistoryAmounts(this.loan)
+                  ) > 0 ? '#F27B83' : ''">
                     <div class="card-body">
                       <div class="d-flex justify-content-between">
                         <div>
@@ -94,7 +101,7 @@
                             (
                               this.loan.amount -
                               this.sumOfHistoryAmounts(this.loan)
-                            ).toFixed(2)
+                            ) | number: "1.2-2"
                           }}
                           $
                         </h3>
@@ -121,7 +128,7 @@
                                 this.sumOfHistoryAmounts(this.loan)) /
                                 this.loan.amount) *
                               100
-                            ).toFixed(2)
+                            ) | number: "1.2-2"
                           }}
                           %
                         </p>
@@ -215,7 +222,7 @@
                     <div class="d-flex justify-content-between">
                       <div>
                         <p>
-                          Amount: <b>{{ this.loanRequest.amount }} $</b>
+                          Amount: <b>{{ this.loanRequest.amount | number: "1.2-2" }} $</b>
                         </p>
                         <p>
                           Period: <b>{{ this.loanRequest.period }} Months</b>
@@ -246,7 +253,7 @@
                       <div class="card-body">
                         <div class="d-flex justify-content-between">
                           <div>
-                            <p>Amount: {{ this.suggestion.amount }} $</p>
+                            <p>Amount: {{ this.suggestion.amount | number: "1.2-2"}} $</p>
                             <p>Period: {{ this.suggestion.period }} Months</p>
                             <p>
                               Installments:
@@ -258,7 +265,7 @@
                                     this.suggestion.period +
                                   this.suggestion.amount /
                                     this.suggestion.period
-                                ).toFixed(2)
+                                ) | number: "1.2-2"
                               }}
                               $
                             </p>
