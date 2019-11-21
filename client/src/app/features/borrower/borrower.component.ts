@@ -1,7 +1,7 @@
 import { NotificatorService } from './../../core/services/notificator.service';
 import { AuthenticationService } from './../../core/services/authentication.service';
 import { BorrowerService } from './../../core/services/borrower.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from 'firebase';
 import { Subscription } from 'rxjs';
@@ -17,7 +17,7 @@ import {
 	templateUrl: './borrower.component.html',
 	styleUrls: [ './borrower.component.css' ]
 })
-export class BorrowerComponent implements OnInit {
+export class BorrowerComponent implements OnInit, OnDestroy {
 	public addLoanForm: FormGroup;
 	public currentLoans = [];
 	public loanRequests = [];
@@ -26,6 +26,10 @@ export class BorrowerComponent implements OnInit {
 	public userDocData;
 	public user: User;
 	private userSubscription: Subscription;
+	private userLoansSubscription: Subscription;
+	private userRequestsSubscription: Subscription;
+	private userSuggestionsSubscription: Subscription;
+	private userPaymentsSubscription: Subscription;
 
 	public loanFullData;
 	public paymentsData = [];
@@ -45,7 +49,7 @@ export class BorrowerComponent implements OnInit {
 	}
 
 	public ngOnInit() {
-		this.borrowerService.getUserLoans(this.user.uid).subscribe((querySnapshot) => {
+		this.userLoansSubscription = this.borrowerService.getUserLoans(this.user.uid).subscribe((querySnapshot) => {
 			this.currentLoans = [];
 			querySnapshot.forEach((doc) => {
 				const currentUser: any = doc.payload.doc.data();
@@ -63,26 +67,28 @@ export class BorrowerComponent implements OnInit {
 			});
 		});
 
-		this.borrowerService.getUserRequests(this.user.uid).subscribe((querySnapshot) => {
-			this.loanRequests = [];
-
-			querySnapshot.forEach((doc) => {
-				this.loanRequests.push({
-					...doc.payload.doc.data()
+		this.userRequestsSubscription = this.borrowerService
+			.getUserRequests(this.user.uid)
+			.subscribe((querySnapshot) => {
+				this.loanRequests = [];
+				querySnapshot.forEach((doc) => {
+					this.loanRequests.push({
+						...doc
+					});
 				});
 			});
-		});
-		this.borrowerService.getUserSuggestions().subscribe((snaphost) => {
+
+		this.userSuggestionsSubscription = this.borrowerService.getUserSuggestions().subscribe((snaphost) => {
 			this.loanSuggestions = [];
 			snaphost.forEach((docs) => {
-				console.log(docs.payload.doc.data());
+				console.log(docs);
 				this.loanSuggestions.push({
-					...docs.payload.doc.data()
+					...docs
 				});
 			});
 		});
 
-		this.borrowerService.getAllPayments(this.user.uid).subscribe((snaphost) => {
+		this.userPaymentsSubscription = this.borrowerService.getAllPayments(this.user.uid).subscribe((snaphost) => {
 			this.allPayments = [];
 			snaphost.forEach((docs) => {
 				console.log(docs.payload.doc.data());
@@ -98,6 +104,14 @@ export class BorrowerComponent implements OnInit {
 			dueDate: [ '', [ Validators.required ] ],
 			period: [ '', [ Validators.required ] ]
 		});
+	}
+
+	public ngOnDestroy() {
+		this.userSubscription.unsubscribe();
+		this.userLoansSubscription.unsubscribe();
+		this.userRequestsSubscription.unsubscribe();
+		this.userSuggestionsSubscription.unsubscribe();
+		this.userPaymentsSubscription.unsubscribe();
 	}
 
 	public calcInstallment(amount, interestRate, period) {
@@ -133,8 +147,8 @@ export class BorrowerComponent implements OnInit {
 						this.currentData.currentBalance += suggestion.amount;
 						this.borrowerService.getUserDocData(docs.id).set(
 							{
-								totalDebt: +this.currentData.totalDebt.toFixed(2),
-								currentBalance: +this.currentData.currentBalance.toFixed(2)
+								totalDebt: Number(this.currentData.totalDebt.toFixed(2)),
+								currentBalance: Number(this.currentData.currentBalance.toFixed(2))
 							},
 							{ merge: true }
 						);

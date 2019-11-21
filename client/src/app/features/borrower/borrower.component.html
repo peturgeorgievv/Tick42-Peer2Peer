@@ -23,7 +23,7 @@
                                                                     <p>Total Amount: <b>{{(this.loan.amount).toFixed(2)}} $</b></p>
                                                                     <p>Next Due Date: <b>{{this.calcNextDueDate(this.loan.date, this.historyAmountsLength(this.loan))}}</b></p>
                                                                     <p>Installment: <b>{{this.calcInstallment(this.loan.amount, this.loan.interestRate, this.loan.period).toFixed(2)}} $</b></p>
-                                                                    <p>Overdue Installments: <b>{{this.calcOverdue(this.loan.date, this.loan.amount, this.loan.penalty, this.loan.interestRate, this.loan.period).toFixed(2)}} $</b></p>
+                                                                    <p>Overdue Installments: <b>{{this.calcOverdue(this.loan.date, this.loan.amount, this.loan.penalty, this.loan.interestRate, this.loan.period, this.sumOfHistoryAmounts(this.loan)).toFixed(2)}} $</b></p>
                                                                     <p>Payments Left: <b>{{(this.loan.amount - this.sumOfHistoryAmounts(this.loan)).toFixed(2)}} $</b></p>
 
                                                                     <p>Penalty: <b>{{this.loan.penalty}} %</b></p>
@@ -66,10 +66,10 @@
                                         
                                         <button type="button" 
                                         (click)="this.loanData(this.loan)"
-                                        class="btn btn-block col-12" data-toggle="modal" data-target="#createPayment"><b>Pay</b></button>
+                                        class="btn col-6" data-toggle="modal" data-target="#createPayment"><b>Pay</b></button>
                                         <app-add-payment-modal *ngIf="this.loanFullData" [loanFullData]="this.loanFullData" (createPayment)="this.createPayment($event)"></app-add-payment-modal>
 
-                                        <button type="button" class="btn btn-block col-12" (click)="this.loanData(this.loan) && this.getPayments(this.loan.$requestId, this.loan.$userId)" data-toggle="modal" data-target="#showPaymentsModal">
+                                        <button type="button" class="btn col-6" (click)="this.loanData(this.loan) && this.getPayments(this.loan.$requestId, this.loan.$userId)" data-toggle="modal" data-target="#showPaymentsModal">
                                             <b>Show payments</b>
                                           </button>
                                           <app-show-payments *ngIf="this.loanFullData" [loanPayments]="this.paymentsData"></app-show-payments>

@@ -18,13 +18,13 @@ export class BorrowerService {
 	public getUserRequests(userId) {
 		return this.angularFireStore
 			.collection('loans', (ref) => ref.where('$userId', '==', userId).where('status', '==', 'request'))
-			.snapshotChanges();
+			.valueChanges();
 	}
 
 	public getUserSuggestions() {
 		return this.angularFireStore
 			.collection('loans', (ref) => ref.where('status', '==', 'suggestion'))
-			.snapshotChanges();
+			.valueChanges();
 	}
 
 	public createLoanRequest(loanData) {

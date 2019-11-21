@@ -8,15 +8,15 @@ const routes: Routes = [
 	{ path: '', pathMatch: 'full', component: HomepageComponent },
 	{
 		path: 'borrower',
-		loadChildren: () => import('./features/borrower/borrower.module').then((m) => m.BorrowerModule)
+		loadChildren: () => import('./features/borrower/borrower.module').then((module) => module.BorrowerModule)
 	},
 	{
 		path: 'dashboard',
-		loadChildren: () => import('./features/dashboard/dashboard.module').then((m) => m.DashboardModule)
+		loadChildren: () => import('./features/dashboard/dashboard.module').then((module) => module.DashboardModule)
 	},
 	{
 		path: 'investor',
-		loadChildren: () => import('./features/investor/investor.module').then((m) => m.InvestorModule)
+		loadChildren: () => import('./features/investor/investor.module').then((module) => module.InvestorModule)
 	},
 	{ path: 'sign-in', pathMatch: 'full', component: SignInComponent },
 	{ path: 'register', pathMatch: 'full', component: RegisterComponent }

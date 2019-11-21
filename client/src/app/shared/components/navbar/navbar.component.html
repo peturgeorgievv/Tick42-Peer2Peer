@@ -86,11 +86,6 @@
       </nav>
       <nav class="navbar secondary-navbar navbar-expand-lg navbar-light color:#000000" *ngIf="loggedIn">
           <a class="navbar-brand" href="#"></a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        
-          <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             </ul>
             <form class="form-inline my-2 my-lg-0">
@@ -98,6 +93,5 @@
               <div class="user-info">Debts: <span class="balance-nums">{{this.userBalanceData.totalDebt}} $ </span></div>
               <div class="user-info">Investments: <span class="balance-nums">{{this.userBalanceData.totalInvestment}} $ </span></div>
             </form>
-          </div>
         </nav>
       
