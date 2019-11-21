@@ -1,3 +1,4 @@
+import { CurrentLoanDTO } from './../../common/models/current-loan.dto';
 import { AllPaymentsDTO } from './../../common/models/all-payments.dto';
 import { LoanSuggestionDTO } from './../../common/models/loan-suggestion.dto';
 import { LoanRequestDTO } from './../../common/models/loan-request.dto';
@@ -61,7 +62,6 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 				this.borrowerService.getUser(currentUser.$investorId).subscribe((е) => {
 					е.forEach((docs) => {
 						this.userDocData = docs.data();
-						console.log(this.userDocData);
 					});
 					this.currentLoans.push({
 						id: doc.payload.doc.id,
@@ -88,7 +88,6 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 			.subscribe((snaphost: LoanSuggestionDTO[]) => {
 				this.loanSuggestions = [];
 				snaphost.forEach((docs: LoanSuggestionDTO) => {
-					console.log(docs);
 					this.loanSuggestions.push({
 						...docs
 					});
@@ -104,7 +103,6 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 						...docs
 					});
 				});
-				console.log(this.allPayments);
 			});
 
 		this.addLoanForm = this.formBuilder.group({
@@ -126,7 +124,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 		return calculateEndOfContractDate(dueDate, period);
 	}
 
-	public calcNextDueDate(dueDate: string, payments: number) {
+	public calcNextDueDate(dueDate: string, payments: number): string {
 		return calculateNextDueDate(dueDate, payments);
 	}
 
@@ -141,17 +139,20 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 		return calculateOverdue(dueDate, amount, penalty, interestRate, period, payments);
 	}
 
-	public loanData(obj) {
-		console.log(obj);
+	public loanData(obj: CurrentLoanDTO) {
 		return (this.loanFullData = obj);
 	}
 
-	public acceptRequest(suggestion): void {
+	public acceptRequest(suggestion: CurrentLoanDTO): void {
 		console.log(suggestion);
 		this.borrowerService
 			.acceptLoanRequest({
 				date: moment().format('YYYY-MM-DD'),
-				installment: calculateInstallment(suggestion.amount, suggestion.interestRate, suggestion.period),
+				installment: calculateInstallment(
+					suggestion.amount,
+					suggestion.interestRate,
+					suggestion.period
+				).toFixed(2),
 				...suggestion,
 				$userId: this.user.uid,
 				status: 'current'
@@ -176,7 +177,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 			});
 	}
 
-	public sumOfHistoryAmounts(obj) {
+	public sumOfHistoryAmounts(obj: CurrentLoanDTO) {
 		return this.allPayments.reduce((acc, data) => {
 			if (data.$requestId === obj.$requestId) {
 				return (acc += data.amount);
@@ -185,7 +186,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 		}, 0);
 	}
 
-	public historyAmountsLength(obj) {
+	public historyAmountsLength(obj: CurrentLoanDTO) {
 		return this.allPayments.reduce((acc, data) => {
 			if (data.$requestId === obj.$requestId) {
 				return (acc += 1);
@@ -252,6 +253,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 					});
 				});
 				this.notificatorService.success('You have paid successefully!');
-			});
+			})
+			.catch(() => this.notificatorService.error('Oops, something went wrong!'));
 	}
 }

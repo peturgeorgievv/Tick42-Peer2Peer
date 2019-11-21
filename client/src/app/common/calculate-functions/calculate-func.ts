@@ -10,7 +10,7 @@ export const calculateInstallment = (amount: number, interestRate: number, perio
 
 export const calculateNextDueDate = (dueDate: string, payments: number) => {
 	const currMonth = moment().month();
-	const dueDateMonth = moment(dueDate).month(); // payments
+	const dueDateMonth = moment(dueDate).month();
 	const nextDueDate = moment(dueDate).add(currMonth - dueDateMonth + payments + 1, 'M').format('YYYY-MM-DD');
 	return nextDueDate;
 };

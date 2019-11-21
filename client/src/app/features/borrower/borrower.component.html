@@ -29,6 +29,15 @@
                             Date Created: <b>{{ this.loan.date }}</b>
                           </p>
                           <p>
+                            Next Due Date:
+                            <b>{{
+                              this.calcNextDueDate(
+                                this.loan.date,
+                                this.historyAmountsLength(this.loan)
+                              )
+                            }}</b>
+                          </p>
+                          <p>
                             Date End Of Contract: <b>{{ this.endOfContract(this.loan.date, this.loan.period) }}</b>
                           </p>
                           <p>
@@ -38,15 +47,6 @@
                           <p>
                             Total Amount:
                             <b>{{ this.loan.amount.toFixed(2) }} $</b>
-                          </p>
-                          <p>
-                            Next Due Date:
-                            <b>{{
-                              this.calcNextDueDate(
-                                this.loan.date,
-                                this.historyAmountsLength(this.loan)
-                              )
-                            }}</b>
                           </p>
                           <p>
                             Installment:
@@ -74,19 +74,7 @@
                             >
                           </p>
                           <p>
-                            Amount Left:
-                            <b
-                              >{{
-                                (
-                                  this.loan.amount -
-                                  this.sumOfHistoryAmounts(this.loan)
-                                ).toFixed(2)
-                              }}
-                              $</b
-                            >
-                          </p>
-                          <p>
-                            Penalty: <b>{{ this.loan.penalty }} %</b>
+                            Penalty Per Day: <b>{{ this.loan.penalty }} %</b>
                           </p>
                           <!-- <p>Penalty: <b>{{this.getCurrentLoanHistory(this.loan.$requestId, this.loan.$userId)}} %</b></p> -->
                         </div>
@@ -99,7 +87,7 @@
                     <div class="card-body">
                       <div class="d-flex justify-content-between">
                         <div>
-                          <p><b>Left to pay:</b></p>
+                          <p><b>Amount Left to Pay:</b></p>
                         </div>
                         <h3 class="fw-bold">
                           {{

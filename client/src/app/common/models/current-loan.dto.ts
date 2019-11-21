@@ -10,4 +10,5 @@ export class CurrentLoanDTO {
 	penalty: number;
 	period: number;
 	status: string;
+	id?: string;
 }
