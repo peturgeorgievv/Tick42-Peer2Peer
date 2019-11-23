@@ -7,9 +7,9 @@
           <hr />
           <p class="card-text">User: {{ this.userData.email }}</p>
           <p class="card-text">
-            Current balance: {{ this.userData.currentBalance }}
+            Current balance: {{ this.userData.currentBalance | number: "1.2-2"}}
           </p>
-          <p class="card-text">Current debt: {{ this.userData.totalDebt }}</p>
+          <p class="card-text">Current debt: {{ this.userData.totalDebt | number: "1.2-2" }}</p>
           <p class="card-text">Total investments: {{ this.userData.totalInvestment }}</p>
         </div>
       </div>
