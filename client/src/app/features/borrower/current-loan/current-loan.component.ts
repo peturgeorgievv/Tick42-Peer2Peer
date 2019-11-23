@@ -23,7 +23,6 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 	@Input() user: User;
 
 	public paymentsSubscription: Subscription;
-	public createPaymentSubscription: Subscription;
 
 	public allPayments: AllPaymentsDTO[] = [];
 	public loanHistory: AllPaymentsDTO[];
@@ -58,7 +57,6 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 
 	public ngOnDestroy() {
 		this.paymentsSubscription.unsubscribe();
-		this.createPaymentSubscription.unsubscribe();
 	}
 
 	public getPayments(reqId: string, userId: string): void {
@@ -95,7 +93,7 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 			})
 			.then(() => {
 				let currentData;
-				this.createPaymentSubscription = this.borrowerService.getUser(this.user.uid).subscribe((е) => {
+				this.borrowerService.getUser(this.user.uid).subscribe((е) => {
 					е.forEach((docs) => {
 						currentData = docs.data();
 						currentData.totalDebt -= data.amount;

@@ -9,8 +9,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from 'firebase';
 import { Subscription } from 'rxjs';
-import * as moment from 'moment';
-import { calculateInstallment } from '../../common/calculate-functions/calculate-func';
 
 @Component({
 	selector: 'app-borrower',
@@ -30,7 +28,6 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 
 	public loanFullData;
 	public allPayments: AllPaymentsDTO[] = [];
-	public currentData;
 	public amountPaid = 0;
 
 	constructor(
@@ -67,23 +64,15 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 
 		this.subscriptions.push(
 			this.borrowerService.getUserRequests(this.user.uid).subscribe((querySnapshot: LoanRequestDTO[]) => {
-				this.loanRequests = [];
-				querySnapshot.forEach((doc: LoanRequestDTO) => {
-					this.loanRequests.push({
-						...doc
-					});
-				});
+				this.loanRequests = querySnapshot;
+				console.log(querySnapshot);
 			})
 		);
 
 		this.subscriptions.push(
 			this.borrowerService.getUserSuggestions().subscribe((snaphost: LoanSuggestionDTO[]) => {
-				this.loanSuggestions = [];
-				snaphost.forEach((docs: LoanSuggestionDTO) => {
-					this.loanSuggestions.push({
-						...docs
-					});
-				});
+				this.loanSuggestions = snaphost;
+				console.log(this.loanSuggestions);
 			})
 		);
 
@@ -107,49 +96,6 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 
 	public ngOnDestroy(): void {
 		this.subscriptions.forEach((subscription) => subscription.unsubscribe());
-	}
-
-	public acceptRequest(suggestion: CurrentLoanDTO): void {
-		console.log(suggestion);
-		this.borrowerService
-			.acceptLoanRequest({
-				date: moment().format('YYYY-MM-DD'),
-				installment: calculateInstallment(
-					suggestion.amount,
-					suggestion.interestRate,
-					suggestion.period
-				).toFixed(2),
-				...suggestion,
-				$userId: this.user.uid,
-				status: 'current'
-			})
-			.then(() => {
-				this.borrowerService.getUser(this.user.uid).subscribe((е) => {
-					е.forEach((docs) => {
-						this.currentData = docs.data();
-						this.currentData.totalDebt += suggestion.amount;
-						this.currentData.currentBalance += suggestion.amount;
-						this.borrowerService.getUserDocData(docs.id).set(
-							{
-								totalDebt: Number(this.currentData.totalDebt.toFixed(2)),
-								currentBalance: Number(this.currentData.currentBalance.toFixed(2))
-							},
-							{ merge: true }
-						);
-					});
-				});
-				this.borrowerService.deleteLoanSuggestion(suggestion.$requestId);
-				this.borrowerService.deleteLoanRequest(suggestion.$requestId);
-			});
-	}
-
-	public rejectSuggestion(suggestionId: string): void {
-		this.borrowerService.deleteLoanSuggestion(suggestionId);
-	}
-
-	public deleteRequest(requestId: string): void {
-		this.borrowerService.deleteLoanSuggestion(requestId);
-		this.borrowerService.deleteLoanRequest(requestId);
 	}
 
 	public createLoanReq(loanData): void {

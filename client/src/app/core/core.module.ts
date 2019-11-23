@@ -13,7 +13,7 @@ import { AuthGuard } from '../auth/auth-guard';
 		HttpClientModule,
 		ToastrModule.forRoot({
 			timeOut: 3000,
-			positionClass: 'toast-bottom-right',
+			positionClass: 'toast-top-left',
 			preventDuplicates: true,
 			countDuplicates: true
 		})
