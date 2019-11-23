@@ -11,4 +11,5 @@ export class CurrentLoanDTO {
 	period: number;
 	status: string;
 	id?: string;
+	email?: string;
 }

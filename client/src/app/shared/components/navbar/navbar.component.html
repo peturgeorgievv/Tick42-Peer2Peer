@@ -89,9 +89,9 @@
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             </ul>
             <form class="form-inline my-2 my-lg-0">
-              <div class="user-info">Balance: <span class="balance-nums">{{this.userBalanceData.currentBalance}} $ </span></div>
-              <div class="user-info">Debts: <span class="balance-nums">{{this.userBalanceData.totalDebt}} $ </span></div>
-              <div class="user-info">Investments: <span class="balance-nums">{{this.userBalanceData.totalInvestment}} $ </span></div>
+              <div class="user-info">Balance: <span class="balance-nums">{{this.userBalanceData.currentBalance | number: "1.2-2"}} $ </span></div>
+              <div class="user-info">Debts: <span class="balance-nums">{{this.userBalanceData.totalDebt | number: "1.2-2"}} $ </span></div>
+              <div class="user-info">Investments: <span class="balance-nums">{{this.userBalanceData.totalInvestment | number: "1.2-2"}} $ </span></div>
             </form>
         </nav>
       
