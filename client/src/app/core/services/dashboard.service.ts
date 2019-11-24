@@ -21,7 +21,12 @@ export class DashboardService {
     return this.angularFireStore.collection('users').doc(userId);
   }
 
-
+  public getCurrentUserLoans(userId: string) {
+    return this.angularFireStore
+      .collection('loans', (ref) => ref.where('$userId', '==', userId).where('status', '==', 'current')
+        .orderBy('period', 'desc'))
+      .snapshotChanges();
+  }
 
 }
 

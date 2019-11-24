@@ -8,6 +8,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class CreateWithdrawComponent implements OnInit {
   public createWithdraw: FormGroup;
+  public currentBalance: number;
 
   @Output() public readonly createWithdrawRequest: EventEmitter<any> = new EventEmitter();
 
@@ -15,16 +16,16 @@ export class CreateWithdrawComponent implements OnInit {
 
   ngOnInit() {
     this.createWithdraw = this.fb.group({
-      amount: ['', [Validators.required]]
+      amount: ['', [Validators.required, Validators.min(1)]]
     });
   }
 
-  public emitWithdrawData(withdrawData){
+  public emitWithdrawData(withdrawData) {
     const withdrawToRemove = {
       ...withdrawData
     };
 
-    this.createWithdrawRequest.emit(withdrawData);
+    this.createWithdrawRequest.emit(withdrawToRemove);
     this.createWithdraw.reset();
   }
 
