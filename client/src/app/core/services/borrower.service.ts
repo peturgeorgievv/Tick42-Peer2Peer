@@ -1,3 +1,5 @@
+import { LoanSuggestionDTO } from './../../common/models/loan-suggestion.dto';
+import { Subscription } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -35,6 +37,10 @@ export class BorrowerService {
 		return this.angularFireStore.collection('loans').doc(refId).set({ $requestId: refId }, { merge: true });
 	}
 
+	public editRequestAmount(requestId: string, amount: number) {
+		return this.angularFireStore.collection('loans').doc(requestId).set({ amount }, { merge: true });
+	}
+
 	public createPayment(data) {
 		return this.angularFireStore.collection('loansHistory').add(data);
 	}
@@ -63,7 +69,7 @@ export class BorrowerService {
 		return this.angularFireStore.collection('users').doc(userId);
 	}
 
-	public deleteLoanRequest(requestId: string) {
+	public deleteLoanRequest(requestId: string): Subscription {
 		console.log(requestId);
 		return this.angularFireStore
 			.collection('loans', (ref) => ref.where('$requestId', '==', requestId).where('status', '==', 'request'))
@@ -85,7 +91,24 @@ export class BorrowerService {
 			});
 	}
 
-	public deleteLoanSuggestion(suggestionId: string) {
+	public deleteBiggerLoanSuggestions(requestId: string, amount: number) {
+		return this.angularFireStore
+			.collection('loans', (ref) =>
+				ref
+					.where('status', '==', 'suggestion')
+					.where('$requestId', '==', requestId)
+					.where('amount', '>=', amount)
+			)
+			.valueChanges()
+			.subscribe((querySnapshot: LoanSuggestionDTO[]) => {
+				querySnapshot.forEach((doc: LoanSuggestionDTO) => {
+					console.log(doc);
+					this.angularFireStore.collection('loans').doc(doc.$suggestionId).delete();
+				});
+			});
+	}
+
+	public deleteLoanSuggestion(suggestionId: string): Subscription {
 		return this.angularFireStore
 			.collection('loans', (ref) =>
 				ref.where('status', '==', 'suggestion').where('$suggestionId', '==', suggestionId)
