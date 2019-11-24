@@ -1,4 +1,7 @@
 <div class="full-app">
+  <div>
+    <app-navbar [loggedIn]="loggedIn" [user]="user"> </app-navbar>
+  </div>
 
     <div>
         <app-navbar
@@ -11,6 +14,4 @@
 <div>
 <router-outlet></router-outlet>
 <ngx-spinner></ngx-spinner>
-</div>
-
 </div>
