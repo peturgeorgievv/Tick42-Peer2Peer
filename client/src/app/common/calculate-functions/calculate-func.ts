@@ -1,39 +1,35 @@
 import * as moment from 'moment';
 
-export const calculateEndOfContractDate = (dueDate: string, period: number) => {
+export const calculateEndOfContractDate = (dueDate: string, period: number): string => {
 	return moment(dueDate).add(period, 'M').format('YYYY-MM-DD');
 };
 
-export const calculateInstallment = (amount: number, interestRate: number, period: number) => {
+export const calculateInstallment = (amount: number, interestRate: number, period: number): number => {
 	return amount * interestRate / 100 / period + amount / period;
 };
 
-export const calculateNextDueDate = (dueDate: string, payments: number) => {
+export const calculateNextDueDate = (dueDate: string, payments: number): string => {
 	const currMonth = moment().month();
 	const dueDateMonth = moment(dueDate).month();
 	const nextDueDate = moment(dueDate).add(currMonth - dueDateMonth + payments + 1, 'M').format('YYYY-MM-DD');
 	return nextDueDate;
 };
 
-export const calculateOverdue = (
-	dueDate: string,
-	amount: number,
-	penalty: number,
-	interestRate: number,
-	period: number,
-	payment: number
-) => {
-	const currMonth = moment().month();
-	const dueDateMonth = moment(dueDate).month();
-	const nextDueDate = moment(dueDate).add(currMonth - dueDateMonth + payment + 1, 'M').format('YYYY-MM-DD');
-	if (moment(nextDueDate).date() < moment().date() && moment(nextDueDate).month() <= moment().month()) {
-		console.log(moment(nextDueDate).date(), moment().date(), moment(nextDueDate).month(), moment().month());
-		const currDateDay = moment().date();
-		const currDueDateDay = moment(nextDueDate).date();
+export const overallAmount = (amount: number, interestRate: number, period: number): number => {
+	return amount * (1 + interestRate / 100 / 12 * period);
+};
 
-		const overdue =
-			(currDateDay - currDueDateDay) * penalty * (amount * interestRate / 100 / period + amount / period);
-		return overdue;
-	}
-	return 0;
+export const calculateOverdueDays = (nextDueDate: string, currDate: string) => {
+	// next Due Date
+	return moment(currDate).diff(moment(nextDueDate), 'days');
+};
+
+export const calculatePenaltyAmount = (days: number, amount: number, penaltyInterest: number) => {
+	// penalty int - interestRate + penalty rate
+	// totalAmount - only debt
+
+	const penalty = Math.pow(1 + penaltyInterest / 100 / 360, days);
+	const penaltyAmountPerDay = (penalty - 1) * amount;
+
+	return days * penaltyAmountPerDay;
 };

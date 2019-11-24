@@ -9,185 +9,18 @@
           <div class="card-header">
             <h4 class="card-title">Current Loans</h4>
           </div>
-          <!-- Here to be ngFor!!! -->
+
           <div *ngIf="this.currentLoans">
-            <div class="card-body" *ngFor="let loan of this.currentLoans">
-              <ul
-                class="list-unstyled"
-                style="border: 2px solid gray; padding: 5px;"
-              >
-                Loan:
-                <li >
-                  <div class="card">
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between">
-                        <div>
-                          <p>
-                            Investor: <b>{{ this.loan.email }}</b>
-                          </p>
-                          <p>
-                            Date Created: <b>{{ this.loan.date }}</b>
-                          </p>
-                          <p>
-                            Next Due Date:
-                            <b>{{
-                              this.calcNextDueDate(
-                                this.loan.date,
-                                this.historyAmountsLength(this.loan)
-                              )
-                            }}</b>
-                          </p>
-                          <p>
-                            Date End Of Contract: <b>{{ this.endOfContract(this.loan.date, this.loan.period) }}</b>
-                          </p>
-                          <p>
-                            Total Amount Without Interest:
-                            <b>{{ this.loan.amount | number: "1.2-2" }} $</b>
-                          </p>
-                          <p>
-                            Total Amount:
-                            <b>{{ this.loan.amount | number: "1.2-2" }} $</b>
-                          </p>
-                          <p>
-                            Installment:
-                            <b
-                              >{{
-                                this.loan.installment
-                              }}
-                              $</b
-                            >
-                          </p>
-                          <p>
-                            Overdue Installments:
-                            <b
-                              >{{
-                                this.calcOverdue(
-                                  this.loan.date,
-                                  this.loan.amount,
-                                  this.loan.penalty,
-                                  this.loan.interestRate,
-                                  this.loan.period,
-                                  this.sumOfHistoryAmounts(this.loan)
-                                ) | number: "1.2-2"
-                              }}
-                              $</b
-                            >
-                          </p>
-                          <p>
-                            Penalty Per Day: <b>{{ this.loan.penalty }} %</b>
-                          </p>
-                          <!-- <p>Penalty: <b>{{this.getCurrentLoanHistory(this.loan.$requestId, this.loan.$userId)}} %</b></p> -->
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="card" [style.background-color]="this.calcOverdue(
-                    this.loan.date,
-                    this.loan.amount,
-                    this.loan.penalty,
-                    this.loan.interestRate,
-                    this.loan.period,
-                    this.sumOfHistoryAmounts(this.loan)
-                  ) > 0 ? '#F27B83' : ''">
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between">
-                        <div>
-                          <p><b>Amount Left to Pay:</b></p>
-                        </div>
-                        <h3 class="fw-bold">
-                          {{
-                            (
-                              this.loan.amount -
-                              this.sumOfHistoryAmounts(this.loan)
-                            ) | number: "1.2-2"
-                          }}
-                          $
-                        </h3>
-                      </div>
-                      <div class="progress progress-sm">
-                        <div
-                          class="progress-bar my-progress-bar"
-                          role="progressbar"
-                          [style.width.%]="
-                            ((this.loan.amount -
-                              this.sumOfHistoryAmounts(this.loan)) /
-                              this.loan.amount) *
-                            100
-                          "
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                        ></div>
-                      </div>
-                      <div class="d-flex justify-content-between mt-2">
-                        <p class="text-muted mb-0">
-                          {{
-                            (
-                              ((this.loan.amount -
-                                this.sumOfHistoryAmounts(this.loan)) /
-                                this.loan.amount) *
-                              100
-                            ) | number: "1.2-2"
-                          }}
-                          %
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="card">
-                    <div class="card-body pb-0">
-                      <div class="h3 fw-bold float-right">
-                        {{ this.loan.interestRate }} %
-                      </div>
-                      <p><b>Interest rate:</b></p>
-                      <div class="pull-in sparkline-fix">
-                        <div id="lineChart"></div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-
-                <button
-                  type="button"
-                  (click)="this.loanData(this.loan)"
-                  class="btn col-6"
-                  data-toggle="modal"
-                  data-target="#createPayment"
-                >
-                  <b>Pay</b>
-                </button>
-                <app-add-payment-modal
-                  *ngIf="this.loanFullData"
-                  [loanFullData]="this.loanFullData"
-                  (createPayment)="this.createPayment($event)"
-                ></app-add-payment-modal>
-
-                <button
-                  type="button"
-                  class="btn col-6"
-                  (click)="
-                    this.loanData(this.loan) &&
-                      this.getPayments(this.loan.$requestId, this.loan.$userId)
-                  "
-                  data-toggle="modal"
-                  data-target="#showPaymentsModal"
-                >
-                  <b>Show payments</b>
-                </button>
-                <app-show-payments
-                  *ngIf="this.loanFullData"
-                  [loanPayments]="this.paymentsData"
-                ></app-show-payments>
-              </ul>
-            </div>
+            <app-current-loan
+              *ngFor="let loan of this.currentLoans"
+              [loanData]="loan"
+              [user]="this.user"
+            ></app-current-loan>
           </div>
         </div>
       </div>
-      <br />
     </div>
+    <br />
 
     <div
       class="justify-content-center align-items-center mb-1 col-md-6 col-sm-12 col-xs-12"
@@ -206,103 +39,16 @@
         ></app-create-loan-modal>
 
         <div class="card card-pricing">
-          <div class="card-header">
-            <h4 class="card-title">Loan Requests(pending)</h4>
-          </div>
-          <!-- Here to make ngFor!!! -->
-          <div class="card-body" *ngFor="let loanRequest of this.loanRequests">
-            <ul
-              class="list-unstyled"
-              style="border: 2px solid gray; padding: 5px;"
-            >
-              Request:
-              <li>
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                      <div>
-                        <p>
-                          Amount: <b>{{ this.loanRequest.amount | number: "1.2-2" }} $</b>
-                        </p>
-                        <p>
-                          Period: <b>{{ this.loanRequest.period }} Months</b>
-                        </p>
-                        <!-- <p>Partial: </p> -->
-                      </div>
-                    </div>
-                    <button class="btn col-6"><b>Edit</b></button>
-                    <button
-                      class="btn col-6"
-                      (click)="this.deleteRequest(this.loanRequest.$requestId)"
-                    >
-                      <b>Delete</b>
-                    </button>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <!-- Here to make ngFor for investor!!! -->
-                <div *ngFor="let suggestion of this.loanSuggestions">
-                  <div
-                    *ngIf="
-                      suggestion.$requestId === this.loanRequest.$requestId
-                    "
-                  >
-                    <h5>Investor: {{ this.suggestion.email }}</h5>
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                          <div>
-                            <p>Amount: {{ this.suggestion.amount | number: "1.2-2"}} $</p>
-                            <p>Period: {{ this.suggestion.period }} Months</p>
-                            <p>
-                              Installments:
-                              {{
-                                (
-                                  (this.suggestion.amount *
-                                    this.suggestion.interestRate) /
-                                    100 /
-                                    this.suggestion.period +
-                                  this.suggestion.amount /
-                                    this.suggestion.period
-                                ) | number: "1.2-2"
-                              }}
-                              $
-                            </p>
-                            <p>
-                              Interest Rate:
-                              {{ this.suggestion.interestRate }} %
-                            </p>
-                            <p>
-                              Penalty Rate Per Day:
-                              {{ this.suggestion.penalty }} %
-                            </p>
-                            <!-- <p>Partial: {{this.suggestion.partial}}</p> -->
-                          </div>
-                        </div>
-                        <button
-                          class="btn col-6"
-                          (click)="this.acceptRequest(this.suggestion)"
-                        >
-                          <b>Accept</b>
-                        </button>
-                        <button
-                          class="btn col-6"
-                          (click)="
-                            this.rejectSuggestion(this.suggestion.$suggestionId)
-                          "
-                        >
-                          <b>Reject</b>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- <h5 *ngIf="suggestion.$requestId !== this.loanRequest.$requestId">No any suggestions at this moment!</h5> -->
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+            <div class="card-header">
+              <h4 class="card-title">Loan Requests(pending)</h4>
+            </div>
+        <app-loan-requests
+          *ngFor="let loanRequest of this.loanRequests"
+          [loanRequestData]="loanRequest"
+          [loanSuggestions]="this.loanSuggestions"
+          [user]="this.user"
+        ></app-loan-requests>
+        <div>
       </div>
     </div>
   </div>

@@ -12,7 +12,7 @@ export class BorrowerService {
 	public getUserLoans(userId: string) {
 		return this.angularFireStore
 			.collection('loans', (ref) => ref.where('$userId', '==', userId).where('status', '==', 'current'))
-			.snapshotChanges();
+			.valueChanges();
 	}
 
 	public getUserRequests(userId: string) {

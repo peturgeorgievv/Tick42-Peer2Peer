@@ -1,15 +1,15 @@
 <div
   class="modal fade"
-  id="showPaymentsModal"
+  id="showPaymentsModal{{this.loanRequestId}}"
   tabindex="-1"
   role="dialog"
-  aria-labelledby="showPaymentsModal"
+  aria-labelledby="showPaymentsModal + this.loanRequestId"
   aria-hidden="true"
 >
   <div class="modal-dialog modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="showPaymentsModal"><i>Your PAYMENTS</i></h5>
+        <h5 class="modal-title" id="showPaymentsModal{{this.loanRequestId}}"><i>Your PAYMENTS</i></h5>
         <button
           type="button"
           class="close"

@@ -1,0 +1,85 @@
+<!-- Here to make ngFor!!! -->
+<div class="card-body" *ngIf="this.loanRequestData && this.loanSuggestions">
+  <ul class="list-unstyled" style="border: 2px solid gray; padding: 5px;">
+    Request:
+    <li>
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <p>
+                Amount:
+                <b>{{ this.amount | number: "1.2-2" }} $</b>
+              </p>
+              <p>
+                Period: <b>{{ this.period }} Months</b>
+              </p>
+              <!-- <p>Partial:</p> -->
+            </div>
+          </div>
+          <button class="btn col-6"><b>Edit</b></button>
+          <button class="btn col-6" (click)="this.deleteRequest()">
+            <b>Delete</b>
+          </button>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div *ngFor="let suggestion of this.loanSuggestions">
+        <div *ngIf="suggestion.$requestId === $requestId">
+          <h5>Investor: {{ this.suggestion.email }}</h5>
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <p>
+                    Amount:
+                    <b>{{ this.suggestion.amount | number: "1.2-2" }} $</b>
+                  </p>
+                  <p>
+                    Period: <b>{{ this.suggestion.period }} Months </b>
+                  </p>
+                  <p>
+                    Installments:
+                    <b
+                      >{{
+                        (this.suggestion.amount *
+                          this.suggestion.interestRate) /
+                          100 /
+                          this.suggestion.period +
+                          this.suggestion.amount / this.suggestion.period
+                          | number: "1.2-2"
+                      }}
+                      $</b
+                    >
+                  </p>
+                  <p>
+                    Interest Rate:
+                    <b>{{ this.suggestion.interestRate }} %</b>
+                  </p>
+                  <p>
+                    Penalty Rate Per Day:
+                    <b>{{ this.suggestion.penalty }} %</b>
+                  </p>
+                  <!-- <p>Partial: {{this.suggestion.partial}}</p> -->
+                </div>
+              </div>
+              <button
+                class="btn col-6"
+                (click)="this.acceptRequest(this.suggestion)"
+              >
+                <b>Accept</b>
+              </button>
+              <button
+                class="btn col-6"
+                (click)="this.rejectSuggestion(this.suggestion.$suggestionId)"
+              >
+                <b>Reject</b>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

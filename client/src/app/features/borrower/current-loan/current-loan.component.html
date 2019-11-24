@@ -1,0 +1,133 @@
+<div class="card-body" *ngIf="this.loanData && this.allPayments">
+  <ul class="list-unstyled" style="border: 2px solid gray; padding: 5px;">
+    Loan:
+    <li>
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <p>
+                Investor: <b>{{ this.loanData.email }}</b>
+              </p>
+              <p>
+                Date Created: <b>{{ this.loanData.date }}</b>
+              </p>
+              <p>
+                Next Due Date:
+                <b>{{ this.calcNextDueDate() }}</b>
+              </p>
+              <p>
+                Date End Of Contract:
+                <b>{{ this.dateEndOfContract }}</b>
+              </p>
+              <p>
+                Total Amount Without Interest:
+                <b>{{ this.amount | number: "1.2-2" }} $</b>
+              </p>
+              <p>
+                Total Amount:
+                <b>{{ this.totalAmount | number: "1.2-2" }} $</b>
+              </p>
+              <p>
+                Installment:
+                <b>{{ this.installment }} $</b>
+              </p>
+              <p>
+                Interest Rate:
+                <b>{{ this.interestRate }} $</b>
+              </p>
+              <p *ngIf="this.overdueDays() > 0">
+                Overdue Days:
+                <b>{{ this.overdueDays() }} $</b>
+              </p>
+              <p *ngIf="this.overdueDays() > 0">
+                Overdue Payment:
+                <b>{{ this.overdueAmount() | number: "1.2-2" }} $</b>
+              </p>
+              <p>
+                Penalty Rate: <b>{{ this.penalty }} %</b>
+              </p>
+              <!-- <p>Penalty: <b>{{this.getCurrentLoanHistory(this.loan.$requestId, this.loan.$userId)}} %</b></p> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div
+        *ngIf="this.amountLeft"
+        class="card"
+        [style.background-color]="this.overdueAmount() > 0 ? '#F27B83' : ''"
+      >
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <p><b>Amount Left to Pay:</b></p>
+            </div>
+            <h3 class="fw-bold">
+              {{ this.amountLeft | number: "1.2-2" }}
+              $
+            </h3>
+          </div>
+          <div class="progress progress-sm">
+            <div
+              class="progress-bar my-progress-bar"
+              role="progressbar"
+              [style.width.%]="(this.amountLeft / this.amount) * 100"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
+          <div class="d-flex justify-content-between mt-2">
+            <p class="text-muted mb-0">
+              {{ (this.amountLeft / this.amount) * 100 | number: "1.2-2" }}
+              %
+            </p>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="card">
+        <div class="card-body pb-0">
+          <div class="h3 fw-bold float-right">{{ this.interestRate }} %</div>
+          <p><b>Interest rate:</b></p>
+          <div class="pull-in sparkline-fix">
+            <div id="lineChart"></div>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <button
+      type="button"
+      (click)="(this.loanData)"
+      class="btn col-6"
+      data-toggle="modal"
+      [attr.data-target]="'#createPayment' + this.loanData.$requestId"
+    >
+      <b>Pay</b>
+    </button>
+    <app-add-payment-modal
+      *ngIf="this.loanData"
+      [loanFullData]="this.loanData"
+      [overdueAmount]="this.overdueAmount()"
+      (createPayment)="this.createPayment($event)"
+    ></app-add-payment-modal>
+
+    <button
+      type="button"
+      class="btn col-6"
+      (click)="this.currentLoanPayments()"
+      data-toggle="modal"
+      [attr.data-target]="'#showPaymentsModal' + this.loanData.$requestId"
+    >
+      <b>Show payments</b>
+    </button>
+    <app-show-payments
+      *ngIf="this.loanHistory"
+      [loanPayments]="this.loanHistory"
+      [loanRequestId]="this.loanData.$requestId"
+    ></app-show-payments>
+  </ul>
+</div>
