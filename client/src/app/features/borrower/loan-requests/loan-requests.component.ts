@@ -1,8 +1,9 @@
+import { Subscription } from 'rxjs';
 import { LoanSuggestionDTO } from './../../../common/models/loan-suggestion.dto';
 import { User } from 'firebase';
 import { BorrowerService } from './../../../core/services/borrower.service';
 import { LoanRequestDTO } from './../../../common/models/loan-request.dto';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import * as moment from 'moment';
 import { calculateInstallment } from '../../../common/calculate-functions/calculate-func';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -12,10 +13,12 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 	templateUrl: './loan-requests.component.html',
 	styleUrls: [ './loan-requests.component.css' ]
 })
-export class LoanRequestsComponent implements OnInit {
+export class LoanRequestsComponent implements OnInit, OnDestroy {
 	@Input() loanRequestData: LoanRequestDTO;
 	@Input() loanSuggestions: LoanRequestDTO;
 	@Input() user: User;
+
+	public deleteLoanRequestSubscription: Subscription;
 
 	public amount: number;
 	public period: number;
@@ -35,9 +38,17 @@ export class LoanRequestsComponent implements OnInit {
 		});
 	}
 
-	public editLoanRequest(data) {
+	ngOnDestroy() {
+		this.deleteLoanRequestSubscription.unsubscribe();
+	}
+
+	public editLoanRequest(data): void {
 		this.edit = false;
-		console.log(data);
+		this.borrowerService.editRequestAmount(this.$requestId, data.amount);
+		this.deleteLoanRequestSubscription = this.borrowerService.deleteBiggerLoanSuggestions(
+			this.$requestId,
+			data.amount
+		);
 	}
 
 	public deleteRequest(): void {
