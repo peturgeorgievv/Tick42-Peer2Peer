@@ -35,23 +35,9 @@ export class AuthenticationService {
 		});
 	}
 
-	// private userBalanceData() {
-	// 	try {
-	// 		const value = JSON.parse(localStorage.getItem('user'));
-	// 		const res = value && value !== 'undefined' ? value : null;
-	// 		return this.angularFireStore
-	// 			.collection('users', (ref) => ref.where('$userId', '==', res.uid))
-	// 			.valueChanges()
-	// 			.subscribe((querySnapshot) => {
-	// 				querySnapshot.forEach((doc) => {
-	// 					this.userBalanceData$.next(doc);
-	// 				});
-	// 			});
-	// 	} catch (error) {
-	// 		// this.userBalanceData$.next(null);
-	// 		// return null;
-	// 	}
-	// }
+	public userBalanceData(userId) {
+		return this.angularFireStore.collection('users', (ref) => ref.where('$userId', '==', userId)).valueChanges();
+	}
 
 	private isUserLoggedIn(): boolean {
 		const value = localStorage.getItem('user');
@@ -75,10 +61,6 @@ export class AuthenticationService {
 	public get isLoggedIn$(): Observable<boolean> {
 		return this.isLoggedInSubject$.asObservable();
 	}
-
-	// public get loggedUserBalanceData$(): Observable<any> {
-	// 	return this.userBalanceData$.asObservable();
-	// }
 
 	public get loggedUser$(): Observable<User> {
 		return this.user$.asObservable();

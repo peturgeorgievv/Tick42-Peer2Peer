@@ -11,10 +11,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 	styleUrls: [ './navbar.component.css' ]
 })
 export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
-	private userBalanceDataSubscription: Subscription;
-
 	@Input() loggedIn: boolean;
 	@Input() user: User;
+
+	public userBalanceDataSubscription: Subscription;
 	public userBalanceData: UserDTO;
 
 	constructor(public authService: AuthenticationService, private readonly angularFireStore: AngularFirestore) {}
@@ -23,19 +23,12 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
 
 	ngOnChanges() {
 		if (this.user) {
-			this.userData();
-		}
-	}
-
-	public userData() {
-		return (this.userBalanceDataSubscription = this.angularFireStore
-			.collection('users', (ref) => ref.where('$userId', '==', this.user.uid))
-			.valueChanges()
-			.subscribe((querySnapshot) => {
-				querySnapshot.forEach((doc: UserDTO) => {
-					this.userBalanceData = doc;
+			this.userBalanceDataSubscription = this.authService
+				.userBalanceData(this.user.uid)
+				.subscribe((querySnapshot: UserDTO[]) => {
+					return (this.userBalanceData = querySnapshot[0]);
 				});
-			}));
+		}
 	}
 
 	ngOnDestroy() {
@@ -44,6 +37,5 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
 
 	public signOut(): void {
 		this.authService.signOut();
-		this.userData();
 	}
 }

@@ -1,96 +1,114 @@
-      <nav class="navbar navbar-expand-lg navbar-light full-navbar" *ngIf="!loggedIn">
-        <a class="navbar-brand font-weight-bolder" [routerLink]="['/']"
-          ><span class="navbar-text text-light">P2P LendIt</span>
-</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+<nav class="navbar navbar-expand-lg navbar-light full-navbar" *ngIf="!loggedIn">
+  <a class="navbar-brand font-weight-bolder" [routerLink]="['/']"
+    ><span class="navbar-text text-light">P2P LendIt</span>
+  </a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto"></ul>
+    <form class="form-inline my-2 my-lg-0">
+      <div class="row">
+        <a
+          class="btn btn-light btn-outline-secondary  font-weight-bolder"
+          [routerLink]="['/sign-in']"
+          role="button"
+          >Sign In</a
         >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto"></ul>
-          <form class="form-inline my-2 my-lg-0">
-            <div class="row">
-              <a
-                class="btn btn-light btn-outline-secondary  font-weight-bolder"
-                [routerLink]="['/sign-in']"
-                role="button"
-                >Sign In</a
-              >
-              <a
-                class="btn btn-light btn-outline-secondary  font-weight-bolder"
-                [routerLink]="['/register']"
-                role="button"
-                >Sign Up</a
-              >
-            </div>
-          </form>
-        </div>
-      </nav>
-
-
-      <nav class="navbar navbar-expand-lg navbar-light full-navbar" *ngIf="loggedIn">
-        <a class="navbar-brand font-weight-bolder color:#000000" [routerLink]="['/dashboard']"
-          ><span class="navbar-text text-light">P2P LendIt</span>
-</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+        <a
+          class="btn btn-light btn-outline-secondary  font-weight-bolder"
+          [routerLink]="['/register']"
+          role="button"
+          >Sign Up</a
         >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+      </div>
+    </form>
+  </div>
+</nav>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto"></ul>
-          <form class="form-inline my-2 my-lg-0">
-            <div class="row">
-              <a
-                class="btn btn-light btn-outline-secondary  font-weight-bolder"
-                [routerLink]="['/borrower']"
-                role="button"
-                >Borrower</a
-              >
-              <a
-                class="btn btn-light btn-outline-secondary  font-weight-bolder"
-                [routerLink]="['/investor']"
-                role="button"
-                >Investor</a
-              >
-              <a
-                class="btn btn-light btn-outline-secondary  font-weight-bolder"
-                [routerLink]="['/dashboard']"
-                role="button"
-                >Dashboard</a
-              >
-              <a
-                class="btn btn-light btn-outline-secondary  font-weight-bolder"
-              (click)="this.signOut()"
-                role="button"
-                >Sign Out</a
-              >
-            </div>
-          </form>
-        </div>
-      </nav>
-      <nav class="navbar secondary-navbar navbar-expand-lg navbar-light color:#000000" *ngIf="loggedIn">
-          <a class="navbar-brand" href="#"></a>
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            </ul>
-            <form class="form-inline my-2 my-lg-0" *ngIf="this.userBalanceData">
-              <div class="user-info">Balance: <span class="balance-nums">{{this.userBalanceData.currentBalance | number: "1.2-2"}} $ </span></div>
-              <div class="user-info">Debts: <span class="balance-nums">{{this.userBalanceData.totalDebt | number: "1.2-2"}} $ </span></div>
-              <div class="user-info">Investments: <span class="balance-nums">{{this.userBalanceData.totalInvestment | number: "1.2-2"}} $ </span></div>
-            </form>
-        </nav>
+<nav class="navbar navbar-expand-lg navbar-light full-navbar" *ngIf="loggedIn">
+  <a
+    class="navbar-brand font-weight-bolder color:#000000"
+    [routerLink]="['/dashboard']"
+    ><span class="navbar-text text-light">P2P LendIt</span>
+  </a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto"></ul>
+    <form class="form-inline my-2 my-lg-0">
+      <div class="row">
+        <a
+          class="btn btn-light btn-outline-secondary  font-weight-bolder"
+          [routerLink]="['/borrower']"
+          role="button"
+          >Borrower</a
+        >
+        <a
+          class="btn btn-light btn-outline-secondary  font-weight-bolder"
+          [routerLink]="['/investor']"
+          role="button"
+          >Investor</a
+        >
+        <a
+          class="btn btn-light btn-outline-secondary  font-weight-bolder"
+          [routerLink]="['/dashboard']"
+          role="button"
+          >Dashboard</a
+        >
+        <a
+          class="btn btn-light btn-outline-secondary  font-weight-bolder"
+          (click)="this.signOut()"
+          role="button"
+          >Sign Out</a
+        >
+      </div>
+    </form>
+  </div>
+</nav>
+<nav
+  class="navbar secondary-navbar navbar-expand-lg navbar-light color:#000000"
+  *ngIf="loggedIn && this.userBalanceData"
+>
+  <a class="navbar-brand" href="#"></a>
+  <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
+  <form class="form-inline my-2 my-lg-0">
+    <div class="user-info">
+      Balance:
+      <span class="balance-nums"
+        >{{ this.userBalanceData.currentBalance | number: "1.2-2" }} $
+      </span>
+    </div>
+    <div class="user-info">
+      Debts:
+      <span class="balance-nums"
+        >{{ this.userBalanceData.totalDebt | number: "1.2-2" }} $
+      </span>
+    </div>
+    <div class="user-info">
+      Investments:
+      <span class="balance-nums"
+        >{{ this.userBalanceData.totalInvestment | number: "1.2-2" }} $
+      </span>
+    </div>
+  </form>
+</nav>
