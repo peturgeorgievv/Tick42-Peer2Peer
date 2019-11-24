@@ -1,17 +1,10 @@
 <div class="full-app">
+  <div>
+    <app-navbar [loggedIn]="loggedIn" [user]="user"> </app-navbar>
+  </div>
 
-    <div>
-        <app-navbar
-            [loggedIn]="loggedIn"
-            [user]="user"
-            [userBalanceData]="userBalanceData"
-        >
-        </app-navbar>
-    </div>
-
-<div>
-<router-outlet></router-outlet>
-<ngx-spinner></ngx-spinner>
-</div>
-
+  <div>
+    <router-outlet></router-outlet>
+    <ngx-spinner></ngx-spinner>
+  </div>
 </div>

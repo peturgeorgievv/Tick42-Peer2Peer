@@ -13,7 +13,7 @@ export class AuthenticationService {
 
 	private readonly user$: BehaviorSubject<User> = new BehaviorSubject(this.loggedUser());
 
-	private readonly userBalanceData$: BehaviorSubject<any> = new BehaviorSubject(this.userBalanceData());
+	// private readonly userBalanceData$: BehaviorSubject<any> = new BehaviorSubject(this.userBalanceData());
 
 	constructor(
 		private angularFireAuth: AngularFireAuth,
@@ -35,23 +35,23 @@ export class AuthenticationService {
 		});
 	}
 
-	private userBalanceData() {
-		try {
-			const value = JSON.parse(localStorage.getItem('user'));
-			const res = value && value !== 'undefined' ? value : null;
-			return this.angularFireStore
-				.collection('users', (ref) => ref.where('$userId', '==', res.uid))
-				.snapshotChanges()
-				.subscribe((querySnapshot) => {
-					querySnapshot.forEach((doc) => {
-						this.userBalanceData$.next(doc.payload.doc.data());
-					});
-				});
-		} catch (error) {
-			this.userBalanceData$.next(null);
-			return null;
-		}
-	}
+	// private userBalanceData() {
+	// 	try {
+	// 		const value = JSON.parse(localStorage.getItem('user'));
+	// 		const res = value && value !== 'undefined' ? value : null;
+	// 		return this.angularFireStore
+	// 			.collection('users', (ref) => ref.where('$userId', '==', res.uid))
+	// 			.valueChanges()
+	// 			.subscribe((querySnapshot) => {
+	// 				querySnapshot.forEach((doc) => {
+	// 					this.userBalanceData$.next(doc);
+	// 				});
+	// 			});
+	// 	} catch (error) {
+	// 		// this.userBalanceData$.next(null);
+	// 		// return null;
+	// 	}
+	// }
 
 	private isUserLoggedIn(): boolean {
 		const value = localStorage.getItem('user');
@@ -76,9 +76,9 @@ export class AuthenticationService {
 		return this.isLoggedInSubject$.asObservable();
 	}
 
-	public get loggedUserBalanceData$(): Observable<any> {
-		return this.userBalanceData$.asObservable();
-	}
+	// public get loggedUserBalanceData$(): Observable<any> {
+	// 	return this.userBalanceData$.asObservable();
+	// }
 
 	public get loggedUser$(): Observable<User> {
 		return this.user$.asObservable();
