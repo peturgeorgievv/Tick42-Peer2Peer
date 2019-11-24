@@ -1,4 +1,4 @@
-<div class="container-fluid my-3" *ngIf="userData">
+<div class="container-fluid my-3" *ngIf="userData && this.curLoans[0]">
   <div class="row">
     <div class="col-md-4">
       <div class="card border-success mb-3">
@@ -7,10 +7,10 @@
           <hr />
           <p class="card-text">User: {{ this.userData.email }}</p>
           <p class="card-text">
-            Current balance: {{ this.userData.currentBalance | number: "1.2-2"}}
+            Current balance: ${{ this.userData.currentBalance | number: "1.2-2"}}
           </p>
-          <p class="card-text">Current debt: {{ this.userData.totalDebt | number: "1.2-2" }}</p>
-          <p class="card-text">Total investments: {{ this.userData.totalInvestment }}</p>
+          <p class="card-text">Current debt: ${{ this.userData.totalDebt | number: "1.2-2" }}</p>
+          <p class="card-text">Total investments: ${{ this.userData.totalInvestment | number: "1.2-2" }}</p>
         </div>
       </div>
     </div>
@@ -28,22 +28,7 @@
         <app-create-withdraw (createWithdrawRequest)="this.createWithdraw($event)"></app-create-withdraw>
       </li>
       <li>
-        <button
-          type="button"
-          class="btn btn-outline-success waves-effect"
-          [routerLink]="'/investor'"
-        >
-          Invest Panel
-        </button>
-      </li>
-      <li>
-        <button
-          type="button"
-          class="btn btn-outline-success waves-effect"
-          [routerLink]="'/borrower'"
-        >
-          Borrow Panel
-        </button>
+
       </li>
     </ul>
   </div>
@@ -52,8 +37,19 @@
       <div class="card border-success mb-3">
         <div class="card-body text-success">
           <h6 class="card-title">Total investments</h6>
-          <hr />
-          <div class="card-text">Some future place to show investments</div>
+          <hr>
+          <div class="card-text">Total period of all investments: {{this.curInvestments[0].period}} days.</div>
+          <div class="card-text">Number of borrowers: COULD</div>
+          <div class="card-text">Overdue investments: SHOULD</div>
+          <div class="card-text">Next Due Date and Amount: SHOULD</div>
+          <hr>
+          <button
+          type="button"
+          class="btn btn-outline-success waves-effect"
+          [routerLink]="'/investor'"
+        >
+          Invest Panel
+        </button>
         </div>
       </div>
     </div>
@@ -61,8 +57,19 @@
       <div class="card border-success mb-3">
         <div class="card-body text-success">
           <h6 class="card-title">Total debts</h6>
-          <hr />
-          <div class="card-text">Some future place to show debts</div>
+          <hr>
+          <div class="card-text">Total period of all debts: {{this.curLoans[0].period}} days.</div>
+          <div class="card-text">Number of investrors: COULD</div>
+          <div class="card-text">Overdue Loans: SHOULD</div>
+          <div class="card-text">Next Due Date and Amount: SHOULD</div>
+          <hr>
+          <button
+          type="button"
+          class="btn btn-outline-success waves-effect"
+          [routerLink]="'/borrower'"
+        >
+          Borrow Panel
+        </button>
         </div>
       </div>
     </div>
