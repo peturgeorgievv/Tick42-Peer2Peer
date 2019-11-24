@@ -1,20 +1,29 @@
-<p>show-investment works!</p>
 <div class="card-body">
   <ul class="list-unstyled" style="border: 2px solid gray; padding: 5px;">
     Investment:
     <li>
-        <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <p>
-                  Investor: <b>{{ this.investmentData.email }}</b>
-                </p>
-                <p>
-                  Amount: <b>{{this.investmentData.amount}}</b>
-                </p>
-              </div>
-            </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div>
+            <p>
+              Borrower: <b>{{ this.investmentData.email }}</b>
+            </p>
+            <p>
+              Total (DUE NOT) Amount: <b>${{ this.investmentData.amount | number: "1.2-2"}}</b>
+            </p>
+            <p>(NOT)Installments (LEFT): <b>to be calculated</b></p>
+            <p>(NOT)Next Due Date: <b>to be calculated</b></p>
+            <p>
+              Installment: <b>${{ this.investmentData.installment | number: "1.2-2"}}</b>
+            </p>
+            <p>(NOT)Overdue installments: <b>to be calculated</b></p>
+            <p>(NOT)Penalties: <b>to be calculated</b></p>
+            <p>
+              Interest rate: <b>{{ this.investmentData.interestRate | number: "1.2-2"}}%</b>
+            </p>
           </div>
+        </div>
+      </div>
     </li>
   </ul>
 </div>

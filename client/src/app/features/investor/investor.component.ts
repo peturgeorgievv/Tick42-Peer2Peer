@@ -19,6 +19,7 @@ export class InvestorComponent implements OnInit, OnDestroy {
   public loanUser;
 
   public userDocData;
+  public getInvestmentsSubscription: Subscription;
 
   constructor(
     private readonly investorService: InvestorService,
@@ -36,33 +37,33 @@ export class InvestorComponent implements OnInit, OnDestroy {
         this.loanRequests.push({
           ...docs.payload.doc.data()
         });
-        // console.log(this.loanRequests);
       });
     });
 
-
-    this.investorService.getUserInvestments(this.user.uid).subscribe((querySnapshot) => {
-      this.currentInvestments = [];
-      querySnapshot.forEach((doc) => {
-        const currentUser: any = doc;
-        this.investorService.getUser(currentUser.$investorId).subscribe((е) => {
-          е.forEach((docs) => {
-            this.userDocData = docs.data();
-            this.currentInvestments.push({
-              email: this.userDocData.email,
-              ...doc
+    this.getInvestmentsSubscription = this.investorService.getUserInvestments(this.user.uid)
+      .subscribe((querySnapshot) => {
+        this.currentInvestments = [];
+        querySnapshot.forEach((doc) => {
+          const currentUser: any = doc;
+          this.investorService.getUser(currentUser.$investorId).subscribe((е) => {
+            е.forEach((docs) => {
+              this.userDocData = docs.data();
+              this.currentInvestments.push({
+                email: this.userDocData.email,
+                ...doc
+              });
             });
           });
         });
-      });
-      console.log(this.currentInvestments);
+        console.log(this.currentInvestments);
 
-    });
+      });
 
   }
 
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
+    this.getInvestmentsSubscription.unsubscribe();
   }
 
 

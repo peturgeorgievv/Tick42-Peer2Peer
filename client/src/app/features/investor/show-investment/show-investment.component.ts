@@ -15,6 +15,8 @@ export class ShowInvestmentComponent implements OnInit {
   public amount: number;
   public period: number;
   public $requestId: string;
+  public installment: number;
+  public interestRate: number;
 
   constructor() { }
 
@@ -22,6 +24,8 @@ export class ShowInvestmentComponent implements OnInit {
     this.amount = this.investmentData.amount;
     this.period = this.investmentData.period;
     this.$requestId = this.investmentData.$requestId;
+    this.installment = this.investmentData.installment;
+    this.interestRate = this.investmentData.interestRate;
   }
 
 }
