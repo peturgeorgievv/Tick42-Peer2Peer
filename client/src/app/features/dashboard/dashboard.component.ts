@@ -1,5 +1,5 @@
 import { DashboardService } from './../../core/services/dashboard.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'firebase';
 import { Subscription } from 'rxjs';
@@ -11,11 +11,16 @@ import { AuthenticationService } from './../../core/services/authentication.serv
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   public userData;
   public user: User;
   private userSubscription: Subscription;
   private currentData;
+  private userLoansSubscription: Subscription;
+  private userInvestmentSubscription: Subscription;
+
+  public curLoans = [];
+  public curInvestments = [];
 
   constructor(
     private readonly dashboardService: DashboardService,
@@ -35,6 +40,50 @@ export class DashboardComponent implements OnInit {
         );
       }
     ));
+
+    this.userLoansSubscription = this.dashboardService
+      .getCurrentUserLoans(this.user.uid)
+      .subscribe((querySnapshot) => {
+        this.curLoans = [];
+        querySnapshot.forEach((doc) => {
+          const curUser: any = doc.payload.doc.data();
+          this.dashboardService.getUser(curUser.$requestId).subscribe((е) => {
+            е.forEach((docs) => {
+              this.userData = docs.data();
+            });
+            this.curLoans.push({
+              ...doc.payload.doc.data()
+            });
+          });
+        });
+
+
+        console.log(this.curLoans);
+      });
+
+    this.userInvestmentSubscription = this.dashboardService
+      .getCurrentUserLoans(this.user.uid)
+      .subscribe((querySnapshot) => {
+        this.curInvestments = [];
+        querySnapshot.forEach((doc) => {
+          const curUser: any = doc.payload.doc.data();
+          this.dashboardService.getUser(curUser.$investorId).subscribe((e) => {
+            e.forEach((docs) => {
+              this.userData = docs.data();
+            });
+            this.curInvestments.push({
+              ...doc.payload.doc.data()
+            });
+          });
+        });
+        console.log(this.curInvestments);
+
+      });
+  }
+
+  ngOnDestroy() {
+    this.userSubscription.unsubscribe();
+    this.userLoansSubscription.unsubscribe();
   }
 
   createDeposit(data) {
