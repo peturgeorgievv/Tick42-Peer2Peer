@@ -5,6 +5,7 @@ import { LoanRequestDTO } from './../../../common/models/loan-request.dto';
 import { Component, OnInit, Input } from '@angular/core';
 import * as moment from 'moment';
 import { calculateInstallment } from '../../../common/calculate-functions/calculate-func';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
 	selector: 'app-loan-requests',
@@ -19,13 +20,24 @@ export class LoanRequestsComponent implements OnInit {
 	public amount: number;
 	public period: number;
 	public $requestId: string;
+	public edit = false;
+	public editLoanForm: FormGroup;
 
-	constructor(private readonly borrowerService: BorrowerService) {}
+	constructor(private readonly borrowerService: BorrowerService, private readonly formBuilder: FormBuilder) {}
 
 	ngOnInit() {
 		this.amount = this.loanRequestData.amount;
 		this.period = this.loanRequestData.period;
 		this.$requestId = this.loanRequestData.$requestId;
+
+		this.editLoanForm = this.formBuilder.group({
+			amount: [ this.amount, [ Validators.required ] ]
+		});
+	}
+
+	public editLoanRequest(data) {
+		this.edit = false;
+		console.log(data);
 	}
 
 	public deleteRequest(): void {

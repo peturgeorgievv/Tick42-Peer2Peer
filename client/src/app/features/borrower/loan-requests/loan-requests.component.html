@@ -5,22 +5,49 @@
     <li>
       <div class="card">
         <div class="card-body">
-          <div class="d-flex justify-content-between">
-            <div>
-              <p>
-                Amount:
-                <b>{{ this.amount | number: "1.2-2" }} $</b>
-              </p>
-              <p>
-                Period: <b>{{ this.period }} Months</b>
-              </p>
-              <!-- <p>Partial:</p> -->
+          <form
+            [formGroup]="this.editLoanForm"
+            (submit)="this.editLoanRequest(this.editLoanForm.value)"
+          >
+            <div class="d-flex justify-content-between">
+              <div>
+                <p>
+                  Amount:
+                  <b *ngIf="!this.edit"
+                    >{{ this.amount | number: "1.2-2" }} $</b
+                  >
+
+                  <b *ngIf="this.edit" style="display: inline-flex;">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="loan-amount"
+                      placeholder=" Enter your prefered amount"
+                      formControlName="amount"
+                    />
+                    $
+                  </b>
+                </p>
+                <p>
+                  Period: <b>{{ this.period }} Months</b>
+                </p>
+                <!-- <p>Partial:</p> -->
+              </div>
             </div>
-          </div>
-          <button class="btn col-6"><b>Edit</b></button>
-          <button class="btn col-6" (click)="this.deleteRequest()">
-            <b>Delete</b>
-          </button>
+            <button
+              class="btn col-6"
+              *ngIf="!this.edit"
+              (click)="this.edit = !this.edit"
+            >
+              <b>Edit</b>
+            </button>
+            <button class="btn col-6" type="submit" *ngIf="this.edit">
+              <b>Save</b>
+            </button>
+            <button class="btn col-6" (click)="this.deleteRequest()">
+              <b>Delete</b>
+            </button>
+          </form>
         </div>
       </div>
     </li>
