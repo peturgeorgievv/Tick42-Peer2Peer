@@ -22,6 +22,7 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 
 	public amount: number;
 	public period: number;
+	public partial: boolean;
 	public $requestId: string;
 	public edit = false;
 	public editLoanForm: FormGroup;
@@ -31,6 +32,7 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 		this.amount = this.loanRequestData.amount;
 		this.period = this.loanRequestData.period;
+		this.partial = this.loanRequestData.partial;
 		this.$requestId = this.loanRequestData.$requestId;
 
 		this.editLoanForm = this.formBuilder.group({
@@ -39,7 +41,9 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.deleteLoanRequestSubscription.unsubscribe();
+		if (this.deleteLoanRequestSubscription) {
+			this.deleteLoanRequestSubscription.unsubscribe();
+		}
 	}
 
 	public editLoanRequest(data): void {
@@ -83,6 +87,21 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 						this.borrowerService.getUserDocData(docs.id).set(
 							{
 								totalDebt: Number(currentData.totalDebt.toFixed(2)),
+								currentBalance: Number(currentData.currentBalance.toFixed(2))
+							},
+							{ merge: true }
+						);
+					});
+				});
+				this.borrowerService.getUser(suggestion.$investorId).subscribe((data) => {
+					let currentData;
+					data.forEach((docs) => {
+						currentData = docs.data();
+						currentData.totalInvestment += suggestion.amount;
+						currentData.currentBalance -= suggestion.amount;
+						this.borrowerService.getUserDocData(docs.id).set(
+							{
+								totalInvestment: Number(currentData.totalInvestment.toFixed(2)),
 								currentBalance: Number(currentData.currentBalance.toFixed(2))
 							},
 							{ merge: true }

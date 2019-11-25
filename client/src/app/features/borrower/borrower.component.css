@@ -1,6 +1,11 @@
 .crate-req-btn {
 	margin-bottom: 10px;
 }
+
+.sort-btns {
+	margin: 0px 5px;
+}
+
 .btn {
 	background-color: #8b728e;
 	color: white;

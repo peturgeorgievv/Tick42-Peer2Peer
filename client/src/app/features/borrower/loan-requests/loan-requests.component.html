@@ -31,7 +31,7 @@
                 <p>
                   Period: <b>{{ this.period }} Months</b>
                 </p>
-                <!-- <p>Partial:</p> -->
+                <p>Partial: <b *ngIf="this.partial"> Yes </b> <b *ngIf="!this.partial"> No </b></p>
               </div>
             </div>
             <button
