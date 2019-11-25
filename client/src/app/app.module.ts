@@ -23,6 +23,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ServerErrorComponent } from './components/server-error/server-error.component';
 
 @NgModule({
 	declarations: [
@@ -33,7 +35,9 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 		SignInComponent,
 		RegisterComponent,
 		HomepageComponent,
-		GoogleComponent
+		GoogleComponent,
+		NotFoundComponent,
+		ServerErrorComponent
 	],
 	imports: [
 		AppRoutingModule,

@@ -9,7 +9,6 @@ export class DashboardService {
 
   constructor(
     private angularFireStore: AngularFirestore,
-    private db: AngularFireDatabase
   ) { }
 
   public getUser(userId: string) {
@@ -21,12 +20,20 @@ export class DashboardService {
     return this.angularFireStore.collection('users').doc(userId);
   }
 
+  public getCurrentUserInvestments(userId: string) {
+    return this.angularFireStore
+      .collection('loans', (ref) => ref.where('$investorId', '==', userId).where('status', '==', 'current')
+        .orderBy('period', 'desc'))
+      .snapshotChanges();
+  }
+
   public getCurrentUserLoans(userId: string) {
     return this.angularFireStore
       .collection('loans', (ref) => ref.where('$userId', '==', userId).where('status', '==', 'current')
         .orderBy('period', 'desc'))
       .snapshotChanges();
   }
+
 
 }
 
