@@ -1,3 +1,4 @@
+import { StatusENUM } from './../../../common/enums/status.enum';
 import { Subscription } from 'rxjs';
 import { LoanSuggestionDTO } from './../../../common/models/loan-suggestion.dto';
 import { User } from 'firebase';
@@ -56,12 +57,12 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	}
 
 	public deleteRequest(): void {
-		this.borrowerService.deleteLoanSuggestion(this.$requestId);
-		this.borrowerService.deleteLoanRequest(this.$requestId);
+		this.borrowerService.rejectLoanSuggestions(this.$requestId);
+		this.borrowerService.rejectLoanRequests(this.$requestId);
 	}
 
 	public rejectSuggestion(suggestionId: string): void {
-		this.borrowerService.deleteLoanSuggestion(suggestionId);
+		this.borrowerService.rejectLoanSuggestions(suggestionId);
 	}
 
 	public acceptRequest(suggestion: LoanSuggestionDTO): void {
@@ -75,7 +76,7 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 				).toFixed(2),
 				...suggestion,
 				$userId: this.user.uid,
-				status: 'current'
+				status: StatusENUM.current
 			})
 			.then(() => {
 				this.borrowerService.getUser(this.user.uid).subscribe((data) => {
@@ -108,8 +109,9 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 						);
 					});
 				});
-				this.borrowerService.deleteLoanSuggestion(suggestion.$requestId);
-				this.borrowerService.deleteLoanRequest(suggestion.$requestId);
+				this.borrowerService.findLoanSuggestion(suggestion.$suggestionId);
+				this.borrowerService.rejectLoanSuggestions(suggestion.$requestId);
+				this.borrowerService.rejectLoanRequests(suggestion.$requestId);
 			});
 	}
 }

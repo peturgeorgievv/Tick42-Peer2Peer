@@ -1,3 +1,4 @@
+import { StatusENUM } from './../../common/enums/status.enum';
 import { CurrentLoanDTO } from './../../common/models/current-loan.dto';
 import { AllPaymentsDTO } from './../../common/models/all-payments.dto';
 import { LoanSuggestionDTO } from './../../common/models/loan-suggestion.dto';
@@ -85,12 +86,12 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 		this.borrowerService
 			.createLoanRequest({
 				$userId: this.user.uid,
-				status: 'request',
+				status: StatusENUM.requestOpen,
 				...loanData
 			})
 			.then((ref) => {
 				this.borrowerService.addRequestIdToLoan(ref.id);
-				this.notificatorService.success('Your loan have been added to pending requests!');
+				this.notificatorService.success('Your request have been added to pending!');
 			})
 			.catch(() => {
 				this.notificatorService.error('Oops, something went wrong!');

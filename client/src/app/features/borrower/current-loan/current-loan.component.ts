@@ -108,11 +108,8 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 					});
 				});
 				this.borrowerService.getUser(data.$investorId).subscribe((е) => {
-					console.log(data);
 					е.forEach((docs) => {
-						console.log(docs);
 						currentData = docs.data();
-						console.log(currentData);
 						currentData.totalInvestment -= data.amount;
 						currentData.currentBalance += data.amount;
 						this.borrowerService.getUserDocData(docs.id).set(

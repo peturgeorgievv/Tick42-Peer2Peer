@@ -12,7 +12,7 @@
             <div class="d-flex justify-content-between">
               <div>
                 <p>
-                  Amount:
+                  Total Amount:
                   <b *ngIf="!this.edit"
                     >{{ this.amount | number: "1.2-2" }} $</b
                   >
@@ -32,6 +32,9 @@
                   Period: <b>{{ this.period }} Months</b>
                 </p>
                 <p>Partial: <b *ngIf="this.partial"> Yes </b> <b *ngIf="!this.partial"> No </b></p>
+                  <p *ngIf="this.partial">
+                    Amount Left To Invest: <b>To Add</b>
+                  </p>
               </div>
             </div>
             <button
