@@ -15,8 +15,7 @@ export class AddPaymentModalComponent implements OnInit {
 
 	constructor() {}
 
-	ngOnInit() {
-	}
+	ngOnInit() {}
 
 	public calcInstallment(amount, interestRate, period) {
 		return calculateInstallment(amount, interestRate, period);
@@ -27,7 +26,7 @@ export class AddPaymentModalComponent implements OnInit {
 			$requestId: this.loanFullData.$requestId,
 			$userId: this.loanFullData.$userId,
 			$investorId: this.loanFullData.$investorId,
-			amount: this.loanFullData.installment,
+			amount: Number(this.loanFullData.installment),
 			date: moment().format('YYYY-MM-DD'),
 			overdue: this.overdueAmount
 		};

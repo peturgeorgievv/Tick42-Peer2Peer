@@ -1,15 +1,13 @@
 import { LoanSuggestionDTO } from './../../common/models/loan-suggestion.dto';
 import { Subscription } from 'rxjs';
-import { AuthenticationService } from './authentication.service';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireDatabase } from '@angular/fire/database';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class BorrowerService {
-	constructor(private angularFireStore: AngularFirestore, private db: AngularFireDatabase) {}
+	constructor(private angularFireStore: AngularFirestore) {}
 
 	public getUserLoans(userId: string) {
 		return this.angularFireStore

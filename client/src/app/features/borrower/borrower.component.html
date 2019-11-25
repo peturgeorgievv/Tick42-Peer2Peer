@@ -39,16 +39,32 @@
         ></app-create-loan-modal>
 
         <div class="card card-pricing">
-            <div class="card-header">
-              <h4 class="card-title">Loan Requests(pending)</h4>
-            </div>
-        <app-loan-requests
-          *ngFor="let loanRequest of this.loanRequests"
-          [loanRequestData]="loanRequest"
-          [loanSuggestions]="this.loanSuggestions"
-          [user]="this.user"
-        ></app-loan-requests>
-        <div>
+          <div class="card-header">
+            <h4 class="card-title">Loan Requests(pending)</h4>
+            <h6>
+              Sort By:
+              <button type="button" class="btn crate-req-btn sort-btns">
+                <b>$+</b>
+              </button>
+              <button type="button" class="btn crate-req-btn sort-btns">
+                <b>$-</b>
+              </button>
+              <button type="button" class="btn crate-req-btn sort-btns">
+                <b>Period +</b>
+              </button>
+              <button type="button" class="btn crate-req-btn sort-btns">
+                <b>Period -</b>
+              </button>
+            </h6>
+          </div>
+          <app-loan-requests
+            *ngFor="let loanRequest of this.loanRequests"
+            [loanRequestData]="loanRequest"
+            [loanSuggestions]="this.loanSuggestions"
+            [user]="this.user"
+          ></app-loan-requests>
+          <div></div>
+        </div>
       </div>
     </div>
   </div>

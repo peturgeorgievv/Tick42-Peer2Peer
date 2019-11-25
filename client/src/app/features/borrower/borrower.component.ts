@@ -6,7 +6,6 @@ import { NotificatorService } from './../../core/services/notificator.service';
 import { AuthenticationService } from './../../core/services/authentication.service';
 import { BorrowerService } from './../../core/services/borrower.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from 'firebase';
 import { Subscription } from 'rxjs';
 
@@ -18,22 +17,19 @@ import { Subscription } from 'rxjs';
 export class BorrowerComponent implements OnInit, OnDestroy {
 	private subscriptions: Subscription[] = [];
 
-	public addLoanForm: FormGroup;
-	public currentLoans = [];
+	public currentLoans: CurrentLoanDTO[] = [];
 	public loanRequests: LoanRequestDTO[] = [];
 	public loanSuggestions: LoanSuggestionDTO[] = [];
 
 	public userDocData;
 	public user: User;
 
-	public loanFullData;
 	public allPayments: AllPaymentsDTO[] = [];
 	public amountPaid = 0;
 
 	constructor(
 		private readonly borrowerService: BorrowerService,
 		private readonly notificatorService: NotificatorService,
-		private readonly formBuilder: FormBuilder,
 		public authService: AuthenticationService
 	) {
 		this.subscriptions.push(
@@ -45,9 +41,9 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 
 	public ngOnInit(): void {
 		this.subscriptions.push(
-			this.borrowerService.getUserLoans(this.user.uid).subscribe((querySnapshot) => {
+			this.borrowerService.getUserLoans(this.user.uid).subscribe((querySnapshot: CurrentLoanDTO[]) => {
 				this.currentLoans = [];
-				querySnapshot.forEach((doc) => {
+				querySnapshot.forEach((doc: CurrentLoanDTO) => {
 					const currentUser: any = doc;
 					this.borrowerService.getUser(currentUser.$investorId).subscribe((е) => {
 						е.forEach((docs) => {
@@ -65,33 +61,20 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 		this.subscriptions.push(
 			this.borrowerService.getUserRequests(this.user.uid).subscribe((querySnapshot: LoanRequestDTO[]) => {
 				this.loanRequests = querySnapshot;
-				console.log(querySnapshot);
 			})
 		);
 
 		this.subscriptions.push(
 			this.borrowerService.getUserSuggestions().subscribe((snaphost: LoanSuggestionDTO[]) => {
 				this.loanSuggestions = snaphost;
-				console.log(this.loanSuggestions);
 			})
 		);
 
 		this.subscriptions.push(
-			this.borrowerService.getAllPayments(this.user.uid).subscribe((snaphost: AllPaymentsDTO[]) => {
-				this.allPayments = [];
-				snaphost.forEach((docs: AllPaymentsDTO) => {
-					this.allPayments.push({
-						...docs
-					});
-				});
+			this.borrowerService.getAllPayments(this.user.uid).subscribe((snapshot: AllPaymentsDTO[]) => {
+				this.allPayments = snapshot;
 			})
 		);
-
-		this.addLoanForm = this.formBuilder.group({
-			amount: [ '', [ Validators.required ] ],
-			dueDate: [ '', [ Validators.required ] ],
-			period: [ '', [ Validators.required ] ]
-		});
 	}
 
 	public ngOnDestroy(): void {

@@ -42,7 +42,7 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 		private readonly notificatorService: NotificatorService
 	) {}
 
-	ngOnInit() {
+	public ngOnInit(): void {
 		this.getPayments(this.loanData.$requestId, this.loanData.$userId);
 		this.amount = this.loanData.amount;
 		this.date = this.loanData.date;
@@ -55,7 +55,7 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 		this.totalAmount = overallAmount(this.amount, this.interestRate, this.period);
 	}
 
-	public ngOnDestroy() {
+	public ngOnDestroy(): void {
 		this.paymentsSubscription.unsubscribe();
 	}
 
@@ -100,8 +100,25 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 						currentData.currentBalance -= data.amount;
 						this.borrowerService.getUserDocData(docs.id).set(
 							{
-								totalDebt: +currentData.totalDebt.toFixed(2),
-								currentBalance: +currentData.currentBalance.toFixed(2)
+								totalDebt: Number(currentData.totalDebt.toFixed(2)),
+								currentBalance: Number(currentData.currentBalance.toFixed(2))
+							},
+							{ merge: true }
+						);
+					});
+				});
+				this.borrowerService.getUser(data.$investorId).subscribe((е) => {
+					console.log(data);
+					е.forEach((docs) => {
+						console.log(docs);
+						currentData = docs.data();
+						console.log(currentData);
+						currentData.totalInvestment -= data.amount;
+						currentData.currentBalance += data.amount;
+						this.borrowerService.getUserDocData(docs.id).set(
+							{
+								totalInvestment: Number(currentData.totalInvestment.toFixed(2)),
+								currentBalance: Number(currentData.currentBalance.toFixed(2))
 							},
 							{ merge: true }
 						);

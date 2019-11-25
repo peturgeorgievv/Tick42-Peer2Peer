@@ -3,5 +3,6 @@ export class LoanRequestDTO {
 	$userId: string;
 	amount: number;
 	period: number;
+	partial: boolean;
 	status: string;
 }
