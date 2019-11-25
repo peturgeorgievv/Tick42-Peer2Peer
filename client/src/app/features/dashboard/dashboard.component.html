@@ -38,8 +38,8 @@
         <div class="card-body text-success">
           <h6 class="card-title">Total investments</h6>
           <hr>
-          <div *ngIf="this.curLoans[0]" class="card-text">Total period of all investments: {{this.curInvestments[0].period}} days.</div>
-          <div *ngIf="!this.curLoans[0]" class="card-text">No any investments at the moment!</div>
+          <div *ngIf="this.curInvestments[0]" class="card-text">Total period of all investments: {{this.curInvestments[0].period}} days.</div>
+          <div *ngIf="!this.curInvestments[0]" class="card-text">No any investments at the moment!</div>
           <div class="card-text">Number of borrowers: COULD</div>
           <div class="card-text">Overdue investments: SHOULD</div>
           <div class="card-text">Next Due Date and Amount: SHOULD</div>
