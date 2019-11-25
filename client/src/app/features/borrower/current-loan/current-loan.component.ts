@@ -22,7 +22,8 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 	@Input() loanData: CurrentLoanDTO;
 	@Input() user: User;
 
-	public paymentsSubscription: Subscription;
+	private paymentsSubscription: Subscription;
+	private getOneLoanSubscription: Subscription;
 
 	public allPayments: AllPaymentsDTO[] = [];
 	public loanHistory: AllPaymentsDTO[];
@@ -87,8 +88,22 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 	}
 
 	public createPayment(data: AllPaymentsDTO): void {
+		this.getOneLoanSubscription = this.borrowerService
+			.getOneLoan(this.user.uid, this.loanData.$requestId)
+			.subscribe((loanData) => {
+				if (loanData[0]) {
+					const loanId = loanData[0].payload.doc.id;
+
+					if (this.amountLeft <= data.amount) {
+						this.borrowerService.payFullyLoan(loanId);
+					}
+				} else {
+					this.getOneLoanSubscription.unsubscribe();
+				}
+			});
+
 		this.borrowerService
-			.createPayment({
+			.createPayment(this.user.uid, this.loanData.$requestId, this.amountLeft, {
 				...data
 			})
 			.then(() => {

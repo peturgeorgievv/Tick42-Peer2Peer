@@ -17,7 +17,7 @@ export class CreateLoanModalComponent implements OnInit {
 		this.createLoan = this.formBuilder.group({
 			period: [ '', [ Validators.required ] ],
 			amount: [ '', [ Validators.required ] ],
-			partial: [ false, [ Validators.required ] ]
+			partial: [ false ]
 		});
 	}
 

@@ -1,3 +1,4 @@
+import { CurrentLoanDTO } from './../../common/models/current-loan.dto';
 import { StatusENUM } from './../../common/enums/status.enum';
 import { LoanSuggestionDTO } from './../../common/models/loan-suggestion.dto';
 import { Subscription } from 'rxjs';
@@ -16,10 +17,39 @@ export class BorrowerService {
 			.valueChanges();
 	}
 
-	public getUserRequests(userId: string) {
+	public getOneLoan(userId: string, requestId: string) {
+		return this.angularFireStore
+			.collection('loans', (ref) =>
+				ref
+					.where('$userId', '==', userId)
+					.where('$requestId', '==', requestId)
+					.where('status', '==', StatusENUM.current)
+			)
+			.snapshotChanges();
+	}
+
+	public payFullyLoan(loanId: string) {
+		return this.angularFireStore.collection('loans').doc(loanId).set({ status: StatusENUM.paid }, { merge: true });
+	}
+
+	public getUserRequestsAsc(userId: string, property: string) {
 		return this.angularFireStore
 			.collection('requests', (ref) =>
-				ref.where('$userId', '==', userId).where('status', '==', StatusENUM.requestOpen)
+				ref
+					.where('$userId', '==', userId)
+					.where('status', '==', StatusENUM.requestOpen)
+					.orderBy(property, 'asc')
+			)
+			.valueChanges();
+	}
+
+	public getUserRequestsDesc(userId: string, property: string) {
+		return this.angularFireStore
+			.collection('requests', (ref) =>
+				ref
+					.where('$userId', '==', userId)
+					.where('status', '==', StatusENUM.requestOpen)
+					.orderBy(property, 'desc')
 			)
 			.valueChanges();
 	}
@@ -39,10 +69,13 @@ export class BorrowerService {
 	}
 
 	public editRequestAmount(requestId: string, amount: number) {
-		return this.angularFireStore.collection('loans').doc(requestId).set({ amount }, { merge: true });
+		return this.angularFireStore.collection('requests').doc(requestId).set({ amount }, { merge: true });
 	}
 
-	public createPayment(data) {
+	public createPayment(userId: string, requestId: string, amountLeft: number, data) {
+		console.log(data);
+		console.log(amountLeft);
+
 		return this.angularFireStore.collection('paymentsHistory').add(data);
 	}
 
@@ -78,7 +111,6 @@ export class BorrowerService {
 	}
 
 	public rejectLoanRequests(requestId: string): Subscription {
-		console.log(requestId);
 		return this.angularFireStore
 			.collection('requests', (ref) =>
 				ref.where('$requestId', '==', requestId).where('status', '==', StatusENUM.requestOpen)
@@ -107,7 +139,7 @@ export class BorrowerService {
 			});
 	}
 
-	public deleteBiggerLoanSuggestions(requestId: string, amount: number) {
+	public rejectBiggerLoanSuggestions(requestId: string, amount: number) {
 		return this.angularFireStore
 			.collection('suggestions', (ref) =>
 				ref

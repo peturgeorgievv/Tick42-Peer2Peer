@@ -59,11 +59,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 			})
 		);
 
-		this.subscriptions.push(
-			this.borrowerService.getUserRequests(this.user.uid).subscribe((querySnapshot: LoanRequestDTO[]) => {
-				this.loanRequests = querySnapshot;
-			})
-		);
+		this.orderLoansAsc('amount');
 
 		this.subscriptions.push(
 			this.borrowerService.getUserSuggestions().subscribe((snaphost: LoanSuggestionDTO[]) => {
@@ -80,6 +76,26 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 
 	public ngOnDestroy(): void {
 		this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+	}
+
+	public orderLoansAsc(property: string): void {
+		this.subscriptions.push(
+			this.borrowerService
+				.getUserRequestsAsc(this.user.uid, property)
+				.subscribe((querySnapshot: LoanRequestDTO[]) => {
+					this.loanRequests = querySnapshot;
+				})
+		);
+	}
+
+	public orderLoansDesc(property: string): void {
+		this.subscriptions.push(
+			this.borrowerService
+				.getUserRequestsDesc(this.user.uid, property)
+				.subscribe((querySnapshot: LoanRequestDTO[]) => {
+					this.loanRequests = querySnapshot;
+				})
+		);
 	}
 
 	public createLoanReq(loanData): void {

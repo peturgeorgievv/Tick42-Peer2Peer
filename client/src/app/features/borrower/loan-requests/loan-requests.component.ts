@@ -19,7 +19,7 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	@Input() loanSuggestions: LoanRequestDTO;
 	@Input() user: User;
 
-	public deleteLoanRequestSubscription: Subscription;
+	public rejectLoanRequestSubscription: Subscription;
 
 	public amount: number;
 	public period: number;
@@ -42,15 +42,15 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		if (this.deleteLoanRequestSubscription) {
-			this.deleteLoanRequestSubscription.unsubscribe();
+		if (this.rejectLoanRequestSubscription) {
+			this.rejectLoanRequestSubscription.unsubscribe();
 		}
 	}
 
 	public editLoanRequest(data): void {
 		this.edit = false;
 		this.borrowerService.editRequestAmount(this.$requestId, data.amount);
-		this.deleteLoanRequestSubscription = this.borrowerService.deleteBiggerLoanSuggestions(
+		this.rejectLoanRequestSubscription = this.borrowerService.rejectBiggerLoanSuggestions(
 			this.$requestId,
 			data.amount
 		);
