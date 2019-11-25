@@ -5,6 +5,7 @@ import { InvestorService } from './../../core/services/investor.service';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User } from 'firebase';
+import * as moment from 'moment';
 
 @Component({
 	selector: 'app-investor',
@@ -80,6 +81,7 @@ export class InvestorComponent implements OnInit, OnDestroy {
 				$investorId: this.user.uid,
 				$userId: this.loanUser,
 				status: StatusENUM.suggestionPending,
+				dateSubmited: moment(new Date()).format('YYYY-DD-MM'),
 				...suggsetion
 			})
 			.then((ref) => this.investorService.addSuggestionId(ref.id))

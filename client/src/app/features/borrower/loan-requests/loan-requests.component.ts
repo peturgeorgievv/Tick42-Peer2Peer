@@ -23,6 +23,7 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 
 	public amount: number;
 	public period: number;
+	public dateSubmited: string;
 	public partial: boolean;
 	public $requestId: string;
 	public edit = false;
@@ -35,6 +36,7 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 		this.period = this.loanRequestData.period;
 		this.partial = this.loanRequestData.partial;
 		this.$requestId = this.loanRequestData.$requestId;
+		this.dateSubmited = this.loanRequestData.dateSubmited;
 
 		this.editLoanForm = this.formBuilder.group({
 			amount: [ this.amount, [ Validators.required ] ]

@@ -31,6 +31,9 @@
                 <p>
                   Period: <b>{{ this.period }} Months</b>
                 </p>
+                <p>
+                  Date Submited: <b>{{ this.dateSubmited }} </b>
+                </p>
                 <p>Partial: <b *ngIf="this.partial"> Yes </b> <b *ngIf="!this.partial"> No </b></p>
                   <p *ngIf="this.partial">
                     Amount Left To Invest: <b>To Add</b>
@@ -68,6 +71,9 @@
                   </p>
                   <p>
                     Period: <b>{{ this.suggestion.period }} Months </b>
+                  </p>
+                  <p>
+                    Date Submited: <b>{{ this.suggestion.dateSubmited }} </b>
                   </p>
                   <p>
                     Installments:

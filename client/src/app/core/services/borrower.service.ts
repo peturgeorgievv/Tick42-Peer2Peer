@@ -72,10 +72,7 @@ export class BorrowerService {
 		return this.angularFireStore.collection('requests').doc(requestId).set({ amount }, { merge: true });
 	}
 
-	public createPayment(userId: string, requestId: string, amountLeft: number, data) {
-		console.log(data);
-		console.log(amountLeft);
-
+	public createPayment(data) {
 		return this.angularFireStore.collection('paymentsHistory').add(data);
 	}
 

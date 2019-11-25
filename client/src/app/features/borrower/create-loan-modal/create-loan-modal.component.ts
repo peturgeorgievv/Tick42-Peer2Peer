@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import * as moment from 'moment';
 
 @Component({
 	selector: 'app-create-loan-modal',
@@ -23,7 +24,8 @@ export class CreateLoanModalComponent implements OnInit {
 
 	public emitLoanData(loanData) {
 		const loanToAdd = {
-			...loanData
+			...loanData,
+			dateSubmited: moment(new Date()).format('YYYY-DD-MM')
 		};
 
 		this.createLoanRequest.emit(loanToAdd);

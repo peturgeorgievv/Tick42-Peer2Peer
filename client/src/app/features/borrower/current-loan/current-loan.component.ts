@@ -103,7 +103,7 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 			});
 
 		this.borrowerService
-			.createPayment(this.user.uid, this.loanData.$requestId, this.amountLeft, {
+			.createPayment({
 				...data
 			})
 			.then(() => {
