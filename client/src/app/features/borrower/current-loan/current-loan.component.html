@@ -104,7 +104,7 @@
       (click)="(this.loanData)"
       class="btn col-6"
       data-toggle="modal"
-      [attr.data-target]="'#createPayment' + this.loanData.$requestId"
+      [attr.data-target]="'#createPayment' + this.loanData.$suggestionId"
     >
       <b>Pay</b>
     </button>
@@ -120,14 +120,14 @@
       class="btn col-6"
       (click)="this.currentLoanPayments()"
       data-toggle="modal"
-      [attr.data-target]="'#showPaymentsModal' + this.loanData.$requestId"
+      [attr.data-target]="'#showPaymentsModal' + this.loanData.$suggestionId"
     >
       <b>Show payments</b>
     </button>
     <app-show-payments
       *ngIf="this.loanHistory"
       [loanPayments]="this.loanHistory"
-      [loanRequestId]="this.loanData.$requestId"
+      [loanSuggestionId]="this.loanData.$suggestionId"
     ></app-show-payments>
   </ul>
 </div>

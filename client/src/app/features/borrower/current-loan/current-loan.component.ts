@@ -44,7 +44,7 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 	) {}
 
 	public ngOnInit(): void {
-		this.getPayments(this.loanData.$requestId, this.loanData.$userId);
+		this.getPayments(this.loanData.$suggestionId, this.loanData.$userId);
 		this.amount = this.loanData.amount;
 		this.date = this.loanData.date;
 		this.installment = this.loanData.installment;
@@ -60,9 +60,9 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 		this.paymentsSubscription.unsubscribe();
 	}
 
-	public getPayments(reqId: string, userId: string): void {
+	public getPayments(suggestionId: string, userId: string): void {
 		this.paymentsSubscription = this.borrowerService
-			.getPayments(reqId, userId)
+			.getPayments(suggestionId, userId)
 			.subscribe((querySnapshot: AllPaymentsDTO[]) => {
 				this.allPayments = querySnapshot;
 				this.amountLeft = this.amount;
