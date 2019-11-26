@@ -1,4 +1,4 @@
-import { AngularFireDatabase } from '@angular/fire/database';
+import { StatusENUM } from './../../common/enums/status.enum';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 
@@ -22,14 +22,14 @@ export class DashboardService {
 
   public getCurrentUserInvestments(userId: string) {
     return this.angularFireStore
-      .collection('loans', (ref) => ref.where('$investorId', '==', userId).where('status', '==', 'current')
+      .collection('loans', (ref) => ref.where('$investorId', '==', userId).where('status', '==', StatusENUM.current)
         .orderBy('period', 'desc'))
       .snapshotChanges();
   }
 
   public getCurrentUserLoans(userId: string) {
     return this.angularFireStore
-      .collection('loans', (ref) => ref.where('$userId', '==', userId).where('status', '==', 'current')
+      .collection('loans', (ref) => ref.where('$userId', '==', userId).where('status', '==', StatusENUM.current)
         .orderBy('period', 'desc'))
       .snapshotChanges();
   }
