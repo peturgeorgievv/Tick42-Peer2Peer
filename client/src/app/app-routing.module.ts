@@ -2,7 +2,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ServerErrorComponent } from './components/server-error/server-error.component';
 
@@ -21,15 +21,15 @@ const routes: Routes = [
 		loadChildren: () => import('./features/investor/investor.module').then((module) => module.InvestorModule)
 	},
 	{ path: 'sign-in', pathMatch: 'full', component: SignInComponent },
-  { path: 'register', pathMatch: 'full', component: RegisterComponent },
-  { path: 'not-found', component: NotFoundComponent },
-  { path: 'server-error', component: ServerErrorComponent },
+	{ path: 'register', pathMatch: 'full', component: RegisterComponent },
+	{ path: 'not-found', component: NotFoundComponent },
+	{ path: 'server-error', component: ServerErrorComponent },
 
-  { path: '**', redirectTo: '/not-found' }
+	{ path: '**', redirectTo: '/not-found' }
 ];
 
 @NgModule({
-	imports: [ RouterModule.forRoot(routes) ],
+	imports: [ RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }) ],
 	exports: [ RouterModule ]
 })
 export class AppRoutingModule {}

@@ -26,6 +26,7 @@ export class AddPaymentModalComponent implements OnInit {
 			$requestId: this.loanFullData.$requestId,
 			$userId: this.loanFullData.$userId,
 			$investorId: this.loanFullData.$investorId,
+			$suggestionId: this.loanFullData.$suggestionId,
 			amount: Number(this.loanFullData.installment),
 			date: moment().format('YYYY-MM-DD'),
 			overdue: this.overdueAmount

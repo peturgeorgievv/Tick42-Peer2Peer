@@ -8,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ShowPaymentsComponent implements OnInit {
 	@Input() loanPayments;
-	@Input() loanRequestId: string;
+	@Input() loanSuggestionId: string;
 
 	constructor() {}
 

@@ -34,10 +34,14 @@
                 <p>
                   Date Submited: <b>{{ this.dateSubmited }} </b>
                 </p>
-                <p>Partial: <b *ngIf="this.partial"> Yes </b> <b *ngIf="!this.partial"> No </b></p>
-                  <p *ngIf="this.partial">
-                    Amount Left To Invest: <b>To Add</b>
-                  </p>
+                <p>
+                  Partial: <b *ngIf="this.partial"> Yes </b>
+                  <b *ngIf="!this.partial"> No </b>
+                </p>
+                <p *ngIf="this.partial">
+                  Amount Left To Invest:
+                  <b>{{ this.amountLeftToInvest | number: "1.2-2" }} $</b>
+                </p>
               </div>
             </div>
             <button
@@ -68,6 +72,10 @@
                   <p>
                     Amount:
                     <b>{{ this.suggestion.amount | number: "1.2-2" }} $</b>
+                  </p>
+                  <p>
+                    Total Amount:
+                    <b>{{ this.calculateTotalAmount(this.suggestion.amount, this.suggestion.interestRate, this.suggestion.period)  | number: "1.2-2" }} $</b>
                   </p>
                   <p>
                     Period: <b>{{ this.suggestion.period }} Months </b>

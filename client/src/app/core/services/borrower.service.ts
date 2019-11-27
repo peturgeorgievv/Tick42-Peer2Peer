@@ -17,12 +17,12 @@ export class BorrowerService {
 			.valueChanges();
 	}
 
-	public getOneLoan(userId: string, requestId: string) {
+	public getOneLoan(userId: string, suggestionId: string) {
 		return this.angularFireStore
 			.collection('loans', (ref) =>
 				ref
 					.where('$userId', '==', userId)
-					.where('$requestId', '==', requestId)
+					.where('$suggestionId', '==', suggestionId)
 					.where('status', '==', StatusENUM.current)
 			)
 			.snapshotChanges();
@@ -87,9 +87,11 @@ export class BorrowerService {
 			.set({ status: StatusENUM.suggestionAccepted }, { merge: true });
 	}
 
-	public getPayments(reqId: string, userId: string) {
+	public getPayments(suggestionId: string, userId: string) {
 		return this.angularFireStore
-			.collection('paymentsHistory', (ref) => ref.where('$requestId', '==', reqId).where('$userId', '==', userId))
+			.collection('paymentsHistory', (ref) =>
+				ref.where('$suggestionId', '==', suggestionId).where('$userId', '==', userId)
+			)
 			.valueChanges();
 	}
 
@@ -142,7 +144,7 @@ export class BorrowerService {
 				ref
 					.where('status', '==', StatusENUM.suggestionPending)
 					.where('$requestId', '==', requestId)
-					.where('amount', '>=', amount)
+					.where('amount', '>', amount)
 			)
 			.valueChanges()
 			.subscribe((querySnapshot: LoanSuggestionDTO[]) => {
@@ -170,5 +172,11 @@ export class BorrowerService {
 						.set({ status: StatusENUM.suggestionRejected }, { merge: true });
 				});
 			});
+	}
+
+	public findPartialRequestLoans(requestId: string) {
+		return this.angularFireStore
+			.collection('loans', (ref) => ref.where('$requestId', '==', requestId))
+			.valueChanges();
 	}
 }
