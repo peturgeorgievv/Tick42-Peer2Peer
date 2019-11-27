@@ -36,6 +36,12 @@
               placeholder="Enter amount to deposit"
               formControlName="amount"
             />
+            <span
+            class="font-italic font-weight-bold text-danger"
+            *ngIf="createDeposit.controls.amount?.errors?.min"
+          >
+           Minimun amount to deposit: $1!
+          </span>
           </div>
           <div class="modal-footer">
             <button

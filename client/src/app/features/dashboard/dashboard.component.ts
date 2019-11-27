@@ -37,20 +37,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.userLoansSubscription = this.dashboardService
       .getCurrentUserLoans(this.user.uid)
       .subscribe((querySnapshot) => {
-        this.curLoans = [];
-        querySnapshot.forEach((doc) => {
-          const curUser: any = doc.payload.doc.data();
-          this.dashboardService.getUser(curUser.$requestId).subscribe((data) => {
-            data.forEach((docs) => {
-              this.userData = docs.data();
-            });
-            this.curLoans.push({
-              ...doc.payload.doc.data()
-            });
-          });
-        });
 
+        this.curLoans = querySnapshot;
+
+        // this.curLoans = [];
+        // querySnapshot.forEach((doc) => {
+        //   const curUser: any = doc;
+        //   this.dashboardService.getUser(curUser.$requestId).subscribe((data) => {
+        //     data.forEach((docs) => {
+        //       this.userData = docs.data();
+        //       this.curLoans.push({
+        //         ...docs
+        //       });
+        //     });
+        //   });
+
+        // });
         console.log(this.curLoans);
+
+
       });
 
     this.userInvestmentSubscription = this.dashboardService

@@ -48,8 +48,8 @@ export class InvestorComponent implements OnInit, OnDestroy {
 				this.currentInvestments = [];
 				querySnapshot.forEach((doc) => {
 					const currentUser: any = doc;
-					this.investorService.getUser(currentUser.$investorId).subscribe((е) => {
-						е.forEach((docs) => {
+					this.investorService.getUser(currentUser.$investorId).subscribe((data) => {
+						data.forEach((docs) => {
 							this.userDocData = docs.data();
 							this.currentInvestments.push({
 								email: this.userDocData.email,
