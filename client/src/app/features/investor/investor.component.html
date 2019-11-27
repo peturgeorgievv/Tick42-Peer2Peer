@@ -32,6 +32,7 @@
         <app-active-loan-requests
         *ngFor="let req of this.loanRequests"
         [requestData]="req"
+        [user]="this.user"
         ></app-active-loan-requests>
       </div>
     </div>

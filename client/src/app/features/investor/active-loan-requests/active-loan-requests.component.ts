@@ -37,6 +37,7 @@ export class ActiveLoanRequestsComponent implements OnInit {
     this.dateSubmited = this.requestData.dateSubmited;
     this.partial = this.requestData.partial;
     this.loanReqId = this.requestData.$requestId;
+    this.loanUser = this.user.uid;
 
   }
 
@@ -56,12 +57,12 @@ export class ActiveLoanRequestsComponent implements OnInit {
       });
   }
 
-  public loanRequestId(reqId: string) {
-    return (this.loanReqId = reqId);
-  }
+  // public loanRequestId(reqId: string) {
+  //   return (this.loanReqId = reqId);
+  // }
 
-  public loanUserId(userId: string) {
-    return (this.loanUser = userId);
-  }
+  // public loanUserId(userId: string) {
+  //   return (this.loanUser = userId);
+  // }
 
 }
