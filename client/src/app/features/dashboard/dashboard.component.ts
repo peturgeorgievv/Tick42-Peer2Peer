@@ -19,7 +19,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private userInvestmentSubscription: Subscription;
 
   public curLoans = [];
+  public filteredForInvestors = [];
+
   public curInvestments = [];
+  public filterForBorrowers = [];
 
   constructor(private readonly dashboardService: DashboardService, public authService: AuthenticationService) {
     this.userSubscription = this.authService.loggedUser$.subscribe((res) => {
@@ -39,41 +42,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe((querySnapshot) => {
 
         this.curLoans = querySnapshot;
-
-        // this.curLoans = [];
-        // querySnapshot.forEach((doc) => {
-        //   const curUser: any = doc;
-        //   this.dashboardService.getUser(curUser.$requestId).subscribe((data) => {
-        //     data.forEach((docs) => {
-        //       this.userData = docs.data();
-        //       this.curLoans.push({
-        //         ...docs
-        //       });
-        //     });
-        //   });
-
-        // });
-        console.log(this.curLoans);
-
+        this.filteredForInvestors = [... new Set(this.curLoans.map(loan => loan.$investorId))];
 
       });
 
     this.userInvestmentSubscription = this.dashboardService
       .getCurrentUserInvestments(this.user.uid)
       .subscribe((querySnapshot) => {
-        this.curInvestments = [];
-        querySnapshot.forEach((doc) => {
-          const curUser: any = doc.payload.doc.data();
-          this.dashboardService.getUser(curUser.$investorId).subscribe((e) => {
-            e.forEach((docs) => {
-              this.userData = docs.data();
-            });
-            this.curInvestments.push({
-              ...doc.payload.doc.data()
-            });
-          });
-        });
-        // console.log(this.curInvestments);
+
+        this.curInvestments = querySnapshot;
+        this.filterForBorrowers = [... new Set(this.curInvestments.map(loan => loan.$userId))];
+
       });
   }
 
