@@ -40,7 +40,7 @@ export class InvestorComponent implements OnInit, OnDestroy {
 					...docs.payload.doc.data()
 				});
 			});
-		});
+    });
 
 		this.getInvestmentsSubscription = this.investorService
 			.getUserInvestments(this.user.uid)
@@ -58,7 +58,6 @@ export class InvestorComponent implements OnInit, OnDestroy {
 						});
 					});
 				});
-				console.log(this.currentInvestments);
 			});
 	}
 
@@ -67,26 +66,4 @@ export class InvestorComponent implements OnInit, OnDestroy {
 		this.getInvestmentsSubscription.unsubscribe();
 	}
 
-	public loanRequestId(reqId: string) {
-		return (this.loanReqId = reqId);
-	}
-	public loanUserId(userId: string) {
-		return (this.loanUser = userId);
-	}
-
-	public createSuggestion(suggsetion): void {
-		this.investorService
-			.createLoanSuggestion({
-				$requestId: this.loanReqId,
-				$investorId: this.user.uid,
-				$userId: this.loanUser,
-				status: StatusENUM.suggestionPending,
-				dateSubmited: moment(new Date()).format('YYYY-DD-MM'),
-				...suggsetion
-			})
-			.then((ref) => this.investorService.addSuggestionId(ref.id))
-			.catch(() => {
-				this.notificatorService.error('Oops, something went wrong!');
-			});
-	}
 }

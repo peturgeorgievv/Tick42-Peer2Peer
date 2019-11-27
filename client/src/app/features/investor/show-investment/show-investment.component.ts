@@ -1,7 +1,5 @@
-import { InvestorService } from './../../../core/services/investor.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { User } from 'firebase';
-import { NumberValueAccessor } from '@angular/forms';
 
 @Component({
   selector: 'app-show-investment',
