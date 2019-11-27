@@ -36,6 +36,18 @@
               placeholder="Enter amount to withdraw"
               formControlName="amount"
             />
+            <span
+            class="font-italic font-weight-bold text-danger"
+            *ngIf="createWithdraw.controls.amount?.errors?.min"
+          >
+           Minimun amount to withdraw: $1!
+          </span>
+          <span
+          class="font-italic font-weight-bold text-danger"
+          *ngIf="createWithdraw.controls.amount?.errors?.max"
+        >
+         Maximun available amount to withdraw: ${{this.userData.currentBalance}}!
+        </span>
           </div>
           <div class="modal-footer">
             <button

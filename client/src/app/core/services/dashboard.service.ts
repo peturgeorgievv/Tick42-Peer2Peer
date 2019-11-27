@@ -31,7 +31,7 @@ export class DashboardService {
     return this.angularFireStore
       .collection('loans', (ref) => ref.where('$userId', '==', userId).where('status', '==', StatusENUM.current)
         .orderBy('period', 'desc'))
-      .snapshotChanges();
+      .valueChanges();
   }
 
 
