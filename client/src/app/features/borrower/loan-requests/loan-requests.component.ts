@@ -55,7 +55,7 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 		}
 
 		this.editLoanForm = this.formBuilder.group({
-			amount: [ this.amount, [ Validators.required ] ]
+			amount: [ this.amount, [ Validators.required, Validators.min(this.editFormValidation()) ] ]
 		});
 	}
 
@@ -70,6 +70,19 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 
 	public calculateTotalAmount(amount: number, interestRate: number, period: number) {
 		return (this.totalAmount = overallAmount(amount, interestRate, period));
+	}
+
+	public editFormValidation() {
+		if (this.partial && this.amountLeftToInvest) {
+			console.log(this.amount - this.amountLeftToInvest);
+			return this.amount - this.amountLeftToInvest;
+		}
+		return 0;
+	}
+
+	public resetForm() {
+		this.edit = !this.edit;
+		this.editLoanForm.setValue({ amount: this.amount });
 	}
 
 	public editLoanRequest(data): void {

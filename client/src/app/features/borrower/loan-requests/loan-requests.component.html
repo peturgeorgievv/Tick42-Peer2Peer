@@ -27,6 +27,13 @@
                     />
                     $
                   </b>
+                  <br/>
+                  <span
+                    class="font-italic font-weight-bold text-danger"
+                    *ngIf="editLoanForm.controls.amount?.errors?.min"
+                  >
+                    You can't edit amount less than already invested!
+                  </span>
                 </p>
                 <p>
                   Period: <b>{{ this.period }} Months</b>
@@ -51,10 +58,18 @@
             >
               <b>Edit</b>
             </button>
-            <button class="btn col-6" type="submit" *ngIf="this.edit">
+            <button
+              class="btn col-6"
+              type="submit"
+              *ngIf="this.edit"
+              [disabled]="editLoanForm.invalid"
+            >
               <b>Save</b>
             </button>
-            <button class="btn col-6" (click)="this.deleteRequest()">
+            <button *ngIf="this.edit" class="btn col-6" (click)="this.resetForm()">
+              <b>Cancel</b>
+            </button>
+            <button *ngIf="!this.edit" class="btn col-6" (click)="this.deleteRequest()">
               <b>Delete</b>
             </button>
           </form>
@@ -75,7 +90,16 @@
                   </p>
                   <p>
                     Total Amount:
-                    <b>{{ this.calculateTotalAmount(this.suggestion.amount, this.suggestion.interestRate, this.suggestion.period)  | number: "1.2-2" }} $</b>
+                    <b
+                      >{{
+                        this.calculateTotalAmount(
+                          this.suggestion.amount,
+                          this.suggestion.interestRate,
+                          this.suggestion.period
+                        ) | number: "1.2-2"
+                      }}
+                      $</b
+                    >
                   </p>
                   <p>
                     Period: <b>{{ this.suggestion.period }} Months </b>
