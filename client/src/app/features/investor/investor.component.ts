@@ -2,10 +2,9 @@ import { StatusENUM } from './../../common/enums/status.enum';
 import { NotificatorService } from './../../core/services/notificator.service';
 import { AuthenticationService } from './../../core/services/authentication.service';
 import { InvestorService } from './../../core/services/investor.service';
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User } from 'firebase';
-import * as moment from 'moment';
 
 @Component({
 	selector: 'app-investor',
@@ -26,7 +25,6 @@ export class InvestorComponent implements OnInit, OnDestroy {
 	constructor(
 		private readonly investorService: InvestorService,
 		public authService: AuthenticationService,
-		private readonly notificatorService: NotificatorService
 	) {
 		this.userSubscription = this.authService.loggedUser$.subscribe((res) => {
 			return (this.user = res);
