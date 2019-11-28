@@ -1,0 +1,81 @@
+<div
+  class="modal fade"
+  id="partialModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="partialModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="partialModal">New Partial Loan Proposal</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form
+          class="container"
+          [formGroup]="this.addPartialLoanSuggestion"
+          (ngSubmit)="
+            this.emitPartialSuggestion(this.addPartialLoanSuggestion.value)
+          "
+        >
+          <div class="row">
+            <div class="form-group col-6">
+              <label for="recipient-name" class="col-form-label"
+                >Interest Rate</label
+              >
+              <input
+                type="number"
+                class="form-control"
+                id="recipient-name"
+                formControlName="interestRate"
+              />
+            </div>
+            <div class="form-group col-6">
+              <label for="recipient-name" class="col-form-label"
+                >Penalty Per Day:</label
+              >
+              <input
+                type="number"
+                class="form-control"
+                id="recipient-name"
+                formControlName="penalty"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-6">
+              <label for="recipient-name" class="col-form-label">Period of Months:</label>
+              <input type="number" class="form-control" id="recipient-name" formControlName="period">
+            </div>
+            <div class="form-group col-6">
+              <label for="recipient-name" class="col-form-label">Total Amount:</label>
+              <input type="number" class="form-control" id="recipient-name" formControlName="amount">
+            </div>
+        </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Send Suggestion
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

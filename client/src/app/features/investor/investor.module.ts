@@ -6,9 +6,10 @@ import { InvestorRouterModule } from './investor-routing.module';
 import { ProposeModalComponent } from './propose-modal/propose-modal.component';
 import { ShowInvestmentComponent } from './show-investment/show-investment.component';
 import { ActiveLoanRequestsComponent } from './active-loan-requests/active-loan-requests.component';
+import { PartialProposeModalComponent } from './partial-propose-modal/partial-propose-modal.component';
 
 @NgModule({
-	declarations: [ InvestorComponent, ProposeModalComponent, ShowInvestmentComponent, ActiveLoanRequestsComponent ],
+	declarations: [ InvestorComponent, ProposeModalComponent, ShowInvestmentComponent, ActiveLoanRequestsComponent, PartialProposeModalComponent ],
 	imports: [ CommonModule, SharedModule, InvestorRouterModule ],
 	exports: [ InvestorComponent ]
 })

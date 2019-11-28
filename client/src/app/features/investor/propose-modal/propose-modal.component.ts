@@ -1,33 +1,33 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
-	selector: 'app-propose-modal',
-	templateUrl: './propose-modal.component.html',
-	styleUrls: [ './propose-modal.component.css' ]
+  selector: 'app-propose-modal',
+  templateUrl: './propose-modal.component.html',
+  styleUrls: ['./propose-modal.component.css']
 })
 export class ProposeModalComponent implements OnInit {
-	public addLoanSuggestion: FormGroup;
+  public addLoanSuggestion: FormGroup;
 
-	@Output() public readonly createSuggestion: EventEmitter<any> = new EventEmitter();
+  @Output() public readonly createSuggestion: EventEmitter<any> = new EventEmitter();
 
-	constructor(private readonly formBuilder: FormBuilder) {}
+  constructor(private readonly formBuilder: FormBuilder) { }
 
-	ngOnInit() {
-		this.addLoanSuggestion = this.formBuilder.group({
-			interestRate: [ '', [ Validators.required ] ],
-			penalty: [ '', [ Validators.required ] ],
-			period: [ '', [ Validators.required ] ],
-			amount: [ '', [ Validators.required ] ]
-		});
-	}
+  ngOnInit() {
+    this.addLoanSuggestion = this.formBuilder.group({
+      interestRate: ['', [Validators.required]],
+      penalty: ['', [Validators.required]],
+      period: ['', [Validators.required]],
+      amount: ['', [Validators.required]]
+    });
+  }
 
-	public emitSuggsetion(suggestion) {
-		const suggestionToAdd = {
-			...suggestion
-		};
+  public emitSuggsetion(suggestion) {
+    const suggestionToAdd = {
+      ...suggestion
+    };
 
-		this.createSuggestion.emit(suggestionToAdd);
-		this.addLoanSuggestion.reset();
-	}
+    this.createSuggestion.emit(suggestionToAdd);
+    this.addLoanSuggestion.reset();
+  }
 }

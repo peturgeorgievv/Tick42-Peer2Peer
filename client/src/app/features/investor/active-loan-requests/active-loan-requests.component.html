@@ -23,19 +23,34 @@
               <b *ngIf="!this.partial">No</b>
             </p>
             <button
+              *ngIf="!this.partial"
               type="button"
-              (click)="
-                this.loanReqId &&
-                  this.loanUser"
+              (click)="(this.loanReqId && this.loanUser)"
               class="btn btn-warning col-6"
               data-toggle="modal"
               data-target="#exampleModal"
             >
               <b>Propose</b>
             </button>
+            <button
+              *ngIf="this.partial"
+              type="button"
+              (click)="(this.loanReqId && this.loanUser)"
+              class="btn btn-warning col-6"
+              data-toggle="modal"
+              data-target="#partialModal"
+            >
+              <b>Propose</b>
+            </button>
             <app-propose-modal
+              *ngIf="!this.partial"
               (createSuggestion)="this.createSuggestion($event)"
             ></app-propose-modal>
+            <app-partial-propose-modal
+              [requestData]="requestData"
+              *ngIf="this.partial"
+              (createPartialSuggestion)="this.createPartialSuggestion($event)"
+            ></app-partial-propose-modal>
           </div>
         </div>
       </div>

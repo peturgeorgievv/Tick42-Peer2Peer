@@ -57,6 +57,22 @@ export class ActiveLoanRequestsComponent implements OnInit {
       });
   }
 
+  public createPartialSuggestion(suggsetion): void {
+    this.investorService
+      .createLoanSuggestion({
+        $requestId: this.loanReqId,
+        $investorId: this.user.uid,
+        $userId: this.loanUser,
+        status: StatusENUM.suggestionPending,
+        dateSubmited: moment(new Date()).format('YYYY-DD-MM'),
+        ...suggsetion
+      })
+      .then((ref) => this.investorService.addSuggestionId(ref.id))
+      .catch(() => {
+        this.notificatorService.error('Oops, something went wrong!');
+      });
+  }
+
   // public loanRequestId(reqId: string) {
   //   return (this.loanReqId = reqId);
   // }
