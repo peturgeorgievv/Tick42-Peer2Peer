@@ -1,3 +1,4 @@
+import { UserDTO } from './../../common/models/users/user-data.dto';
 import { StatusENUM } from './../../common/enums/status.enum';
 import { CurrentLoanDTO } from './../../common/models/current-loan.dto';
 import { AllPaymentsDTO } from './../../common/models/all-payments.dto';

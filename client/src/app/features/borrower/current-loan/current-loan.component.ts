@@ -1,3 +1,5 @@
+import { AuthenticationService } from './../../../core/services/authentication.service';
+import { UserDTO } from './../../../common/models/users/user-data.dto';
 import { User } from 'firebase';
 import { NotificatorService } from './../../../core/services/notificator.service';
 import { Subscription } from 'rxjs';
@@ -21,6 +23,7 @@ import {
 export class CurrentLoanComponent implements OnInit, OnDestroy {
 	@Input() loanData: CurrentLoanDTO;
 	@Input() user: User;
+	public userBalanceData: UserDTO;
 
 	private paymentsSubscription: Subscription;
 	private getOneLoanSubscription: Subscription;
@@ -40,7 +43,8 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private readonly borrowerService: BorrowerService,
-		private readonly notificatorService: NotificatorService
+		private readonly notificatorService: NotificatorService,
+		private readonly authService: AuthenticationService
 	) {}
 
 	public ngOnInit(): void {
@@ -54,6 +58,9 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 
 		this.dateEndOfContract = calculateEndOfContractDate(this.date, this.period);
 		this.totalAmount = overallAmount(this.amount, this.interestRate, this.period);
+		this.authService.userBalanceDataSubject$.subscribe((res) => {
+			this.userBalanceData = res;
+		});
 	}
 
 	public ngOnDestroy(): void {
@@ -107,36 +114,27 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 				...data
 			})
 			.then(() => {
+				const balance = (this.userBalanceData.currentBalance -= data.amount);
+				this.borrowerService.getUserDocData(this.userBalanceData.$userDocId).set(
+					{
+						currentBalance: Number(balance.toFixed(2))
+					},
+					{ merge: true }
+				);
 				let currentData;
-				this.borrowerService.getUser(this.user.uid).subscribe((е) => {
-					е.forEach((docs) => {
-						currentData = docs.data();
-						currentData.totalDebt -= data.amount;
-						currentData.currentBalance -= data.amount;
-						this.borrowerService.getUserDocData(docs.id).set(
-							{
-								totalDebt: Number(currentData.totalDebt.toFixed(2)),
-								currentBalance: Number(currentData.currentBalance.toFixed(2))
-							},
-							{ merge: true }
-						);
-					});
-				});
 				this.borrowerService.getUser(data.$investorId).subscribe((е) => {
 					е.forEach((docs) => {
 						currentData = docs.data();
-						currentData.totalInvestment -= data.amount;
 						currentData.currentBalance += data.amount;
 						this.borrowerService.getUserDocData(docs.id).set(
 							{
-								totalInvestment: Number(currentData.totalInvestment.toFixed(2)),
 								currentBalance: Number(currentData.currentBalance.toFixed(2))
 							},
 							{ merge: true }
 						);
 					});
+					this.notificatorService.success('You have paid successefully!');
 				});
-				this.notificatorService.success('You have paid successefully!');
 			})
 			.catch(() => this.notificatorService.error('Oops, something went wrong!'));
 	}

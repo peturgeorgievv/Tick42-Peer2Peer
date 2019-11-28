@@ -126,11 +126,11 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 						let currentData;
 						data.forEach((docs) => {
 							currentData = docs.data();
-							currentData.totalDebt += suggestion.amount;
+							// currentData.totalDebt += suggestion.amount;
 							currentData.currentBalance += suggestion.amount;
 							this.borrowerService.getUserDocData(docs.id).set(
 								{
-									totalDebt: Number(currentData.totalDebt.toFixed(2)),
+									// totalDebt: Number(currentData.totalDebt.toFixed(2)),
 									currentBalance: Number(currentData.currentBalance.toFixed(2))
 								},
 								{ merge: true }
@@ -141,11 +141,11 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 						let currentData;
 						data.forEach((docs) => {
 							currentData = docs.data();
-							currentData.totalInvestment += suggestion.amount;
+							// currentData.totalInvestment += suggestion.amount;
 							currentData.currentBalance -= suggestion.amount;
 							this.borrowerService.getUserDocData(docs.id).set(
 								{
-									totalInvestment: Number(currentData.totalInvestment.toFixed(2)),
+									// totalInvestment: Number(currentData.totalInvestment.toFixed(2)),
 									currentBalance: Number(currentData.currentBalance.toFixed(2))
 								},
 								{ merge: true }
@@ -174,11 +174,11 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 						let currentData;
 						data.forEach((docs) => {
 							currentData = docs.data();
-							currentData.totalDebt += suggestion.amount;
+							// currentData.totalDebt += suggestion.amount;
 							currentData.currentBalance += suggestion.amount;
 							this.borrowerService.getUserDocData(docs.id).set(
 								{
-									totalDebt: Number(currentData.totalDebt.toFixed(2)),
+									// totalDebt: Number(currentData.totalDebt.toFixed(2)),
 									currentBalance: Number(currentData.currentBalance.toFixed(2))
 								},
 								{ merge: true }
@@ -189,11 +189,11 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 						let currentData;
 						data.forEach((docs) => {
 							currentData = docs.data();
-							currentData.totalInvestment += suggestion.amount;
+							// currentData.totalInvestment += suggestion.amount;
 							currentData.currentBalance -= suggestion.amount;
 							this.borrowerService.getUserDocData(docs.id).set(
 								{
-									totalInvestment: Number(currentData.totalInvestment.toFixed(2)),
+									// totalInvestment: Number(currentData.totalInvestment.toFixed(2)),
 									currentBalance: Number(currentData.currentBalance.toFixed(2))
 								},
 								{ merge: true }

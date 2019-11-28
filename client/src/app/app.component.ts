@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { User } from 'firebase';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from './core/services/authentication.service';
@@ -11,6 +11,7 @@ import { AuthenticationService } from './core/services/authentication.service';
 export class AppComponent implements OnInit, OnDestroy {
 	private loggedInSubscription: Subscription;
 	private userSubscription: Subscription;
+	// private userBalanceDataSubscription: Subscription;
 
 	public loggedIn: boolean;
 	public user: User;
