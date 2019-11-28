@@ -23,7 +23,6 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 	public loanRequests: LoanRequestDTO[] = [];
 	public loanSuggestions: LoanSuggestionDTO[] = [];
 
-	public userDocData;
 	public user: User;
 
 	public allPayments: AllPaymentsDTO[] = [];
@@ -44,19 +43,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 	public ngOnInit(): void {
 		this.subscriptions.push(
 			this.borrowerService.getUserLoans(this.user.uid).subscribe((querySnapshot: CurrentLoanDTO[]) => {
-				this.currentLoans = [];
-				querySnapshot.forEach((doc: CurrentLoanDTO) => {
-					const currentUser: any = doc;
-					this.borrowerService.getUser(currentUser.$investorId).subscribe((е) => {
-						е.forEach((docs) => {
-							this.userDocData = docs.data();
-							this.currentLoans.push({
-								email: this.userDocData.email,
-								...doc
-							});
-						});
-					});
-				});
+				this.currentLoans = querySnapshot;
 			})
 		);
 

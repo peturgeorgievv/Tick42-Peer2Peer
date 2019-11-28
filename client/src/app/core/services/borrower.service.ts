@@ -101,11 +101,6 @@ export class BorrowerService {
 			.valueChanges();
 	}
 
-	public getUser(userId: string) {
-		console.log(userId);
-		return this.angularFireStore.collection('users', (ref) => ref.where('$userId', '==', userId)).get();
-	}
-
 	public getUserDocData(userId: string) {
 		return this.angularFireStore.collection('users').doc(userId);
 	}

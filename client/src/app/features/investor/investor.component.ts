@@ -1,3 +1,5 @@
+import { CurrentLoanDTO } from './../../common/models/current-loan.dto';
+import { UserDTO } from './../../common/models/users/user-data.dto';
 import { StatusENUM } from './../../common/enums/status.enum';
 import { NotificatorService } from './../../core/services/notificator.service';
 import { AuthenticationService } from './../../core/services/authentication.service';
@@ -18,16 +20,16 @@ export class InvestorComponent implements OnInit, OnDestroy {
 	private userSubscription: Subscription;
 	public loanReqId;
 	public loanUser;
+	public userBalanceData: UserDTO;
 
-	public userDocData;
 	public getInvestmentsSubscription: Subscription;
 
-	constructor(
-		private readonly investorService: InvestorService,
-		public authService: AuthenticationService,
-	) {
+	constructor(private readonly investorService: InvestorService, public authService: AuthenticationService) {
 		this.userSubscription = this.authService.loggedUser$.subscribe((res) => {
 			return (this.user = res);
+		});
+		this.authService.userBalanceDataSubject$.subscribe((res) => {
+			this.userBalanceData = res;
 		});
 	}
 
@@ -38,24 +40,12 @@ export class InvestorComponent implements OnInit, OnDestroy {
 					...docs.payload.doc.data()
 				});
 			});
-    });
+		});
 
 		this.getInvestmentsSubscription = this.investorService
 			.getUserInvestments(this.user.uid)
-			.subscribe((querySnapshot) => {
-				this.currentInvestments = [];
-				querySnapshot.forEach((doc) => {
-					const currentUser: any = doc;
-					this.investorService.getUser(currentUser.$investorId).subscribe((data) => {
-						data.forEach((docs) => {
-							this.userDocData = docs.data();
-							this.currentInvestments.push({
-								email: this.userDocData.email,
-								...doc
-							});
-						});
-					});
-				});
+			.subscribe((querySnapshot: CurrentLoanDTO[]) => {
+				this.currentInvestments = querySnapshot;
 			});
 	}
 
@@ -63,5 +53,4 @@ export class InvestorComponent implements OnInit, OnDestroy {
 		this.userSubscription.unsubscribe();
 		this.getInvestmentsSubscription.unsubscribe();
 	}
-
 }

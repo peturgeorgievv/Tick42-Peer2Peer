@@ -56,7 +56,6 @@ export class AuthenticationService {
 				.collection('users', (ref) => ref.where('$userId', '==', res.uid).where('email', '==', res.email))
 				.valueChanges()
 				.subscribe((querySnapshot: UserDTO[]) => {
-					console.log(querySnapshot);
 					this.userBalanceData$.next(userData);
 					userData.$userDocId = querySnapshot[0].$userDocId;
 					userData.$userId = querySnapshot[0].$userId;
@@ -174,7 +173,7 @@ export class AuthenticationService {
 			.signInWithEmailAndPassword(email, password)
 			.then((res) => {
 				this.user$.next(res.user);
-				this.userBalanceDataCalculation();
+				this.userBalanceData$.next(null);
 				this.userBalanceData$.next(this.userBalanceDataCalculation());
 				this.router.navigate([ '/dashboard' ]);
 			})
@@ -186,8 +185,8 @@ export class AuthenticationService {
 	public signOut() {
 		this.angularFireAuth.auth.signOut().then((res) => {
 			this.user$.next(null);
-			this.userBalanceData$.next(null);
 			localStorage.removeItem('user');
+			this.userBalanceData$.next(null);
 			this.router.navigate([ '/' ]);
 		});
 	}

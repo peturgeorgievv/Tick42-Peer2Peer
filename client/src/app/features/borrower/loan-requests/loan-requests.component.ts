@@ -1,3 +1,5 @@
+import { AuthenticationService } from './../../../core/services/authentication.service';
+import { UserDTO } from './../../../common/models/users/user-data.dto';
 import { StatusENUM } from './../../../common/enums/status.enum';
 import { Subscription } from 'rxjs';
 import { LoanSuggestionDTO } from './../../../common/models/loan-suggestion.dto';
@@ -18,6 +20,7 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	@Input() loanRequestData: LoanRequestDTO;
 	@Input() loanSuggestions: LoanRequestDTO;
 	@Input() user: User;
+	public userBalanceData: UserDTO;
 
 	public rejectLoanRequestSubscription: Subscription;
 	public findPartialRequestLoansSubscription: Subscription;
@@ -32,7 +35,11 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	public edit = false;
 	public editLoanForm: FormGroup;
 
-	constructor(private readonly borrowerService: BorrowerService, private readonly formBuilder: FormBuilder) {}
+	constructor(
+		private readonly borrowerService: BorrowerService,
+		private readonly formBuilder: FormBuilder,
+		private readonly authService: AuthenticationService
+	) {}
 
 	ngOnInit() {
 		this.amount = this.loanRequestData.amount;
@@ -56,6 +63,10 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 
 		this.editLoanForm = this.formBuilder.group({
 			amount: [ this.amount, [ Validators.required, Validators.min(this.editFormValidation()) ] ]
+		});
+
+		this.authService.userBalanceDataSubject$.subscribe((res) => {
+			this.userBalanceData = res;
 		});
 	}
 
@@ -122,35 +133,23 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 					status: StatusENUM.current
 				})
 				.then(() => {
-					this.borrowerService.getUser(this.user.uid).subscribe((data) => {
-						let currentData;
-						data.forEach((docs) => {
-							currentData = docs.data();
-							// currentData.totalDebt += suggestion.amount;
-							currentData.currentBalance += suggestion.amount;
-							this.borrowerService.getUserDocData(docs.id).set(
-								{
-									// totalDebt: Number(currentData.totalDebt.toFixed(2)),
-									currentBalance: Number(currentData.currentBalance.toFixed(2))
-								},
-								{ merge: true }
-							);
-						});
-					});
-					this.borrowerService.getUser(suggestion.$investorId).subscribe((data) => {
-						let currentData;
-						data.forEach((docs) => {
-							currentData = docs.data();
-							// currentData.totalInvestment += suggestion.amount;
-							currentData.currentBalance -= suggestion.amount;
-							this.borrowerService.getUserDocData(docs.id).set(
-								{
-									// totalInvestment: Number(currentData.totalInvestment.toFixed(2)),
-									currentBalance: Number(currentData.currentBalance.toFixed(2))
-								},
-								{ merge: true }
-							);
-						});
+					const balance = (this.userBalanceData.currentBalance += suggestion.amount);
+					this.borrowerService.getUserDocData(this.userBalanceData.$userDocId).set(
+						{
+							currentBalance: Number(balance.toFixed(2))
+						},
+						{ merge: true }
+					);
+
+					this.borrowerService.getUserDocData(suggestion.$investorDocId).get().subscribe((userData) => {
+						const userBalanceData = userData.data();
+						const investorBalance = (userBalanceData.currentBalance -= suggestion.amount);
+						this.borrowerService.getUserDocData(suggestion.$investorDocId).set(
+							{
+								currentBalance: Number(investorBalance.toFixed(2))
+							},
+							{ merge: true }
+						);
 					});
 					this.borrowerService.findLoanSuggestion(suggestion.$suggestionId);
 					this.borrowerService.rejectBiggerLoanSuggestions(suggestion.$requestId, this.amountLeftToInvest);
@@ -170,35 +169,23 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 					status: StatusENUM.current
 				})
 				.then(() => {
-					this.borrowerService.getUser(this.user.uid).subscribe((data) => {
-						let currentData;
-						data.forEach((docs) => {
-							currentData = docs.data();
-							// currentData.totalDebt += suggestion.amount;
-							currentData.currentBalance += suggestion.amount;
-							this.borrowerService.getUserDocData(docs.id).set(
-								{
-									// totalDebt: Number(currentData.totalDebt.toFixed(2)),
-									currentBalance: Number(currentData.currentBalance.toFixed(2))
-								},
-								{ merge: true }
-							);
-						});
-					});
-					this.borrowerService.getUser(suggestion.$investorId).subscribe((data) => {
-						let currentData;
-						data.forEach((docs) => {
-							currentData = docs.data();
-							// currentData.totalInvestment += suggestion.amount;
-							currentData.currentBalance -= suggestion.amount;
-							this.borrowerService.getUserDocData(docs.id).set(
-								{
-									// totalInvestment: Number(currentData.totalInvestment.toFixed(2)),
-									currentBalance: Number(currentData.currentBalance.toFixed(2))
-								},
-								{ merge: true }
-							);
-						});
+					const balance = (this.userBalanceData.currentBalance += suggestion.amount);
+					this.borrowerService.getUserDocData(this.userBalanceData.$userDocId).set(
+						{
+							currentBalance: Number(balance.toFixed(2))
+						},
+						{ merge: true }
+					);
+
+					this.borrowerService.getUserDocData(suggestion.$investorDocId).get().subscribe((userData) => {
+						const userBalanceData = userData.data();
+						const investorBalance = (userBalanceData.currentBalance -= suggestion.amount);
+						this.borrowerService.getUserDocData(suggestion.$investorDocId).set(
+							{
+								currentBalance: Number(investorBalance.toFixed(2))
+							},
+							{ merge: true }
+						);
 					});
 					this.borrowerService.findLoanSuggestion(suggestion.$suggestionId);
 					this.borrowerService.rejectLoanSuggestions(suggestion.$requestId);

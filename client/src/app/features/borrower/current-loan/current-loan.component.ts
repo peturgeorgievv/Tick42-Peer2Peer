@@ -121,20 +121,18 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 					},
 					{ merge: true }
 				);
-				let currentData;
-				this.borrowerService.getUser(data.$investorId).subscribe((е) => {
-					е.forEach((docs) => {
-						currentData = docs.data();
-						currentData.currentBalance += data.amount;
-						this.borrowerService.getUserDocData(docs.id).set(
-							{
-								currentBalance: Number(currentData.currentBalance.toFixed(2))
-							},
-							{ merge: true }
-						);
-					});
-					this.notificatorService.success('You have paid successefully!');
+				this.borrowerService.getUserDocData(data.$investorDocId).get().subscribe((userData) => {
+					const userBalanceData = userData.data();
+					const investorBalance = (userBalanceData.currentBalance += data.amount);
+					this.borrowerService.getUserDocData(data.$investorDocId).set(
+						{
+							currentBalance: Number(investorBalance.toFixed(2))
+						},
+						{ merge: true }
+					);
 				});
+
+				this.notificatorService.success('You have paid successefully!');
 			})
 			.catch(() => this.notificatorService.error('Oops, something went wrong!'));
 	}

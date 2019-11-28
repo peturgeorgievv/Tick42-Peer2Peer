@@ -28,7 +28,7 @@
               (click)="(this.loanReqId && this.loanUser)"
               class="btn btn-warning col-6"
               data-toggle="modal"
-              data-target="#exampleModal"
+              [attr.data-target]="'#exampleModal' + this.requestData.$requestId"
             >
               <b>Propose</b>
             </button>
@@ -38,12 +38,13 @@
               (click)="(this.loanReqId && this.loanUser)"
               class="btn btn-warning col-6"
               data-toggle="modal"
-              data-target="#partialModal"
+              [attr.data-target]="'#partialModal' + this.requestData.$requestId"
             >
               <b>Propose</b>
             </button>
             <app-propose-modal
               *ngIf="!this.partial"
+              [requestData]="this.requestData"
               (createSuggestion)="this.createSuggestion($event)"
             ></app-propose-modal>
             <app-partial-propose-modal
