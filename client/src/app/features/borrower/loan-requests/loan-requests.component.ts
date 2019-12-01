@@ -155,7 +155,6 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 					this.borrowerService.rejectBiggerLoanSuggestions(suggestion.$requestId, this.amountLeftToInvest);
 				});
 		} else {
-			// if (!this.partial) {
 			this.borrowerService
 				.acceptLoanRequest({
 					date: moment().format('YYYY-MM-DD'),
