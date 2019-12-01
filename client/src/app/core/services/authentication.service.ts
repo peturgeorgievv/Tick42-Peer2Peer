@@ -53,15 +53,20 @@ export class AuthenticationService {
 			};
 			console.log(res);
 			this.angularFireStore
-				.collection('users', (ref) => ref.where('$userId', '==', res.uid).where('email', '==', res.email))
+				.collection('users', (ref) =>
+					ref.where('$userId', '==', res.uid).where('email', '==', res.email).orderBy('$userDocId', 'asc')
+				)
 				.valueChanges()
 				.subscribe((querySnapshot: UserDTO[]) => {
+					console.log(querySnapshot);
 					this.userBalanceData$.next(userData);
 					userData.$userDocId = querySnapshot[0].$userDocId;
 					userData.$userId = querySnapshot[0].$userId;
 					userData.email = querySnapshot[0].email;
 					userData.currentBalance = querySnapshot[0].currentBalance;
 					this.getUserLoans(res.uid).subscribe((debts) => {
+						console.log(res.uid);
+						console.log(debts);
 						const userDebts = debts.reduce((acc: number, curValue: CurrentLoanDTO) => {
 							return (acc += curValue.amount);
 						}, 0);

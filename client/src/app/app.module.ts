@@ -7,7 +7,6 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AuthenticationService } from './core/services/authentication.service';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
@@ -58,7 +57,6 @@ import { ServerErrorComponent } from './components/server-error/server-error.com
 			useClass: SpinnerIntercerptorService,
 			multi: true
 		},
-		AuthenticationService,
 	],
 	bootstrap: [ AppComponent ]
 })

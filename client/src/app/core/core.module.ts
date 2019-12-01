@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import { AuthenticationService } from './services/authentication.service';
+import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
 import { NotificatorService } from './services/notificator.service';
@@ -6,7 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from '../auth/auth-guard';
 
 @NgModule({
-	providers: [ NotificatorService, AuthGuard ],
+	providers: [ NotificatorService, AuthGuard, AuthenticationService ],
 	declarations: [],
 	imports: [
 		CommonModule,
@@ -19,4 +20,14 @@ import { AuthGuard } from '../auth/auth-guard';
 		})
 	]
 })
-export class CoreModule {}
+export class CoreModule {
+	public constructor(
+		@Optional()
+		@SkipSelf()
+		parent: CoreModule
+	) {
+		if (parent) {
+			return parent;
+		}
+	}
+}
