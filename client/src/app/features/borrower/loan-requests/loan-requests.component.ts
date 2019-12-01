@@ -119,77 +119,46 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 		console.log(this.partial);
 		console.log(suggestion);
 		console.log(this.amountLeftToInvest);
-		if (this.partial && this.amountLeftToInvest - suggestion.amount > 0) {
-			this.borrowerService
-				.acceptLoanRequest({
-					date: moment().format('YYYY-MM-DD'),
-					installment: calculateInstallment(
-						suggestion.amount,
-						suggestion.interestRate,
-						suggestion.period
-					).toFixed(2),
-					...suggestion,
-					$userId: this.user.uid,
-					status: StatusENUM.current
-				})
-				.then(() => {
-					const balance = (this.userBalanceData.currentBalance += suggestion.amount);
-					this.borrowerService.getUserDocData(this.userBalanceData.$userDocId).set(
+
+		this.borrowerService
+			.acceptLoanRequest({
+				date: moment().format('YYYY-MM-DD'),
+				installment: calculateInstallment(
+					suggestion.amount,
+					suggestion.interestRate,
+					suggestion.period
+				).toFixed(2),
+				...suggestion,
+				$userId: this.user.uid,
+				status: StatusENUM.current
+			})
+			.then(() => {
+				const balance = (this.userBalanceData.currentBalance += suggestion.amount);
+				this.borrowerService.getUserDocData(this.userBalanceData.$userDocId).set(
+					{
+						currentBalance: Number(balance.toFixed(2))
+					},
+					{ merge: true }
+				);
+
+				this.borrowerService.getUserDocData(suggestion.$investorDocId).get().subscribe((userData) => {
+					const userBalanceData = userData.data();
+					const investorBalance = (userBalanceData.currentBalance -= suggestion.amount);
+					this.borrowerService.getUserDocData(suggestion.$investorDocId).set(
 						{
-							currentBalance: Number(balance.toFixed(2))
+							currentBalance: Number(investorBalance.toFixed(2))
 						},
 						{ merge: true }
 					);
-
-					this.borrowerService.getUserDocData(suggestion.$investorDocId).get().subscribe((userData) => {
-						const userBalanceData = userData.data();
-						const investorBalance = (userBalanceData.currentBalance -= suggestion.amount);
-						this.borrowerService.getUserDocData(suggestion.$investorDocId).set(
-							{
-								currentBalance: Number(investorBalance.toFixed(2))
-							},
-							{ merge: true }
-						);
-					});
+				});
+				if (this.partial && this.amountLeftToInvest - suggestion.amount > 0) {
 					this.borrowerService.findLoanSuggestion(suggestion.$suggestionId);
 					this.borrowerService.rejectBiggerLoanSuggestions(suggestion.$requestId, this.amountLeftToInvest);
-				});
-		} else {
-			this.borrowerService
-				.acceptLoanRequest({
-					date: moment().format('YYYY-MM-DD'),
-					installment: calculateInstallment(
-						suggestion.amount,
-						suggestion.interestRate,
-						suggestion.period
-					).toFixed(2),
-					...suggestion,
-					$userId: this.user.uid,
-					status: StatusENUM.current
-				})
-				.then(() => {
-					const balance = (this.userBalanceData.currentBalance += suggestion.amount);
-					this.borrowerService.getUserDocData(this.userBalanceData.$userDocId).set(
-						{
-							currentBalance: Number(balance.toFixed(2))
-						},
-						{ merge: true }
-					);
-
-					this.borrowerService.getUserDocData(suggestion.$investorDocId).get().subscribe((userData) => {
-						const userBalanceData = userData.data();
-						const investorBalance = (userBalanceData.currentBalance -= suggestion.amount);
-						this.borrowerService.getUserDocData(suggestion.$investorDocId).set(
-							{
-								currentBalance: Number(investorBalance.toFixed(2))
-							},
-							{ merge: true }
-						);
-					});
+				} else {
 					this.borrowerService.findLoanSuggestion(suggestion.$suggestionId);
 					this.borrowerService.rejectLoanSuggestions(suggestion.$requestId);
 					this.borrowerService.rejectLoanRequests(suggestion.$requestId);
-				});
-		}
+				}
+			});
 	}
 }
