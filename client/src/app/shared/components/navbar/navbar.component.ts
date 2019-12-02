@@ -10,7 +10,6 @@ import { User } from 'firebase';
 	styleUrls: [ './navbar.component.css' ]
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-	@Input() loggedIn: boolean;
 	@Input() user: User;
 	private userBalanceDataSubscription: Subscription;
 

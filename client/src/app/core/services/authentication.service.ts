@@ -11,8 +11,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 	providedIn: 'root'
 })
 export class AuthenticationService {
-	private readonly isLoggedInSubject$ = new BehaviorSubject<boolean>(this.isUserLoggedIn());
-
 	private readonly user$: BehaviorSubject<User> = new BehaviorSubject(this.loggedUser());
 
 	private readonly userBalanceData$: BehaviorSubject<any> = new BehaviorSubject(this.userBalanceDataCalculation());
@@ -27,13 +25,11 @@ export class AuthenticationService {
 		this.angularFireAuth.authState.subscribe((user) => {
 			if (user) {
 				this.user$.next(user);
-				this.isLoggedInSubject$.next(true);
 				localStorage.setItem('user', JSON.stringify(user));
 				this.userBalanceData$.next(this.userBalanceDataCalculation());
 				JSON.parse(localStorage.getItem('user'));
 			} else {
 				this.user$.next(null);
-				this.isLoggedInSubject$.next(null);
 				this.userBalanceData$.next(null);
 				localStorage.setItem('user', null);
 				JSON.parse(localStorage.getItem('user'));
@@ -149,21 +145,12 @@ export class AuthenticationService {
 			.valueChanges();
 	}
 
-	private isUserLoggedIn(): boolean {
-		const value = localStorage.getItem('user');
-		const res = value && value !== 'undefined' ? value : null;
-		return !!res;
-	}
-
 	private loggedUser(): User {
 		try {
 			const value = JSON.parse(localStorage.getItem('user'));
 			const res = value && value !== 'undefined' ? value : null;
 			return res;
 		} catch (error) {
-			// in case of storage tampering
-			this.isLoggedInSubject$.next(false);
-
 			return null;
 		}
 	}
@@ -172,8 +159,9 @@ export class AuthenticationService {
 		return this.userBalanceData$.asObservable();
 	}
 
-	public get isLoggedIn$(): Observable<boolean> {
-		return this.isLoggedInSubject$.asObservable();
+	public get isLoggedIn(): boolean {
+		const user = JSON.parse(localStorage.getItem('user'));
+		return user !== null ? true : false;
 	}
 
 	public get loggedUser$(): Observable<User> {

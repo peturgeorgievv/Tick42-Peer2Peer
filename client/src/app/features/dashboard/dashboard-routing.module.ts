@@ -1,3 +1,4 @@
+import { AuthGuard } from './../../auth/auth-guard';
 import { DashboardComponent } from './dashboard.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -7,7 +8,8 @@ const dashboardRoutes: Routes = [
 	{
 		path: '',
 		component: DashboardComponent,
-		pathMatch: 'full'
+		pathMatch: 'full',
+		canActivate: [ AuthGuard ]
 	}
 ];
 
