@@ -30,6 +30,7 @@
     "font-awesome": "^4.7.0",
     "jest-preset-angular": "^7.1.1",
     "jquery": "^3.4.1",
+    "moment": "^2.24.0",
     "ngx-spinner": "^8.0.3",
     "ngx-toastr": "^11.2.1",
     "popper.js": "^1.16.0",
