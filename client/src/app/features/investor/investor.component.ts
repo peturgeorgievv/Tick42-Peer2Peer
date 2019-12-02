@@ -45,7 +45,9 @@ export class InvestorComponent implements OnInit, OnDestroy {
 		this.getInvestmentsSubscription = this.investorService
 			.getUserInvestments(this.user.uid)
 			.subscribe((querySnapshot: CurrentLoanDTO[]) => {
-				this.currentInvestments = querySnapshot;
+        this.currentInvestments = querySnapshot;
+        console.log(this.currentInvestments);
+
 			});
 	}
 
