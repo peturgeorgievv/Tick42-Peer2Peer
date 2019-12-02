@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 		// });
 
 		this.authService.userBalanceDataSubject$.subscribe((res) => {
-			return (this.userData = res);
+			this.userData = res;
 		});
 
 		this.userLoansSubscription = this.dashboardService
