@@ -27,6 +27,7 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 
 	private paymentsSubscription: Subscription;
 	private getOneLoanSubscription: Subscription;
+	private userBalanceDataSubscription: Subscription;
 
 	public allPayments: AllPaymentsDTO[] = [];
 	public loanHistory: AllPaymentsDTO[];
@@ -58,13 +59,14 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 
 		this.dateEndOfContract = calculateEndOfContractDate(this.date, this.period);
 		this.totalAmount = overallAmount(this.amount, this.interestRate, this.period);
-		this.authService.userBalanceDataSubject$.subscribe((res) => {
+		this.userBalanceDataSubscription = this.authService.userBalanceDataSubject$.subscribe((res) => {
 			this.userBalanceData = res;
 		});
 	}
 
 	public ngOnDestroy(): void {
 		this.paymentsSubscription.unsubscribe();
+		this.userBalanceDataSubscription.unsubscribe();
 	}
 
 	public getPayments(suggestionId: string, userId: string): void {
