@@ -28,7 +28,7 @@ export class InvestorService {
 
 	public getUserInvestments(userId: string) {
 		return this.angularFireStore
-			.collection('loans', (ref) => ref.where('$userId', '==', userId).where('status', '==', StatusENUM.current))
+			.collection('loans', (ref) => ref.where('$investorId', '==', userId).where('status', '==', StatusENUM.current))
 			.valueChanges();
 	}
 

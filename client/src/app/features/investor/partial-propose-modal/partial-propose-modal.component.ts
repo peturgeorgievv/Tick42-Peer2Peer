@@ -15,8 +15,6 @@ export class PartialProposeModalComponent implements OnInit {
   constructor(private readonly formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    console.log(this.requestData.amount);
-
     this.addPartialLoanSuggestion = this.formBuilder.group({
 			interestRate: [ '', [ Validators.required ] ],
 			penalty: [ '', [ Validators.required ] ],

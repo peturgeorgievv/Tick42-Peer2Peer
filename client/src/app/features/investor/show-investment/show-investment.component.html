@@ -6,21 +6,24 @@
         <div class="d-flex justify-content-between">
           <div>
             <p>
-              Borrower: <b>{{ this.investmentData.email }}</b>
+              Borrower: <b>{{ this.investmentData.$userId }}</b>
             </p>
             <p>
-              Total (DUE NOT) Amount: <b>${{ this.investmentData.amount | number: "1.2-2"}}</b>
+              Total Amount: <b>${{ this.investmentData.amount | number: "1.2-2"}}</b>
             </p>
-            <p>(NOT)Installments (LEFT): <b>to be calculated</b></p>
-            <p>(NOT)Next Due Date: <b>to be calculated</b></p>
             <p>
-              Installment: <b>${{ this.investmentData.installment | number: "1.2-2"}}</b>
+              Total Amount Left: <b>to be calculated</b>
             </p>
-            <p>(NOT)Overdue installments: <b>to be calculated</b></p>
-            <p>(NOT)Penalties: <b>to be calculated</b></p>
             <p>
               Interest rate: <b>{{ this.interestRate | number: "1.2-2"}}%</b>
             </p>
+            <p>
+              Installment: <b>${{ this.investmentData.installment | number: "1.2-2"}}</b>
+            </p>
+            <p>Installments Left: <b>to be calculated</b></p>
+            <p>Next Due Date: <b>to be calculated</b></p>
+            <p>Overdue installments: <b>to be calculated</b></p>
+            <p>Penalties: <b>to be calculated</b></p>
           </div>
         </div>
       </div>
