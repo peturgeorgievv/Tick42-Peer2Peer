@@ -8,85 +8,84 @@ import { StatusENUM } from 'src/app/common/enums/status.enum';
 import { User } from 'firebase';
 
 @Component({
-	selector: 'app-active-loan-requests',
-	templateUrl: './active-loan-requests.component.html',
-	styleUrls: [ './active-loan-requests.component.css' ]
+  selector: 'app-active-loan-requests',
+  templateUrl: './active-loan-requests.component.html',
+  styleUrls: ['./active-loan-requests.component.css']
 })
 export class ActiveLoanRequestsComponent implements OnInit {
-	@Input() requestData;
-	@Input() user: User;
-	public userBalanceData: UserDTO;
+  @Input() requestData;
+  @Input() user: User;
+  public userBalanceData: UserDTO;
 
-	public loanReqId;
-	public loanUser;
+  public loanReqId;
+  public loanUser;
 
-	public name;
-	public totalAmount;
-	public period;
-	public dateSubmited;
-	public partial;
+  public name;
+  public totalAmount;
+  public period;
+  public dateSubmited;
+  public partial;
 
-	constructor(
-		private readonly investorService: InvestorService,
-		private readonly notificatorService: NotificatorService,
-		private readonly authService: AuthenticationService
-	) {}
+  constructor(
+    private readonly investorService: InvestorService,
+    private readonly notificatorService: NotificatorService,
+    private readonly authService: AuthenticationService
+  ) { }
 
-	ngOnInit() {
-		console.log(this.requestData);
+  ngOnInit() {
 
-		this.name = this.requestData.$userId;
-		this.totalAmount = this.requestData.amount;
-		this.period = this.requestData.period;
-		this.dateSubmited = this.requestData.dateSubmited;
-		this.partial = this.requestData.partial;
-		this.loanReqId = this.requestData.$requestId;
-		this.loanUser = this.user.uid;
+    this.name = this.requestData.$userId;
+    this.totalAmount = this.requestData.amount;
+    this.period = this.requestData.period;
+    this.dateSubmited = this.requestData.dateSubmited;
+    this.partial = this.requestData.partial;
+    this.loanReqId = this.requestData.$requestId;
+    this.loanUser = this.user.uid;
 
-		this.authService.userBalanceDataSubject$.subscribe((res) => {
-			this.userBalanceData = res;
-		});
-	}
+    this.authService.userBalanceDataSubject$.subscribe((res) => {
+      this.userBalanceData = res;
+    });
+  }
 
-	public createSuggestion(suggsetion): void {
-		console.log(this.userBalanceData);
-		this.investorService
-			.createLoanSuggestion({
-				$requestId: this.loanReqId,
-				$investorId: this.user.uid,
-				$investorDocId: this.userBalanceData.$userDocId,
-				$userId: this.loanUser,
-				status: StatusENUM.suggestionPending,
-				dateSubmited: moment(new Date()).format('YYYY-DD-MM'),
-				...suggsetion
-			})
-			.then((ref) => this.investorService.addSuggestionId(ref.id))
-			.catch(() => {
-				this.notificatorService.error('Oops, something went wrong!');
-			});
-	}
+  public createSuggestion(suggsetion): void {
+    console.log(this.userBalanceData);
+    this.investorService
+      .createLoanSuggestion({
+        $requestId: this.loanReqId,
+        $investorId: this.user.uid,
+        $investorDocId: this.userBalanceData.$userDocId,
+        $userId: this.loanUser,
+        status: StatusENUM.suggestionPending,
+        dateSubmited: moment(new Date()).format('YYYY-DD-MM'),
+        ...suggsetion
+      })
+      .then((ref) => this.investorService.addSuggestionId(ref.id))
+      .catch(() => {
+        this.notificatorService.error('Oops, something went wrong!');
+      });
+  }
 
-	public createPartialSuggestion(suggsetion): void {
-		this.investorService
-			.createLoanSuggestion({
-				$requestId: this.loanReqId,
-				$investorId: this.user.uid,
-				$userId: this.loanUser,
-				status: StatusENUM.suggestionPending,
-				dateSubmited: moment(new Date()).format('YYYY-DD-MM'),
-				...suggsetion
-			})
-			.then((ref) => this.investorService.addSuggestionId(ref.id))
-			.catch(() => {
-				this.notificatorService.error('Oops, something went wrong!');
-			});
-	}
+  public createPartialSuggestion(suggsetion): void {
+    this.investorService
+      .createLoanSuggestion({
+        $requestId: this.loanReqId,
+        $investorId: this.user.uid,
+        $userId: this.loanUser,
+        status: StatusENUM.suggestionPending,
+        dateSubmited: moment(new Date()).format('YYYY-DD-MM'),
+        ...suggsetion
+      })
+      .then((ref) => this.investorService.addSuggestionId(ref.id))
+      .catch(() => {
+        this.notificatorService.error('Oops, something went wrong!');
+      });
+  }
 
-	// public loanRequestId(reqId: string) {
-	//   return (this.loanReqId = reqId);
-	// }
+  // public loanRequestId(reqId: string) {
+  //   return (this.loanReqId = reqId);
+  // }
 
-	// public loanUserId(userId: string) {
-	//   return (this.loanUser = userId);
-	// }
+  // public loanUserId(userId: string) {
+  //   return (this.loanUser = userId);
+  // }
 }

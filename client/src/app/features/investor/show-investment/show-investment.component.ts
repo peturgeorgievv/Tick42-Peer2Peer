@@ -19,6 +19,8 @@ export class ShowInvestmentComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.investmentData);
+
     this.amount = this.investmentData.amount;
     this.period = this.investmentData.period;
     this.$requestId = this.investmentData.$requestId;

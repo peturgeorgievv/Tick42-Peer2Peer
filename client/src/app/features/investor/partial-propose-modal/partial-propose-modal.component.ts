@@ -9,22 +9,21 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 export class PartialProposeModalComponent implements OnInit {
   public addPartialLoanSuggestion: FormGroup;
 
-  @Output() public readonly createPartialSuggestion: EventEmitter<any> = new EventEmitter();
   @Input() requestData;
+  @Output() public readonly createPartialSuggestion: EventEmitter<any> = new EventEmitter();
 
   constructor(private readonly formBuilder: FormBuilder) { }
 
   ngOnInit() {
     console.log(this.requestData.amount);
 
-
-
     this.addPartialLoanSuggestion = this.formBuilder.group({
-      interestRate: ['', [Validators.required]],
-      penalty: ['', [Validators.required]],
-      period: [{value: this.requestData.period, disabled: true}, [Validators.required]],
-      amount: [{value: this.requestData.amount, disabled: true}, [Validators.required]]
-    });
+			interestRate: [ '', [ Validators.required ] ],
+			penalty: [ '', [ Validators.required ] ],
+			period: [ '', [ Validators.required ] ],
+			amount: [ '', [ Validators.required ] ]
+		});
+
   }
 
   public emitPartialSuggestion(suggestion) {
