@@ -70,6 +70,7 @@ export class ActiveLoanRequestsComponent implements OnInit {
       .createLoanSuggestion({
         $requestId: this.loanReqId,
         $investorId: this.user.uid,
+        $investorDocId: this.userBalanceData.$userDocId,
         $userId: this.loanUser,
         status: StatusENUM.suggestionPending,
         dateSubmited: moment(new Date()).format('YYYY-DD-MM'),
