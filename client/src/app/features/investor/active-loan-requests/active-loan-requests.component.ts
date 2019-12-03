@@ -44,12 +44,8 @@ export class ActiveLoanRequestsComponent implements OnInit {
     this.loanUser = this.user.uid;
 
     this.authService.userBalanceDataSubject$.subscribe((res) => {
-      if (res !== undefined) {
-        this.userBalanceData = res;
-      }
+      this.userBalanceData = res;
     });
-
-
   }
 
   public createSuggestion(suggsetion): void {

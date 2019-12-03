@@ -6,6 +6,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
   templateUrl: './partial-propose-modal.component.html',
   styleUrls: ['./partial-propose-modal.component.css']
 })
+
 export class PartialProposeModalComponent implements OnInit {
   public addPartialLoanSuggestion: FormGroup;
 
@@ -16,10 +17,10 @@ export class PartialProposeModalComponent implements OnInit {
 
   ngOnInit() {
     this.addPartialLoanSuggestion = this.formBuilder.group({
-			interestRate: [ '', [ Validators.required ] ],
-			penalty: [ '', [ Validators.required ] ],
-			period: [ '', [ Validators.required ] ],
-			amount: [ '', [ Validators.required ] ]
+			interestRate: [ '', [ Validators.required, Validators.min(0) ] ],
+			penalty: [ '', [ Validators.required, Validators.min(0) ] ],
+			period: [ '', [ Validators.required, Validators.min(1) ] ],
+			amount: [ '', [ Validators.required, Validators.min(1) ] ]
 		});
 
   }
