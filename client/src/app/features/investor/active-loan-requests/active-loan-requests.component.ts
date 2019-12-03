@@ -33,7 +33,6 @@ export class ActiveLoanRequestsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.name = this.requestData.$userId;
     this.totalAmount = this.requestData.amount;
     this.period = this.requestData.period;
@@ -59,7 +58,10 @@ export class ActiveLoanRequestsComponent implements OnInit {
         dateSubmited: moment(new Date()).format('YYYY-DD-MM'),
         ...suggsetion
       })
-      .then((ref) => this.investorService.addSuggestionId(ref.id))
+      .then((ref) => {
+        this.investorService.addSuggestionId(ref.id);
+        this.notificatorService.success('Your proposal has been added!');
+      })
       .catch(() => {
         this.notificatorService.error('Oops, something went wrong!');
       });
@@ -76,17 +78,13 @@ export class ActiveLoanRequestsComponent implements OnInit {
         dateSubmited: moment(new Date()).format('YYYY-DD-MM'),
         ...suggsetion
       })
-      .then((ref) => this.investorService.addSuggestionId(ref.id))
+      .then((ref) => {
+        this.investorService.addSuggestionId(ref.id);
+        this.notificatorService.success('Your proposal has been added!');
+      })
       .catch(() => {
         this.notificatorService.error('Oops, something went wrong!');
       });
   }
 
-  // public loanRequestId(reqId: string) {
-  //   return (this.loanReqId = reqId);
-  // }
-
-  // public loanUserId(userId: string) {
-  //   return (this.loanUser = userId);
-  // }
 }
