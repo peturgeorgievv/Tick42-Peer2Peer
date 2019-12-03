@@ -45,6 +45,7 @@
             <app-propose-modal
               *ngIf="!this.partial"
               [requestData]="this.requestData"
+              [userBalanceData]="userBalanceData"
               (createSuggestion)="this.createSuggestion($event)"
             ></app-propose-modal>
             <app-partial-propose-modal
