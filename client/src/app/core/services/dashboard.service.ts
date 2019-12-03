@@ -8,10 +8,6 @@ import { Injectable } from '@angular/core';
 export class DashboardService {
 	constructor(private angularFireStore: AngularFirestore) {}
 
-	// public getUser(userId: string) {
-	// 	return this.angularFireStore.collection('users', (ref) => ref.where('$userId', '==', userId)).get();
-	// }
-
 	public getUserDocData(userId: string) {
 		return this.angularFireStore.collection('users').doc(userId).get();
 	}

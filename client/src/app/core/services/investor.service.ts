@@ -12,7 +12,7 @@ export class InvestorService {
 	public getAllLoanRequests() {
 		return this.angularFireStore
 			.collection('requests', (ref) => ref.where('status', '==', StatusENUM.requestOpen))
-			.snapshotChanges();
+			.valueChanges();
 	}
 
 	public createLoanSuggestion(loanData) {
@@ -28,7 +28,9 @@ export class InvestorService {
 
 	public getUserInvestments(userId: string) {
 		return this.angularFireStore
-			.collection('loans', (ref) => ref.where('$investorId', '==', userId).where('status', '==', StatusENUM.current))
+      .collection('loans', (ref) => ref
+      .where('$investorId', '==', userId)
+      .where('status', '==', StatusENUM.current))
 			.valueChanges();
 	}
 

@@ -32,6 +32,8 @@ export class ProposeModalComponent implements OnInit {
     };
 
     this.createSuggestion.emit(suggestionToAdd);
-    this.addLoanSuggestion.reset();
+    this.addLoanSuggestion.reset({period: this.requestData.period,
+      amount: this.requestData.amount});
+
   }
 }
