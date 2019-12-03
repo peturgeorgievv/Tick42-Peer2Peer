@@ -145,7 +145,6 @@ export class BorrowerService {
 			.valueChanges()
 			.subscribe((querySnapshot: LoanSuggestionDTO[]) => {
 				querySnapshot.forEach((doc: LoanSuggestionDTO) => {
-					console.log(doc);
 					this.angularFireStore
 						.collection('suggestions')
 						.doc(doc.$suggestionId)

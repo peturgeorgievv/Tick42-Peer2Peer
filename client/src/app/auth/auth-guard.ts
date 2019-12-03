@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate {
 
 	canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> | boolean {
 		if (this.authService.isLoggedIn !== true) {
-			this.notificator.error(`You not authorized to access this page!`);
+			this.notificator.error(`You are not authorized to access this page!`);
 			this.router.navigate([ '/' ]);
 		}
 		return true;

@@ -27,7 +27,7 @@
                     />
                     $
                   </b>
-                  <br/>
+                  <br />
                   <span
                     class="font-italic font-weight-bold text-danger"
                     *ngIf="editLoanForm.controls.amount?.errors?.min"
@@ -45,7 +45,7 @@
                   Partial: <b *ngIf="this.partial"> Yes </b>
                   <b *ngIf="!this.partial"> No </b>
                 </p>
-                <p *ngIf="this.partial">
+                <p *ngIf="this.partial && this.amountLeftToInvest > 0">
                   Amount Left To Invest:
                   <b>{{ this.amountLeftToInvest | number: "1.2-2" }} $</b>
                 </p>
@@ -54,7 +54,7 @@
             <button
               class="btn col-6"
               *ngIf="!this.edit"
-              (click)="this.edit = !this.edit"
+              (click)="this.resetForm()"
             >
               <b>Edit</b>
             </button>
@@ -66,10 +66,18 @@
             >
               <b>Save</b>
             </button>
-            <button *ngIf="this.edit" class="btn col-6" (click)="this.resetForm()">
+            <button
+              *ngIf="this.edit"
+              class="btn col-6"
+              (click)="this.resetForm()"
+            >
               <b>Cancel</b>
             </button>
-            <button *ngIf="!this.edit" class="btn col-6" (click)="this.deleteRequest()">
+            <button
+              *ngIf="!this.edit"
+              class="btn col-6"
+              (click)="this.deleteRequest()"
+            >
               <b>Delete</b>
             </button>
           </form>

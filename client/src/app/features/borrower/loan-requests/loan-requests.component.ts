@@ -21,9 +21,7 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	@Input() loanSuggestions: LoanRequestDTO;
 	@Input() user: User;
 	public userBalanceData: UserDTO;
-
-	public rejectLoanRequestSubscription: Subscription;
-	public findPartialRequestLoansSubscription: Subscription;
+	private subscriptions: Subscription[] = [];
 
 	public amount: number;
 	public period: number;
@@ -33,6 +31,7 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	public amountLeftToInvest = 0;
 	public $requestId: string;
 	public edit = false;
+	public validateMin = 0;
 	public editLoanForm: FormGroup;
 
 	constructor(
@@ -49,34 +48,34 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 		this.dateSubmited = this.loanRequestData.dateSubmited;
 
 		if (this.loanRequestData.$requestId && this.partial) {
-			this.findPartialRequestLoansSubscription = this.borrowerService
-				.findPartialRequestLoans(this.loanRequestData.$requestId)
-				.subscribe((data: LoanRequestDTO[]) => {
-					this.amountLeftToInvest = this.amount;
-					data.forEach((loan) => {
-						if (loan.amount) {
-							this.amountLeftToInvest -= loan.amount;
-						}
-					});
-				});
+			this.subscriptions.push(
+				this.borrowerService
+					.findPartialRequestLoans(this.loanRequestData.$requestId)
+					.subscribe((data: LoanRequestDTO[]) => {
+						this.amountLeftToInvest = this.amount;
+						data.forEach((loan) => {
+							if (loan.amount) {
+								this.amountLeftToInvest -= loan.amount;
+								this.editFormValidation();
+							}
+						});
+					})
+			);
 		}
 
 		this.editLoanForm = this.formBuilder.group({
 			amount: [ this.amount, [ Validators.required, Validators.min(this.editFormValidation()) ] ]
 		});
 
-		this.authService.userBalanceDataSubject$.subscribe((res) => {
-			this.userBalanceData = res;
-		});
+		this.subscriptions.push(
+			this.authService.userBalanceDataSubject$.subscribe((res) => {
+				this.userBalanceData = res;
+			})
+		);
 	}
 
 	ngOnDestroy() {
-		if (this.rejectLoanRequestSubscription) {
-			this.rejectLoanRequestSubscription.unsubscribe();
-		}
-		if (this.findPartialRequestLoansSubscription) {
-			this.findPartialRequestLoansSubscription.unsubscribe();
-		}
+		this.subscriptions.forEach((subscription) => subscription.unsubscribe());
 	}
 
 	public calculateTotalAmount(amount: number, interestRate: number, period: number) {
@@ -84,11 +83,12 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	}
 
 	public editFormValidation() {
-		if (this.partial && this.amountLeftToInvest) {
-			console.log(this.amount - this.amountLeftToInvest);
-			return this.amount - this.amountLeftToInvest;
+		if (this.partial && this.amountLeftToInvest > 0) {
+			this.validateMin = this.amount - this.amountLeftToInvest;
+			return this.validateMin;
 		}
-		return 0;
+		console.log(this.validateMin);
+		return this.validateMin;
 	}
 
 	public resetForm() {
@@ -99,10 +99,7 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	public editLoanRequest(data): void {
 		this.edit = false;
 		this.borrowerService.editRequestAmount(this.$requestId, data.amount).then(() => {
-			this.rejectLoanRequestSubscription = this.borrowerService.rejectBiggerLoanSuggestions(
-				this.$requestId,
-				data.amount
-			);
+			this.subscriptions.push(this.borrowerService.rejectBiggerLoanSuggestions(this.$requestId, data.amount));
 		});
 	}
 
@@ -148,24 +145,28 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 					{ merge: true }
 				);
 
-				this.borrowerService.getUserDocData(suggestion.$investorDocId).get().subscribe((userData) => {
-					const userBalanceData = userData.data();
-					const investorBalance = (userBalanceData.currentBalance -= suggestion.amount);
-					this.borrowerService.getUserDocData(suggestion.$investorDocId).set(
-						{
-							currentBalance: Number(investorBalance.toFixed(2))
-						},
-						{ merge: true }
-					);
-				});
+				this.subscriptions.push(
+					this.borrowerService.getUserDocData(suggestion.$investorDocId).get().subscribe((userData) => {
+						const userBalanceData = userData.data();
+						const investorBalance = (userBalanceData.currentBalance -= suggestion.amount);
+						this.borrowerService.getUserDocData(suggestion.$investorDocId).set(
+							{
+								currentBalance: Number(investorBalance.toFixed(2))
+							},
+							{ merge: true }
+						);
+					})
+				);
 			});
 		if (partial) {
 			this.borrowerService.findLoanSuggestion(suggestion.$suggestionId);
-			this.borrowerService.rejectBiggerLoanSuggestions(suggestion.$requestId, this.amountLeftToInvest);
+			this.subscriptions.push(
+				this.borrowerService.rejectBiggerLoanSuggestions(suggestion.$requestId, this.amountLeftToInvest)
+			);
 		} else {
 			this.borrowerService.findLoanSuggestion(suggestion.$suggestionId);
-			this.borrowerService.rejectLoanSuggestions(suggestion.$requestId);
-			this.borrowerService.rejectLoanRequests(suggestion.$requestId);
+			this.subscriptions.push(this.borrowerService.rejectLoanSuggestions(suggestion.$requestId));
+			this.subscriptions.push(this.borrowerService.rejectLoanRequests(suggestion.$requestId));
 		}
 	}
 }

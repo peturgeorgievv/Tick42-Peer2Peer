@@ -1,4 +1,7 @@
-<div class="card-body" *ngIf="this.loanData && this.allPayments">
+<div
+  class="card-body"
+  *ngIf="this.loanData && this.allPayments && this.userBalanceData"
+>
   <ul class="list-unstyled" style="border: 2px solid gray; padding: 5px;">
     Loan:
     <li>
@@ -7,7 +10,7 @@
           <div class="d-flex justify-content-between">
             <div>
               <p>
-                Investor: <b>{{ this.loanData.email }}</b>
+                Investor: <b>{{ this.userBalanceData.email }}</b>
               </p>
               <p>
                 Date Created: <b>{{ this.loanData.date }}</b>
@@ -32,10 +35,6 @@
                 Installment:
                 <b>{{ this.installment }} $</b>
               </p>
-              <p>
-                Interest Rate:
-                <b>{{ this.interestRate }} $</b>
-              </p>
               <p *ngIf="this.overdueDays() > 0">
                 Overdue Days:
                 <b>{{ this.overdueDays() }} $</b>
@@ -47,7 +46,6 @@
               <p>
                 Penalty Rate: <b>{{ this.penalty }} %</b>
               </p>
-              <!-- <p>Penalty: <b>{{this.getCurrentLoanHistory(this.loan.$requestId, this.loan.$userId)}} %</b></p> -->
             </div>
           </div>
         </div>
