@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
 	selector: 'app-create-loan-modal',
@@ -12,7 +13,7 @@ export class CreateLoanModalComponent implements OnInit {
 
 	@Output() public readonly createLoanRequest: EventEmitter<any> = new EventEmitter();
 
-	constructor(private readonly formBuilder: FormBuilder) {}
+	constructor(private readonly formBuilder: FormBuilder, public activeModal: NgbActiveModal) {}
 
 	ngOnInit() {
 		this.createLoan = this.formBuilder.group({
@@ -30,5 +31,10 @@ export class CreateLoanModalComponent implements OnInit {
 
 		this.createLoanRequest.emit(loanToAdd);
 		this.createLoan.reset();
+		this.activeModal.close();
+	}
+
+	public closeModal(): void {
+		this.activeModal.dismiss();
 	}
 }

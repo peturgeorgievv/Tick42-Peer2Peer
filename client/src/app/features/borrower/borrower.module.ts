@@ -21,7 +21,7 @@ import { NgbModalModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 	],
 	imports: [ CommonModule, SharedModule, BorrowerRouterModule, NgbModalModule ],
 	exports: [ BorrowerComponent ],
-	entryComponents: [ AddPaymentModalComponent, ShowPaymentsComponent ],
+	entryComponents: [ AddPaymentModalComponent, ShowPaymentsComponent, CreateLoanModalComponent ],
 	providers: [ NgbActiveModal ]
 })
 export class BorrowerModule {}

@@ -1,3 +1,4 @@
+import { CreateLoanModalComponent } from './create-loan-modal/create-loan-modal.component';
 import { UserDTO } from './../../common/models/users/user-data.dto';
 import { StatusENUM } from './../../common/enums/status.enum';
 import { CurrentLoanDTO } from './../../common/models/current-loan.dto';
@@ -10,6 +11,7 @@ import { BorrowerService } from './../../core/services/borrower.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { User } from 'firebase';
 import { Subscription } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
 	selector: 'app-borrower',
@@ -31,7 +33,8 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 	constructor(
 		private readonly borrowerService: BorrowerService,
 		private readonly notificatorService: NotificatorService,
-		public authService: AuthenticationService
+		private readonly authService: AuthenticationService,
+		private readonly modalService: NgbModal
 	) {
 		this.subscriptions.push(
 			this.authService.loggedUser$.subscribe((res) => {
@@ -66,6 +69,25 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 		this.subscriptions.forEach((subscription) => subscription.unsubscribe());
 	}
 
+	createLoanRequestModal(): void {
+		const createLoanRequestModal = this.modalService.open(CreateLoanModalComponent);
+		createLoanRequestModal.componentInstance.createLoanRequest.subscribe((loanData) => {
+			this.borrowerService
+				.createLoanRequest({
+					$userId: this.user.uid,
+					status: StatusENUM.requestOpen,
+					...loanData
+				})
+				.then((ref) => {
+					this.borrowerService.addRequestIdToLoan(ref.id);
+					this.notificatorService.success('Your request have been added to pending!');
+				})
+				.catch(() => {
+					this.notificatorService.error('Oops, something went wrong!');
+				});
+		});
+	}
+
 	public orderLoansAsc(property: string): void {
 		this.subscriptions.push(
 			this.borrowerService
@@ -84,21 +106,5 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 					this.loanRequests = querySnapshot;
 				})
 		);
-	}
-
-	public createLoanReq(loanData): void {
-		this.borrowerService
-			.createLoanRequest({
-				$userId: this.user.uid,
-				status: StatusENUM.requestOpen,
-				...loanData
-			})
-			.then((ref) => {
-				this.borrowerService.addRequestIdToLoan(ref.id);
-				this.notificatorService.success('Your request have been added to pending!');
-			})
-			.catch(() => {
-				this.notificatorService.error('Oops, something went wrong!');
-			});
 	}
 }

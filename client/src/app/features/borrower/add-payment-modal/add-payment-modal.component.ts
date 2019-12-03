@@ -1,3 +1,4 @@
+import { AllPaymentsDTO } from './../../../common/models/all-payments.dto';
 import { CurrentLoanDTO } from './../../../common/models/current-loan.dto';
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { calculateInstallment } from '../../../common/calculate-functions/calculate-func';
@@ -10,7 +11,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 	styleUrls: [ './add-payment-modal.component.css' ]
 })
 export class AddPaymentModalComponent implements OnInit {
-	@Output() public readonly createPayment: EventEmitter<any> = new EventEmitter();
+	@Output() public readonly createPayment: EventEmitter<AllPaymentsDTO> = new EventEmitter();
 	@Input() loanFullData: CurrentLoanDTO;
 	@Input() overdueAmount: number;
 
@@ -22,8 +23,8 @@ export class AddPaymentModalComponent implements OnInit {
 		return calculateInstallment(amount, interestRate, period);
 	}
 
-	public emitLoanData() {
-		const loanToAdd = {
+	public emitLoanData(): void {
+		const loanToAdd: AllPaymentsDTO = {
 			$requestId: this.loanFullData.$requestId,
 			$userId: this.loanFullData.$userId,
 			$investorId: this.loanFullData.$investorId,

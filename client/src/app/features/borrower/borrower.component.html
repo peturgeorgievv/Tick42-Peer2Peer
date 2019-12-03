@@ -29,14 +29,10 @@
         <button
           type="button"
           class="btn col-12 crate-req-btn"
-          data-toggle="modal"
-          data-target="#createLoanModal"
+          (click)="this.createLoanRequestModal()"
         >
           <b>Create Loan Request</b>
         </button>
-        <app-create-loan-modal
-          (createLoanRequest)="this.createLoanReq($event)"
-        ></app-create-loan-modal>
 
         <div class="card card-pricing">
           <div class="card-header">

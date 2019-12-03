@@ -55,10 +55,8 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 		addPaymentsModal.componentInstance.loanFullData = this.loanData;
 		addPaymentsModal.componentInstance.overdueAmount = this.overdueAmount();
 		addPaymentsModal.componentInstance.createPayment.subscribe((data) => {
-			console.log(data);
 			this.subscriptions.push(
 				this.borrowerService.getOneLoan(this.user.uid, this.loanData.$suggestionId).subscribe((loanData) => {
-					console.log(loanData);
 					if (loanData[0]) {
 						const loanId = loanData[0].payload.doc.id;
 						if (this.amountLeft <= data.amount) {
