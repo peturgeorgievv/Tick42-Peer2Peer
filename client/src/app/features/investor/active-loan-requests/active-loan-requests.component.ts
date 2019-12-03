@@ -6,7 +6,7 @@ import { NotificatorService } from 'src/app/core/services/notificator.service';
 import * as moment from 'moment';
 import { StatusENUM } from 'src/app/common/enums/status.enum';
 import { User } from 'firebase';
-import undefined = require('firebase/empty-import');
+
 
 @Component({
   selector: 'app-active-loan-requests',
