@@ -1,63 +1,50 @@
-<div
-  class="modal fade"
-  id="createPayment{{ this.loanFullData.$suggestionId }}"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="#createPayment"
-  aria-hidden="true"
->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">
-          Please enter your Loan preferences:
-        </h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">
+    Please submit your payment:
+  </h4>
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="this.closeModal()"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form class="container" (submit)="this.emitLoanData()">
+    <div class="row">
+      <div class="form-group col-6">
+        <label for="exampleInputEmail1">Amount: </label>
+        <div>
+          <b>{{ this.loanFullData.installment }} $</b>
+        </div>
       </div>
-
-      <div class="modal-body">
-        <form class="container" (submit)="this.emitLoanData()">
-          <div class="row">
-            <div class="form-group col-6">
-              <label for="exampleInputEmail1">Amount: </label>
-              <div>
-                <b>{{ this.loanFullData.installment }} $</b>
-              </div>
-            </div>
-            <div class="form-group col-6" *ngIf="this.overdueAmount">
-              <label for="exampleInputEmail1">Overdue: </label>
-              <div>
-                <b>{{ this.overdueAmount }}</b>
-              </div>
-            </div>
-            <div class="form-group col-12" *ngIf="this.overdueAmount">
-              <label for="exampleInputEmail1">Total: </label>
-              <div>
-                <b>{{ this.loanFullData.installment + this.overdueAmount }}</b>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            <button type="submit" id="submitPayment" class="btn btn-primary">
-              Submit Payment
-            </button>
-          </div>
-        </form>
+      <div class="form-group col-6" *ngIf="this.overdueAmount">
+        <label for="exampleInputEmail1">Overdue: </label>
+        <div>
+          <b>{{ this.overdueAmount }}</b>
+        </div>
+      </div>
+      <div class="form-group col-12" *ngIf="this.overdueAmount">
+        <label for="exampleInputEmail1">Total: </label>
+        <div>
+          <b>{{ this.loanFullData.installment + this.overdueAmount }}</b>
+        </div>
       </div>
     </div>
-  </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="this.closeModal()"
+      >
+        Close
+      </button>
+      <button type="submit" class="btn btn-outline-dark">
+        Submit Payment
+      </button>
+    </div>
+  </form>
 </div>
+<div class="modal-footer"></div>

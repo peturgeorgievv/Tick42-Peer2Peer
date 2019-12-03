@@ -24,6 +24,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ServerErrorComponent } from './components/server-error/server-error.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
 	declarations: [
@@ -49,14 +50,15 @@ import { ServerErrorComponent } from './components/server-error/server-error.com
 		AngularFirestoreModule,
 		SharedModule,
 		CoreModule,
-		NgxSpinnerModule
+		NgxSpinnerModule,
+		NgbModule.forRoot()
 	],
 	providers: [
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: SpinnerIntercerptorService,
 			multi: true
-		},
+		}
 	],
 	bootstrap: [ AppComponent ]
 })

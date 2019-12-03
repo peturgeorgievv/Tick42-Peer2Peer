@@ -1,3 +1,5 @@
+import { ShowPaymentsComponent } from './../show-payments/show-payments.component';
+import { AddPaymentModalComponent } from './../add-payment-modal/add-payment-modal.component';
 import { AuthenticationService } from './../../../core/services/authentication.service';
 import { UserDTO } from './../../../common/models/users/user-data.dto';
 import { User } from 'firebase';
@@ -14,6 +16,7 @@ import {
 	calculateEndOfContractDate,
 	overallAmount
 } from '../../../common/calculate-functions/calculate-func';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
 	selector: 'app-current-loan',
@@ -25,9 +28,7 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 	@Input() user: User;
 	public userBalanceData: UserDTO;
 
-	private paymentsSubscription: Subscription;
-	private getOneLoanSubscription: Subscription;
-	private userBalanceDataSubscription: Subscription;
+	private subscriptions: Subscription[] = [];
 
 	public allPayments: AllPaymentsDTO[] = [];
 	public loanHistory: AllPaymentsDTO[];
@@ -45,8 +46,61 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 	constructor(
 		private readonly borrowerService: BorrowerService,
 		private readonly notificatorService: NotificatorService,
-		private readonly authService: AuthenticationService
+		private readonly authService: AuthenticationService,
+		private readonly modalService: NgbModal
 	) {}
+
+	openAddPaymentsModal() {
+		const addPaymentsModal = this.modalService.open(AddPaymentModalComponent);
+		addPaymentsModal.componentInstance.loanFullData = this.loanData;
+		addPaymentsModal.componentInstance.overdueAmount = this.overdueAmount();
+		addPaymentsModal.componentInstance.createPayment.subscribe((data) => {
+			console.log(data);
+			this.subscriptions.push(
+				this.borrowerService.getOneLoan(this.user.uid, this.loanData.$suggestionId).subscribe((loanData) => {
+					console.log(loanData);
+					if (loanData[0]) {
+						const loanId = loanData[0].payload.doc.id;
+						if (this.amountLeft <= data.amount) {
+							this.borrowerService.payFullyLoan(loanId);
+						}
+					}
+					this.borrowerService
+						.createPayment({
+							...data
+						})
+						.then(() => {
+							const balance = (this.userBalanceData.currentBalance -= data.amount);
+							this.borrowerService.getUserDocData(this.userBalanceData.$userDocId).set(
+								{
+									currentBalance: Number(balance.toFixed(2))
+								},
+								{ merge: true }
+							);
+							this.borrowerService.getUserDocData(data.$investorDocId).get().subscribe((userData) => {
+								const userBalanceData = userData.data();
+								const investorBalance = (userBalanceData.currentBalance += data.amount);
+								this.borrowerService.getUserDocData(data.$investorDocId).set(
+									{
+										currentBalance: Number(investorBalance.toFixed(2))
+									},
+									{ merge: true }
+								);
+							});
+
+							this.notificatorService.success('You have paid successefully!');
+						})
+						.catch(() => this.notificatorService.error('Oops, something went wrong!'));
+				})
+			);
+		});
+	}
+
+	openShowPaymentsModal() {
+		const showPaymentsModal = this.modalService.open(ShowPaymentsComponent);
+		showPaymentsModal.componentInstance.loanPayments = this.currentLoanPayments();
+		showPaymentsModal.componentInstance.loanSuggestionId = this.loanData.$suggestionId;
+	}
 
 	public ngOnInit(): void {
 		this.getPayments(this.loanData.$suggestionId, this.loanData.$userId);
@@ -59,25 +113,26 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 
 		this.dateEndOfContract = calculateEndOfContractDate(this.date, this.period);
 		this.totalAmount = overallAmount(this.amount, this.interestRate, this.period);
-		this.userBalanceDataSubscription = this.authService.userBalanceDataSubject$.subscribe((res) => {
-			this.userBalanceData = res;
-		});
+		this.subscriptions.push(
+			this.authService.userBalanceDataSubject$.subscribe((res) => {
+				this.userBalanceData = res;
+			})
+		);
 	}
 
 	public ngOnDestroy(): void {
-		this.paymentsSubscription.unsubscribe();
-		this.userBalanceDataSubscription.unsubscribe();
+		this.subscriptions.forEach((subscription) => subscription.unsubscribe());
 	}
 
 	public getPayments(suggestionId: string, userId: string): void {
-		this.paymentsSubscription = this.borrowerService
-			.getPayments(suggestionId, userId)
-			.subscribe((querySnapshot: AllPaymentsDTO[]) => {
+		this.subscriptions.push(
+			this.borrowerService.getPayments(suggestionId, userId).subscribe((querySnapshot: AllPaymentsDTO[]) => {
 				this.allPayments = querySnapshot;
 				this.amountLeft = this.amount;
 				this.allPayments.forEach((data) => (this.amountLeft -= data.amount));
 				return this.amountLeft;
-			});
+			})
+		);
 	}
 
 	public overdueDays(): number {
@@ -94,49 +149,6 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 
 	public calcNextDueDate(): string {
 		return calculateNextDueDate(this.date, this.historyAmountsLength(this.allPayments));
-	}
-
-	public createPayment(data: AllPaymentsDTO): void {
-		this.getOneLoanSubscription = this.borrowerService
-			.getOneLoan(this.user.uid, this.loanData.$requestId)
-			.subscribe((loanData) => {
-				if (loanData[0]) {
-					const loanId = loanData[0].payload.doc.id;
-
-					if (this.amountLeft <= data.amount) {
-						this.borrowerService.payFullyLoan(loanId);
-					}
-				} else {
-					this.getOneLoanSubscription.unsubscribe();
-				}
-			});
-
-		this.borrowerService
-			.createPayment({
-				...data
-			})
-			.then(() => {
-				const balance = (this.userBalanceData.currentBalance -= data.amount);
-				this.borrowerService.getUserDocData(this.userBalanceData.$userDocId).set(
-					{
-						currentBalance: Number(balance.toFixed(2))
-					},
-					{ merge: true }
-				);
-				this.borrowerService.getUserDocData(data.$investorDocId).get().subscribe((userData) => {
-					const userBalanceData = userData.data();
-					const investorBalance = (userBalanceData.currentBalance += data.amount);
-					this.borrowerService.getUserDocData(data.$investorDocId).set(
-						{
-							currentBalance: Number(investorBalance.toFixed(2))
-						},
-						{ merge: true }
-					);
-				});
-
-				this.notificatorService.success('You have paid successefully!');
-			})
-			.catch(() => this.notificatorService.error('Oops, something went wrong!'));
 	}
 
 	public currentLoanPayments(): AllPaymentsDTO[] {

@@ -8,10 +8,20 @@ import { AddPaymentModalComponent } from './add-payment-modal/add-payment-modal.
 import { ShowPaymentsComponent } from './show-payments/show-payments.component';
 import { CurrentLoanComponent } from './current-loan/current-loan.component';
 import { LoanRequestsComponent } from './loan-requests/loan-requests.component';
+import { NgbModalModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
-	declarations: [ BorrowerComponent, CreateLoanModalComponent, AddPaymentModalComponent, ShowPaymentsComponent, CurrentLoanComponent, LoanRequestsComponent ],
-	imports: [ CommonModule, SharedModule, BorrowerRouterModule ],
-	exports: [ BorrowerComponent ]
+	declarations: [
+		BorrowerComponent,
+		CreateLoanModalComponent,
+		AddPaymentModalComponent,
+		ShowPaymentsComponent,
+		CurrentLoanComponent,
+		LoanRequestsComponent
+	],
+	imports: [ CommonModule, SharedModule, BorrowerRouterModule, NgbModalModule ],
+	exports: [ BorrowerComponent ],
+	entryComponents: [ AddPaymentModalComponent, ShowPaymentsComponent ],
+	providers: [ NgbActiveModal ]
 })
 export class BorrowerModule {}

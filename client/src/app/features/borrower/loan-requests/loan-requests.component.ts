@@ -87,7 +87,6 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 			this.validateMin = this.amount - this.amountLeftToInvest;
 			return this.validateMin;
 		}
-		console.log(this.validateMin);
 		return this.validateMin;
 	}
 

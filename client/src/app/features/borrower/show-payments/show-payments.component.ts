@@ -1,3 +1,4 @@
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AllPaymentsDTO } from './../../../common/models/all-payments.dto';
 import { Component, OnInit, Input } from '@angular/core';
 
@@ -7,10 +8,14 @@ import { Component, OnInit, Input } from '@angular/core';
 	styleUrls: [ './show-payments.component.css' ]
 })
 export class ShowPaymentsComponent implements OnInit {
-	@Input() loanPayments;
+	@Input() loanPayments: AllPaymentsDTO[];
 	@Input() loanSuggestionId: string;
 
-	constructor() {}
+	constructor(public activeModal: NgbActiveModal) {}
 
 	ngOnInit() {}
+
+	public closeModal(): void {
+		this.activeModal.dismiss();
+	}
 }

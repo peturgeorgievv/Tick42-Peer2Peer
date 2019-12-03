@@ -2,6 +2,7 @@ import { CurrentLoanDTO } from './../../../common/models/current-loan.dto';
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { calculateInstallment } from '../../../common/calculate-functions/calculate-func';
 import * as moment from 'moment';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
 	selector: 'app-add-payment-modal',
@@ -13,7 +14,7 @@ export class AddPaymentModalComponent implements OnInit {
 	@Input() loanFullData: CurrentLoanDTO;
 	@Input() overdueAmount: number;
 
-	constructor() {}
+	constructor(public activeModal: NgbActiveModal) {}
 
 	ngOnInit() {}
 
@@ -34,5 +35,10 @@ export class AddPaymentModalComponent implements OnInit {
 		};
 
 		this.createPayment.emit(loanToAdd);
+		this.activeModal.close();
+	}
+
+	public closeModal(): void {
+		this.activeModal.dismiss();
 	}
 }

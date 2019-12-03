@@ -1,64 +1,53 @@
-<div
-  class="modal fade"
-  id="showPaymentsModal{{this.loanSuggestionId}}"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="showPaymentsModal + this.loanRequestId"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-scrollable" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="showPaymentsModal{{this.loanSuggestionId}}"><i>Your PAYMENTS</i></h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
+<div class="modal-dialog modal-dialog-scrollable" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title"><i>Your PAYMENTS</i></h5>
+      <button type="button" class="close" (click)="this.closeModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="!this.loanPayments.length">
+        You don't have any payments yet!
       </div>
-      <div class="modal-body">
-        <div *ngIf="!this.loanPayments.length">
-          You don't have any payments yet!
-        </div>
-        <div class="card" *ngFor="let payment of this.loanPayments">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <p>
-                  Amount Paid:
-                  <b>{{ this.payment.amount | number: "1.2-2" }} $</b>
-                </p>
-                <p>
-                  Overdue Paid:
-                  <b>{{ this.payment.overdue | number: "1.2-2" }} $</b>
-                </p>
-                <p>
-                  Total Paid:
-                  <b
-                    >{{
-                      this.payment.amount + this.payment.overdue
-                        | number: "1.2-2"
-                    }}
-                    $</b
-                  >
-                </p>
-                <p>
-                  Date Paid: <b>{{ this.payment.date }}</b>
-                </p>
-              </div>
+      <div class="card" *ngFor="let payment of this.loanPayments">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <p>
+                Amount Paid:
+                <b>{{ this.payment.amount | number: "1.2-2" }} $</b>
+              </p>
+              <p>
+                Overdue Paid:
+                <b>{{ this.payment.overdue | number: "1.2-2" }} $</b>
+              </p>
+              <p>
+                Total Paid:
+                <b
+                  >{{
+                    this.payment.amount + this.payment.overdue | number: "1.2-2"
+                  }}
+                  $</b
+                >
+              </p>
+              <p>
+                Date Paid: <b>{{ this.payment.date }}</b>
+              </p>
             </div>
           </div>
-          <br />
         </div>
+        <br />
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Close
-        </button>
-      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="this.closeModal()"
+      >
+        Close
+      </button>
     </div>
   </div>
 </div>
