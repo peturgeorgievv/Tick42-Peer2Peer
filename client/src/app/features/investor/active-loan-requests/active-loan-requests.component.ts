@@ -6,6 +6,7 @@ import { NotificatorService } from 'src/app/core/services/notificator.service';
 import * as moment from 'moment';
 import { StatusENUM } from 'src/app/common/enums/status.enum';
 import { User } from 'firebase';
+import undefined = require('firebase/empty-import');
 
 @Component({
   selector: 'app-active-loan-requests',
@@ -15,6 +16,7 @@ import { User } from 'firebase';
 export class ActiveLoanRequestsComponent implements OnInit {
   @Input() requestData;
   @Input() user: User;
+
   public userBalanceData: UserDTO;
 
   public loanReqId;
@@ -33,7 +35,6 @@ export class ActiveLoanRequestsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.name = this.requestData.$userId;
     this.totalAmount = this.requestData.amount;
     this.period = this.requestData.period;
@@ -43,12 +44,15 @@ export class ActiveLoanRequestsComponent implements OnInit {
     this.loanUser = this.user.uid;
 
     this.authService.userBalanceDataSubject$.subscribe((res) => {
-      this.userBalanceData = res;
+      if (res !== undefined) {
+        this.userBalanceData = res;
+      }
     });
+
+
   }
 
   public createSuggestion(suggsetion): void {
-    console.log(this.userBalanceData);
     this.investorService
       .createLoanSuggestion({
         $requestId: this.loanReqId,
@@ -59,7 +63,10 @@ export class ActiveLoanRequestsComponent implements OnInit {
         dateSubmited: moment(new Date()).format('YYYY-DD-MM'),
         ...suggsetion
       })
-      .then((ref) => this.investorService.addSuggestionId(ref.id))
+      .then((ref) => {
+        this.investorService.addSuggestionId(ref.id);
+        this.notificatorService.success('Your proposal has been added!');
+      })
       .catch(() => {
         this.notificatorService.error('Oops, something went wrong!');
       });
@@ -76,17 +83,13 @@ export class ActiveLoanRequestsComponent implements OnInit {
         dateSubmited: moment(new Date()).format('YYYY-DD-MM'),
         ...suggsetion
       })
-      .then((ref) => this.investorService.addSuggestionId(ref.id))
+      .then((ref) => {
+        this.investorService.addSuggestionId(ref.id);
+        this.notificatorService.success('Your proposal has been added!');
+      })
       .catch(() => {
         this.notificatorService.error('Oops, something went wrong!');
       });
   }
 
-  // public loanRequestId(reqId: string) {
-  //   return (this.loanReqId = reqId);
-  // }
-
-  // public loanUserId(userId: string) {
-  //   return (this.loanUser = userId);
-  // }
 }

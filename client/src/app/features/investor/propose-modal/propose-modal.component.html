@@ -37,6 +37,12 @@
                 id="recipient-name"
                 formControlName="interestRate"
               />
+              <span
+              class="font-italic font-weight-bold text-danger"
+              *ngIf="addLoanSuggestion.controls.interestRate?.errors?.min"
+            >
+              Invalid interest rate!
+            </span>
             </div>
             <div class="form-group col-6">
               <label for="recipient-name" class="col-form-label"
@@ -48,6 +54,12 @@
                 id="recipient-name"
                 formControlName="penalty"
               />
+              <span
+              class="font-italic font-weight-bold text-danger"
+              *ngIf="addLoanSuggestion.controls.penalty?.errors?.min"
+            >
+              Invalid penalty rate!
+            </span>
             </div>
           </div>
           <div class="row">
@@ -82,7 +94,11 @@
             >
               Close
             </button>
-            <button type="submit" class="btn btn-primary">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="addLoanSuggestion.invalid"
+            >
               Send Suggestion
             </button>
           </div>

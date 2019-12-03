@@ -9,8 +9,18 @@ import { ActiveLoanRequestsComponent } from './active-loan-requests/active-loan-
 import { PartialProposeModalComponent } from './partial-propose-modal/partial-propose-modal.component';
 
 @NgModule({
-	declarations: [ InvestorComponent, ProposeModalComponent, ShowInvestmentComponent, ActiveLoanRequestsComponent, PartialProposeModalComponent ],
-	imports: [ CommonModule, SharedModule, InvestorRouterModule ],
-	exports: [ InvestorComponent ]
+  declarations: [
+    InvestorComponent,
+    ProposeModalComponent,
+    ShowInvestmentComponent,
+    ActiveLoanRequestsComponent,
+    PartialProposeModalComponent
+  ],
+  imports: [
+    CommonModule,
+    SharedModule,
+    InvestorRouterModule
+  ],
+  exports: [InvestorComponent]
 })
-export class InvestorModule {}
+export class InvestorModule { }
