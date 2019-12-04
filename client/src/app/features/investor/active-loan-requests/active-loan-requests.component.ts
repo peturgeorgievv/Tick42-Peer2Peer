@@ -32,7 +32,11 @@ export class ActiveLoanRequestsComponent implements OnInit {
     private readonly investorService: InvestorService,
     private readonly notificatorService: NotificatorService,
     private readonly authService: AuthenticationService
-  ) { }
+  ) {
+    this.authService.userBalanceDataSubject$.subscribe((res) => {
+      this.userBalanceData = res;
+    });
+  }
 
   ngOnInit() {
     this.name = this.requestData.$userId;
@@ -42,14 +46,6 @@ export class ActiveLoanRequestsComponent implements OnInit {
     this.partial = this.requestData.partial;
     this.loanReqId = this.requestData.$requestId;
     this.loanUser = this.user.uid;
-
-    this.authService.userBalanceDataSubject$.subscribe((res) => {
-      if (res !== undefined) {
-        this.userBalanceData = res;
-      }
-    });
-
-
   }
 
   public createSuggestion(suggsetion): void {
