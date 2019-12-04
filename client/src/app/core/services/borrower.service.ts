@@ -135,6 +135,27 @@ export class BorrowerService {
 	}
 
 	public rejectBiggerLoanSuggestions(requestId: string, amount: number) {
+		console.log(amount);
+		return this.angularFireStore
+			.collection('suggestions', (ref) =>
+				ref
+					.where('status', '==', StatusENUM.suggestionPending)
+					.where('$requestId', '==', requestId)
+					.where('amount', '>', amount)
+			)
+			.valueChanges()
+			.subscribe((querySnapshot: LoanSuggestionDTO[]) => {
+				querySnapshot.forEach((doc: LoanSuggestionDTO) => {
+					this.angularFireStore
+						.collection('suggestions')
+						.doc(doc.$suggestionId)
+						.set({ status: StatusENUM.suggestionRejected }, { merge: true });
+				});
+			});
+	}
+
+	public rejectBiggerPartialLoanSuggestions(requestId: string, amount: number) {
+		console.log(amount);
 		return this.angularFireStore
 			.collection('suggestions', (ref) =>
 				ref

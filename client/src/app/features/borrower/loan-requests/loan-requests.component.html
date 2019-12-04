@@ -54,7 +54,7 @@
             <button
               class="btn col-6"
               *ngIf="!this.edit"
-              (click)="this.resetForm()"
+              (click)="this.resetForm(); this.editFormValidation()"
             >
               <b>Edit</b>
             </button>

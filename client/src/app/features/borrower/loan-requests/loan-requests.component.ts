@@ -56,15 +56,15 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 						data.forEach((loan) => {
 							if (loan.amount) {
 								this.amountLeftToInvest -= loan.amount;
-								this.editFormValidation();
 							}
+							this.editFormValidation();
 						});
 					})
 			);
 		}
 
 		this.editLoanForm = this.formBuilder.group({
-			amount: [ this.amount, [ Validators.required, Validators.min(this.editFormValidation()) ] ]
+			amount: [ this.amount, [ Validators.required ] ]
 		});
 
 		this.subscriptions.push(
@@ -83,11 +83,11 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	}
 
 	public editFormValidation() {
+		const validateAmount = this.amount - this.amountLeftToInvest;
 		if (this.partial && this.amountLeftToInvest > 0) {
-			this.validateMin = this.amount - this.amountLeftToInvest;
-			return this.validateMin;
+			return this.editLoanForm.controls['amount'].setValidators([ Validators.min(validateAmount) ]);
 		}
-		return this.validateMin;
+		return this.editLoanForm.controls['amount'].setValidators([ Validators.min(0) ]);
 	}
 
 	public resetForm() {
@@ -98,7 +98,9 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	public editLoanRequest(data): void {
 		this.edit = false;
 		this.borrowerService.editRequestAmount(this.$requestId, data.amount).then(() => {
-			this.subscriptions.push(this.borrowerService.rejectBiggerLoanSuggestions(this.$requestId, data.amount));
+			this.subscriptions.push(
+				this.borrowerService.rejectBiggerLoanSuggestions(this.$requestId, this.amountLeftToInvest)
+			);
 		});
 	}
 
@@ -114,10 +116,8 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	public acceptRequest(suggestion: LoanSuggestionDTO): void {
 		let partial = false;
 		if (this.partial && this.amountLeftToInvest - suggestion.amount > 0) {
-			console.log(partial);
 			partial = true;
 		} else {
-			console.log(partial);
 			partial = false;
 		}
 
@@ -134,8 +134,6 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 				status: StatusENUM.current
 			})
 			.then(() => {
-				console.log(suggestion.amount);
-				console.log(this.amountLeftToInvest);
 				const balance = (this.userBalanceData.currentBalance += suggestion.amount);
 				this.borrowerService.getUserDocData(this.userBalanceData.$userDocId).set(
 					{
@@ -156,16 +154,19 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 						);
 					})
 				);
+				if (partial) {
+					this.borrowerService.findLoanSuggestion(suggestion.$suggestionId);
+					this.subscriptions.push(
+						this.borrowerService.rejectBiggerPartialLoanSuggestions(
+							suggestion.$requestId,
+							this.amountLeftToInvest
+						)
+					);
+				} else {
+					this.borrowerService.findLoanSuggestion(suggestion.$suggestionId);
+					this.subscriptions.push(this.borrowerService.rejectLoanSuggestions(suggestion.$requestId));
+					this.subscriptions.push(this.borrowerService.rejectLoanRequests(suggestion.$requestId));
+				}
 			});
-		if (partial) {
-			this.borrowerService.findLoanSuggestion(suggestion.$suggestionId);
-			this.subscriptions.push(
-				this.borrowerService.rejectBiggerLoanSuggestions(suggestion.$requestId, this.amountLeftToInvest)
-			);
-		} else {
-			this.borrowerService.findLoanSuggestion(suggestion.$suggestionId);
-			this.subscriptions.push(this.borrowerService.rejectLoanSuggestions(suggestion.$requestId));
-			this.subscriptions.push(this.borrowerService.rejectLoanRequests(suggestion.$requestId));
-		}
 	}
 }
