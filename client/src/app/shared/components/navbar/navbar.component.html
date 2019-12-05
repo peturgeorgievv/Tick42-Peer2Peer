@@ -20,13 +20,14 @@
     <form class="form-inline my-2 my-lg-0">
       <div class="row">
         <a
-          class="btn btn-light btn-outline-secondary  font-weight-bolder"
+          class="btn btn-light font-weight-bolder sign-out"
+          style="margin: 0px 3px;"
           [routerLink]="['/sign-in']"
           role="button"
           >Sign In</a
         >
         <a
-          class="btn btn-light btn-outline-secondary  font-weight-bolder"
+          class="btn btn-light font-weight-bolder sign-out"
           [routerLink]="['/register']"
           role="button"
           >Sign Up</a
@@ -39,8 +40,8 @@
 <div *ngIf="this.user">
   <nav class="navbar navbar-expand-lg navbar-light full-navbar">
       <a class="navbar-brand font-weight-bolder" [routerLink]="['/']"
-      ><img class="img-responsive2"
-      src="../../../../assets/Logo_02 (1).png"  style="width: 125px; border-radius: 1px;">
+      ><img class=""
+      src="../../../../assets/Logo_02 (1).png"  style="width: 125px; border-radius: 1px; margin: 0px;">
     </a>
     <button
       class="navbar-toggler"
@@ -59,27 +60,24 @@
       <form class="form-inline my-2 my-lg-0">
         <div class="row">
           <a
-            class="btn btn-light btn-outline-secondary  font-weight-bolder"
-            [routerLink]="['/borrower']"
-            role="button"
-            >Borrower</a
-          >
-          <a
-            class="btn btn-light btn-outline-secondary  font-weight-bolder"
-            [routerLink]="['/investor']"
-            role="button"
-            >Investor</a
-          >
-          <a
-            class="btn btn-light btn-outline-secondary  font-weight-bolder"
+            class="nav-link font-weight-bolder nav-btns"
             [routerLink]="['/dashboard']"
-            role="button"
             >Dashboard</a
           >
           <a
-            class="btn btn-light btn-outline-secondary  font-weight-bolder"
+            class="nav-link font-weight-bolder nav-btns"
+            [routerLink]="['/borrower']"
+            >Borrower</a
+          >
+          <a
+            class="nav-link font-weight-bolder nav-btns"
+            [routerLink]="['/investor']"
+            >Investor</a
+          >
+          <a
+          class="btn btn-light font-weight-bolder sign-out"
+          role="button"
             (click)="this.signOut()"
-            role="button"
             >Sign Out</a
           >
         </div>
@@ -94,26 +92,29 @@
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
     <form class="form-inline my-2 my-lg-0">
       <div class="user-info">
-        <span class="balance-nums">{{ this.userBalanceData.email }} </span>
-      </div>
+        <div class="btn secondary-navbar-btns">
+              <span class="sec-navbar-text">Balance:</span> <span class="badge badge-light badge-size">{{ this.userBalanceData.currentBalance | number: "1.2-2" }} $</span>
+            </div>
+          </div>
       <div class="user-info">
-        Balance:
-        <span class="balance-nums"
-          >{{ this.userBalanceData.currentBalance | number: "1.2-2" }} $
-        </span>
-      </div>
+        <div class="btn secondary-navbar-btns">
+              <span class="sec-navbar-text">Debts:</span> <span class="badge badge-light badge-size">{{ this.userBalanceData.totalDebt | number: "1.2-2" }} $</span>
+            </div>
+          </div>
       <div class="user-info">
-        Debts:
-        <span class="balance-nums"
-          >{{ this.userBalanceData.totalDebt | number: "1.2-2" }} $
-        </span>
-      </div>
-      <div class="user-info">
-        Investments:
-        <span class="balance-nums"
-          >{{ this.userBalanceData.totalInvestment | number: "1.2-2" }} $
-        </span>
-      </div>
+        <div class="btn secondary-navbar-btns">
+              <span class="sec-navbar-text">Investments:</span> <span class="badge badge-light badge-size">{{ this.userBalanceData.totalInvestment | number: "1.2-2" }} $</span>
+            </div>
+          </div>
+                      <div class="col">
+                      <div ngbDropdown class="d-inline-block">
+                        <button class="btn secondary-navbar-btns" id="dropdownBasic1" ngbDropdownToggle> <span class="sec-navbar-text">{{ this.userBalanceData.email }} </span></button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="dropdown-menu">
+                          <div ngbDropdownItem class="dropdown-text">Next Due Date: 12-12-2012</div>
+                          <div ngbDropdownItem class="dropdown-text">Overdue Debts: 5</div>
+                        </div>
+                      </div>
+                    </div>
     </form>
   </nav>
 </div>
