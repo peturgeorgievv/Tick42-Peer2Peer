@@ -1,9 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.css';
 body {
-	background-color: #c0e5c8;
+	background-image: url("./assets/background-buildings.jpg");
+	background-size: 100%;
 }
 
 html {
-	background-color: #c0e5c8;
 }

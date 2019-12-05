@@ -3,7 +3,19 @@
   *ngIf="this.loanData && this.allPayments && this.userBalanceData"
 >
   <ul class="list-unstyled" style="border: 2px solid gray; padding: 5px;">
+    <div class="row" style="padding: 2px 16px;">
+    <span class="col-6">
     Loan:
+  </span>
+    <button
+    type="button"
+    class="btn col-6"
+    (click)="this.showFullLoanData = !this.showFullLoanData"
+  >
+    <b *ngIf="!this.showFullLoanData">Show More <img class="arrow-down" src="../../../../assets/arrow-down-solid.svg"/></b>
+    <b *ngIf="this.showFullLoanData">Hide <img class="arrow-down" src="../../../../assets/arrow-down-solid.svg"/></b>
+  </button>
+</div>
     <li>
       <div class="card">
         <div class="card-body">
@@ -13,11 +25,16 @@
                 Investor: <b>{{ this.userBalanceData.email }}</b>
               </p>
               <p>
-                Date Created: <b>{{ this.loanData.date }}</b>
-              </p>
-              <p>
                 Next Due Date:
                 <b>{{ this.calcNextDueDate() }}</b>
+              </p>
+              <p>
+                Installment:
+                <b>{{ this.installment }} $</b>
+              </p>
+              <div *ngIf="showFullLoanData">
+              <p>
+                Date Created: <b>{{ this.loanData.date }}</b>
               </p>
               <p>
                 Date End Of Contract:
@@ -31,10 +48,6 @@
                 Total Amount:
                 <b>{{ this.totalAmount | number: "1.2-2" }} $</b>
               </p>
-              <p>
-                Installment:
-                <b>{{ this.installment }} $</b>
-              </p>
               <p *ngIf="this.overdueDays() > 0">
                 Overdue Days:
                 <b>{{ this.overdueDays() }} $</b>
@@ -47,6 +60,7 @@
                 Penalty Rate: <b>{{ this.penalty }} %</b>
               </p>
             </div>
+          </div>
           </div>
         </div>
       </div>

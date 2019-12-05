@@ -11,3 +11,8 @@
 .my-progress-bar {
 	background-color: #85b79d;
 }
+
+.arrow-down {
+	width: 17px;
+	color: white !important;
+}
