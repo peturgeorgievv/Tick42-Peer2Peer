@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs';
+import { HomepageService } from './../../core/services/homepage.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,10 +8,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./homepage.component.css']
 })
 export class HomepageComponent implements OnInit {
+  public allUsers: any = [];
+  public allUsersSub: Subscription;
+  public allLoans = [];
+  public allInvestments = [];
+  public maxInterest: number;
 
-  constructor() { }
+  constructor(private readonly homepageService: HomepageService) { }
 
   ngOnInit() {
+    this.allUsersSub = this.homepageService
+      .getAllUsers()
+      .subscribe(data => { console.log(data.docs.length);
+
+        // this.allUsers = data;
+      });
+
   }
+
 
 }
