@@ -1,4 +1,5 @@
-<p>Total users: </p>
-<p>Total amount of loans listed: </p>
-<p>Total amount of investments listed:  </p>
-<p>Maximum interest rate: </p>
+<div *ngIf="this.allUsers && this.allLoans && this.allRequests">
+  <p>Total users: {{ this.allUsers }}.</p>
+  <p>Total amount of active loans: {{ this.allLoans }}.</p>
+  <p>Total amount of loan-requests listed: {{ this.allRequests }}.</p>
+</div>
