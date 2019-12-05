@@ -39,6 +39,7 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 	public penalty: number;
 	public period: number;
 	public amountLeft: number;
+	public showFullLoanData = false;
 
 	public dateEndOfContract: string;
 	public totalAmount: number;

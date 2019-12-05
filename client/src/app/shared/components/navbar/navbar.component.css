@@ -1,5 +1,7 @@
 .navbar {
 	background-color: #694873;
+	padding-top: 3px;
+	padding-bottom: 3px;
 }
 
 .user-info {
@@ -14,4 +16,54 @@
 
 .balance-nums {
 	font-weight: bolder;
+}
+
+.secondary-navbar-btns {
+	background-color: #694873;
+	margin: 1px 0px;
+}
+
+.sec-navbar-text {
+	color: white;
+	font-weight: bolder;
+	margin: 0px 3px;
+}
+
+.badge-size {
+	font-size: 14px;
+	color: #694873;
+}
+
+.nav-btns {
+	color: white;
+	font-size: 18px;
+	font-weight: bold;
+	text-shadow: 0.08em 0 black, 0 0.08em black, -0.08em 0 black, 0 -0.08em black;
+}
+
+.nav-btns:hover {
+	text-decoration: underline;
+	text-decoration-color: whitesmoke;
+}
+
+.sign-out {
+	color: #694873 !important;
+	font-weight: bolder;
+}
+
+.data-dropdown:hover {
+	color: blue;
+}
+
+.dropdown-text {
+	color: white;
+	text-shadow: 0.06em 0 black, 0 0.06em black, -0.06em 0 black, 0 -0.06em black;
+	font-weight: bold;
+	font-size: 14px;
+	margin: 4px;
+	padding: 0px 5px;
+}
+
+.dropdown-menu {
+	background-color: #694873;
 }
