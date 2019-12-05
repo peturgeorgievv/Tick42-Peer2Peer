@@ -61,7 +61,7 @@
           <hr />
           <div *ngIf="this.curInvestments[0]" class="card-text">
             Total period of all investments:
-            {{ this.curInvestments[0].period }} days.
+            {{ this.curInvestments[0].period }} months.
           </div>
           <div *ngIf="!this.curInvestments[0]" class="card-text">
             No any investments at the moment!
@@ -88,7 +88,7 @@
           <h6 class="card-title">Total debts</h6>
           <hr />
           <div *ngIf="this.curLoans[0]" class="card-text">
-            Total period of all debts: {{ this.curLoans[0].period }} days.
+            Total period of all debts: {{ this.curLoans[0].period }} months.
           </div>
           <div *ngIf="!this.curLoans[0]" class="card-text">
             No any debts at the moment!
