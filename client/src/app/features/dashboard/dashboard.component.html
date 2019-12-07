@@ -27,28 +27,19 @@
         <button
           type="button"
           class="btn btn-outline-success waves-effect"
-          data-toggle="modal"
-          data-target="#createDepositModal"
+          (click)="this.createDepositModal()"
         >
           Deposit
         </button>
-        <app-create-deposit
-          (createDepositRequest)="this.createDeposit($event)"
-        ></app-create-deposit>
       </li>
       <li>
         <button
           type="button"
           class="btn btn-outline-success waves-effect"
-          data-toggle="modal"
-          data-target="#createWithdrawModal"
+          (click)="this.createWithdrawModal()"
         >
           Withdraw
         </button>
-        <app-create-withdraw
-          [userData]="userData"
-          (createWithdrawRequest)="this.createWithdraw($event)"
-        ></app-create-withdraw>
       </li>
       <li></li>
     </ul>
