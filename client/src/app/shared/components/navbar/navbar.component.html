@@ -93,20 +93,29 @@
     <form class="form-inline my-2 my-lg-0">
       <div class="user-info">
         <div class="btn secondary-navbar-btns">
-              <span class="sec-navbar-text">Balance:</span> <span class="badge badge-light badge-size">{{ this.userBalanceData.currentBalance | number: "1.2-2" }} $</span>
-            </div>
-          </div>
+          <span class="sec-navbar-text">Balance:</span> <span class="badge badge-light badge-size">{{ this.userBalanceData.currentBalance | number: "1.2-2" }} $</span>
+        </div>
+      </div>
       <div class="user-info">
         <div class="btn secondary-navbar-btns">
-              <span class="sec-navbar-text">Debts:</span> <span class="badge badge-light badge-size">{{ this.userBalanceData.totalDebt | number: "1.2-2" }} $</span>
-            </div>
-          </div>
+          <span class="sec-navbar-text">Debts:</span> <span class="badge badge-light badge-size">{{ this.userBalanceData.totalDebt | number: "1.2-2" }} $</span>
+        </div>
+      </div>
       <div class="user-info">
         <div class="btn secondary-navbar-btns">
-              <span class="sec-navbar-text">Investments:</span> <span class="badge badge-light badge-size">{{ this.userBalanceData.totalInvestment | number: "1.2-2" }} $</span>
-            </div>
-          </div>
-                      <div class="col">
+          <span class="sec-navbar-text">Investments:</span> <span class="badge badge-light badge-size">{{ this.userBalanceData.totalInvestment | number: "1.2-2" }} $</span>
+        </div>
+      </div>
+      <div class="user-info">
+      <a
+      *ngIf="this.userBalanceData.status === 'admin'"
+      class="btn secondary-navbar-btns"
+      role="button"
+      [routerLink]="['/users']"
+        ><span class="sec-navbar-text">Users</span></a
+      >
+      </div>
+                      <div class="col" style="padding: 0px;">
                       <div ngbDropdown class="d-inline-block">
                         <button class="btn secondary-navbar-btns" id="dropdownBasic1" ngbDropdownToggle> <span class="sec-navbar-text">{{ this.userBalanceData.email }} </span></button>
                         <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="dropdown-menu">

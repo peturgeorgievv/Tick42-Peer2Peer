@@ -9,13 +9,18 @@ import { Component, OnInit } from '@angular/core';
 export class RegisterComponent implements OnInit {
 	public email: string;
 	public password: string;
+	public firstName: string;
+	public lastName: string;
+	public status = 'basic';
 
 	constructor(public authenticationService: AuthenticationService) {}
 
 	signUp() {
-		this.authenticationService.signUp(this.email, this.password);
+		this.authenticationService.signUp(this.email, this.password, this.firstName, this.lastName, this.status);
 		this.email = '';
 		this.password = '';
+		this.firstName = '';
+		this.lastName = '';
 	}
 
 	ngOnInit() {}

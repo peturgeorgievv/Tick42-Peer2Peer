@@ -1,1 +1,36 @@
-<p>users works!</p>
+<table class="table table-striped" *ngIf="this.users">
+  <thead>
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">Name</th>
+    <th scope="col">E-mail</th>
+    <th scope="col">Current Balance</th>
+    <th scope="col">Status</th>
+    <th scope="col">#</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of users; index as i">
+    <th scope="row">{{ i + 1 }}</th>
+    <td>
+      {{ user.firstName }} {{ user.lastName}}
+    </td>
+    <td>
+      {{ user.email }}
+    </td>
+    <td>{{ user.currentBalance | number: "1.2-2" }} $</td>
+    <td>{{ user.status }}</td>
+    <td>          <button
+        class="btn col-6"
+      >
+        <b>Show Details</b>
+      </button>
+      <button
+      class="btn col-6"
+    >
+      <b>Ban User</b>
+    </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
