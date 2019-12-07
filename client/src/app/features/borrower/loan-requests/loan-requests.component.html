@@ -32,7 +32,7 @@
                     class="font-italic font-weight-bold text-danger"
                     *ngIf="editLoanForm.controls.amount?.errors?.min"
                   >
-                    You can't edit amount less than already invested!
+                    You can't edit amount less than - {{this.editLoanForm.controls.amount?.errors?.min.min}} $!
                   </span>
                 </p>
                 <p>

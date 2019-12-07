@@ -38,7 +38,7 @@
 	color: white;
 	font-size: 18px;
 	font-weight: bold;
-	text-shadow: 0.08em 0 black, 0 0.08em black, -0.08em 0 black, 0 -0.08em black;
+	text-shadow: 0.05em 0 black, 0 0.05em black, -0.05em 0 black, 0 -0.05em black;
 }
 
 .nav-btns:hover {
@@ -57,7 +57,7 @@
 
 .dropdown-text {
 	color: white;
-	text-shadow: 0.06em 0 black, 0 0.06em black, -0.06em 0 black, 0 -0.06em black;
+	text-shadow: 0.05em 0 black, 0 0.05em black, -0.05em 0 black, 0 -0.05em black;
 	font-weight: bold;
 	font-size: 14px;
 	margin: 4px;
