@@ -21,49 +21,56 @@ describe('BorrowerComponent', () => {
 	let fixture: ComponentFixture<BorrowerComponent>;
 	let component: BorrowerComponent;
 
-	beforeEach(() => {
-		jest.clearAllMocks();
+	beforeEach(
+		async(() => {
+			jest.clearAllMocks();
 
-		authService = {
-			get loggedUser$() {
-				return of();
-			}
-		};
+			authService = {
+				get loggedUser$() {
+					return of();
+				}
+			};
 
-		modalService = {
-			open() {}
-		};
+			modalService = {
+				open() {}
+			};
 
-		notificatorService = {
-			success() {},
-			error() {}
-		};
+			notificatorService = {
+				success() {},
+				error() {}
+			};
 
-		borrowerService = {
-			getUserLoans() {},
-			getUserSuggestions() {},
-			getAllPayments() {},
-			createLoanRequest() {},
-			addRequestIdToLoan() {},
-			getUserRequestsAsc() {},
-			getUserRequestsDesc() {}
-		};
+			borrowerService = {
+				getUserLoans: () => {},
+				getUserSuggestions() {},
+				getAllPayments() {},
+				createLoanRequest() {},
+				addRequestIdToLoan() {},
+				getUserRequestsAsc() {},
+				getUserRequestsDesc() {}
+			};
 
-		TestBed.configureTestingModule({
-			imports: [ CommonModule, SharedModule ],
-			declarations: [ BorrowerComponent, CreateLoanModalComponent, CurrentLoanComponent, LoanRequestsComponent ],
-			providers: [ BorrowerService, AuthenticationService, NotificatorService, NgbModal ]
+			TestBed.configureTestingModule({
+				imports: [ CommonModule, SharedModule ],
+				declarations: [
+					BorrowerComponent,
+					CreateLoanModalComponent,
+					CurrentLoanComponent,
+					LoanRequestsComponent
+				],
+				providers: [ BorrowerService, AuthenticationService, NotificatorService, NgbModal ]
+			})
+				.overrideProvider(BorrowerService, { useValue: borrowerService })
+				.overrideProvider(AuthenticationService, { useValue: authService })
+				.overrideProvider(NotificatorService, { useValue: notificatorService })
+				.overrideProvider(NgbModal, { useValue: modalService })
+				.compileComponents()
+				.then(() => {
+					fixture = TestBed.createComponent(BorrowerComponent);
+					component = fixture.debugElement.componentInstance;
+				});
 		})
-			.overrideProvider(BorrowerService, { useValue: borrowerService })
-			.overrideProvider(AuthenticationService, { useValue: authService })
-			.overrideProvider(NotificatorService, { useValue: notificatorService })
-			.overrideProvider(NgbModal, { useValue: modalService })
-			.compileComponents()
-			.then(() => {
-				fixture = TestBed.createComponent(BorrowerComponent);
-				component = fixture.componentInstance;
-			});
-	});
+	);
 
 	it('should be defined', () => {
 		// Arrange & Act & Assert
@@ -98,17 +105,15 @@ describe('BorrowerComponent', () => {
 		});
 
 		// it('should set the loggedUserData field with the passed value', () => {
-		//   // Arrange
-		//   const mockedUser = 'mocked user';
-		//   const spy = jest
-		//     .spyOn(authService, 'loggedUserData$', 'get')
-		//     .mockReturnValue(of(mockedUser));
+		// 	// Arrange
+		// 	const mockedUser = 'mocked user';
+		// 	const spy = jest.spyOn(modalService, 'open').mockReturnValue(of(mockedUser));
 
-		//   // Act
-		//   component.ngOnInit();
+		// 	// Act
+		// 	component.createLoanRequestModal();
 
-		//   // Assert
-		//   expect(component.loggedUserData).toEqual(mockedUser);
+		// 	// Assert
+		// 	expect(spy).toBeCalled();
 		// });
 
 		// it('should set the loggedUserData field with the passed value', () => {

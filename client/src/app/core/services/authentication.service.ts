@@ -43,28 +43,28 @@ export class AuthenticationService {
 				$userDocId: '',
 				$userId: '',
 				email: '',
+				firstName: '',
+				lastName: '',
 				currentBalance: 0,
 				totalInvestment: 0,
-				totalDebt: 0
+				totalDebt: 0,
+				status: ''
 			};
 			this.angularFireAuth.user.subscribe((res: User) => {
 				if (res) {
 					this.subscriptions.push(
 						this.angularFireStore
-							.collection('users', (ref) =>
-								ref
-									.where('$userId', '==', res.uid)
-									.where('email', '==', res.email)
-									.orderBy('$userDocId', 'asc')
-							)
+							.collection('users', (ref) => ref.where('$userId', '==', res.uid))
 							.valueChanges()
 							.subscribe((querySnapshot: UserDTO[]) => {
-								// const userInfo = querySnapshot.docs[0].data();
 								this.userBalanceData$.next(userData);
 								userData.$userDocId = querySnapshot[0].$userDocId;
 								userData.$userId = querySnapshot[0].$userId;
 								userData.email = querySnapshot[0].email;
 								userData.currentBalance = querySnapshot[0].currentBalance;
+								userData.firstName = querySnapshot[0].firstName;
+								userData.lastName = querySnapshot[0].lastName;
+								userData.status = querySnapshot[0].status;
 								this.subscriptions.push(
 									this.getUserLoans(res.uid).subscribe((debts) => {
 										const userDebts = debts.reduce((acc: number, curValue: CurrentLoanDTO) => {
@@ -168,20 +168,19 @@ export class AuthenticationService {
 		return this.user$.asObservable();
 	}
 
-	public signUp(email: string, password: string) {
+	public signUp(email: string, password: string, firstName: string, lastName: string, status: string) {
 		this.angularFireAuth.auth
 			.createUserWithEmailAndPassword(email, password)
 			.then((res) => {
-				console.log('Logged successfully', res);
 				this.angularFireStore
 					.collection('users')
-					.add({ $userId: res.user.uid, currentBalance: 0, email })
-					.then((ref) =>
-						this.angularFireStore
+					.add({ $userId: res.user.uid, currentBalance: 0, email, firstName, lastName, status })
+					.then((ref) => {
+						return this.angularFireStore
 							.collection('users')
 							.doc(ref.id)
-							.set({ $userDocId: ref.id }, { merge: true })
-					);
+							.set({ $userDocId: ref.id }, { merge: true });
+					});
 			})
 			.catch((error) => {
 				console.log('Something is wrong:', error.message);
