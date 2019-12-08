@@ -1,3 +1,6 @@
+import { CreateAdminModalComponent } from './create-admin-modal/create-admin-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthenticationService } from './../../core/services/authentication.service';
 import { UsersService } from './../../core/services/users.service';
 import { UserDTO } from './../../common/models/users/user-data.dto';
 import { Component, OnInit } from '@angular/core';
@@ -10,12 +13,24 @@ import { Component, OnInit } from '@angular/core';
 export class UsersComponent implements OnInit {
 	public users: UserDTO[];
 
-	constructor(private readonly usersService: UsersService) {}
+	constructor(
+		private readonly usersService: UsersService,
+		private readonly authService: AuthenticationService,
+		private readonly modalService: NgbModal
+	) {}
 
-	ngOnInit() {
+	public ngOnInit(): void {
 		this.usersService.getAllUsers().subscribe((userData: UserDTO[]) => {
 			this.users = userData;
 			console.log(userData);
 		});
+	}
+
+	public openCreateAdminModal(): void {
+		const createAdminModal = this.modalService.open(CreateAdminModalComponent);
+	}
+
+	public signUp() {
+		// this.authService.signUp();
 	}
 }

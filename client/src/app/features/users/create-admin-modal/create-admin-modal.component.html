@@ -1,0 +1,98 @@
+<div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          Enter new Admin Data:
+        </h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="this.closeModal()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="container" [formGroup]="this.createAdminDataForm"
+        (ngSubmit)="this.emitUserData(this.createAdminDataForm.value)">
+          <div class="row">
+            <div class="form-group col-12">
+              <label for="exampleInputEmail1">E-mail: </label>
+                    <input
+                    type="text"
+                    class="form-control"
+                    id="email"
+                    placeholder="Enter your E-mail"
+                    formControlName="email"
+                  />
+                        <span
+                          class="font-italic font-weight-bold text-danger"
+                          *ngIf="createAdminDataForm.controls.email?.errors?.minlength"
+                        >
+                          You're E-mail must be at least {{createAdminDataForm.controls.email?.errors?.minlength.requiredLength}} characters!
+                        </span>
+            </div>
+            <div class="form-group col-12">
+              <label for="exampleInputEmail1">First Name: </label>
+                    <input
+                    type="text"
+                    class="form-control"
+                    id="firstName"
+                    placeholder="Enter your First Name"
+                    formControlName="firstName"
+                  />
+                  <span
+                  class="font-italic font-weight-bold text-danger"
+                  *ngIf="createAdminDataForm.controls.firstName?.errors?.minlength"
+                >
+                You're first name can't be smaller than 2 characters!
+                </span>
+            </div>
+            <div class="form-group col-12">
+              <label for="exampleInputEmail1">Last Name: </label>
+                    <input
+                    type="text"
+                    class="form-control"
+                    id="lastName"
+                    placeholder="Enter your Last Name"
+                    formControlName="lastName"
+                  />
+                  <span
+                  class="font-italic font-weight-bold text-danger"
+                  *ngIf="createAdminDataForm.controls.lastName?.errors?.minlength"
+                >
+                You're last name can't be smaller than 2 characters!
+                </span>
+            </div>
+            <div class="form-group col-12">
+              <label for="exampleInputEmail1">Password: </label>
+                    <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    placeholder="Enter your password"
+                    formControlName="password"
+                  />
+                  <span
+                  class="font-italic font-weight-bold text-danger"
+                  *ngIf="createAdminDataForm.controls.password?.errors?.minlength"
+                >
+                  You're password must be at least {{createAdminDataForm.controls.password?.errors?.minlength.requiredLength}} characters!
+                </span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="this.closeModal()"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-outline-dark" [disabled]="!this.createAdminDataForm.valid">
+              Create Admin
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer"></div>
+      
