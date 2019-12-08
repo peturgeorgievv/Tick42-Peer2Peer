@@ -1,11 +1,15 @@
+import { Subscription } from "rxjs";
+import { ProposeModalComponent } from './../propose-modal/propose-modal.component';
 import { UserDTO } from './../../../common/models/users/user-data.dto';
 import { AuthenticationService } from './../../../core/services/authentication.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from "@angular/core";
 import { InvestorService } from 'src/app/core/services/investor.service';
 import { NotificatorService } from 'src/app/core/services/notificator.service';
 import * as moment from 'moment';
 import { StatusENUM } from 'src/app/common/enums/status.enum';
 import { User } from 'firebase';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PartialProposeModalComponent } from '../partial-propose-modal/partial-propose-modal.component';
 
 
 @Component({
@@ -13,11 +17,12 @@ import { User } from 'firebase';
   templateUrl: './active-loan-requests.component.html',
   styleUrls: ['./active-loan-requests.component.css']
 })
-export class ActiveLoanRequestsComponent implements OnInit {
+export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
   @Input() requestData;
   @Input() user: User;
 
   public userBalanceData: UserDTO;
+
 
   public loanReqId;
   public loanUser;
@@ -31,7 +36,8 @@ export class ActiveLoanRequestsComponent implements OnInit {
   constructor(
     private readonly investorService: InvestorService,
     private readonly notificatorService: NotificatorService,
-    private readonly authService: AuthenticationService
+    private readonly authService: AuthenticationService,
+    private readonly modalService: NgbModal,
   ) {
     this.authService.userBalanceDataSubject$.subscribe((res) => {
       this.userBalanceData = res;
@@ -48,7 +54,8 @@ export class ActiveLoanRequestsComponent implements OnInit {
     this.loanUser = this.user.uid;
   }
 
-  public createSuggestion(suggsetion): void {
+
+  public createSuggestion(suggestion): void {
     this.investorService
       .createLoanSuggestion({
         $requestId: this.loanReqId,
@@ -57,7 +64,7 @@ export class ActiveLoanRequestsComponent implements OnInit {
         $userId: this.loanUser,
         status: StatusENUM.suggestionPending,
         dateSubmited: moment(new Date()).format('YYYY-DD-MM'),
-        ...suggsetion
+        ...suggestion
       })
       .then((ref) => {
         this.investorService.addSuggestionId(ref.id);
@@ -68,7 +75,7 @@ export class ActiveLoanRequestsComponent implements OnInit {
       });
   }
 
-  public createPartialSuggestion(suggsetion): void {
+  public createPartialSuggestion(suggestion): void {
     this.investorService
       .createLoanSuggestion({
         $requestId: this.loanReqId,
@@ -77,7 +84,7 @@ export class ActiveLoanRequestsComponent implements OnInit {
         $userId: this.loanUser,
         status: StatusENUM.suggestionPending,
         dateSubmited: moment(new Date()).format('YYYY-DD-MM'),
-        ...suggsetion
+        ...suggestion
       })
       .then((ref) => {
         this.investorService.addSuggestionId(ref.id);
@@ -85,6 +92,26 @@ export class ActiveLoanRequestsComponent implements OnInit {
       })
       .catch(() => {
         this.notificatorService.error('Oops, something went wrong!');
+      });
+  }
+
+  createProposeModal(): void {
+    const createProposeModal = this.modalService.open(ProposeModalComponent);
+    createProposeModal.componentInstance.requestData = this.requestData;
+
+    createProposeModal.componentInstance.createSuggestion
+      .subscribe((proposeData) => {
+        this.createSuggestion(proposeData);
+      });
+  }
+
+  createPartialProposeModal(): void {
+    const createPartialProposeModal = this.modalService.open(PartialProposeModalComponent);
+    createPartialProposeModal.componentInstance.requestData = this.requestData;
+
+    createPartialProposeModal.componentInstance.createPartialSuggestion
+      .subscribe((proposeData) => {
+        this.createPartialSuggestion(proposeData);
       });
   }
 

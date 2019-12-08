@@ -1,3 +1,4 @@
+import { RegisterUserDTO } from './../../../common/models/users/register-user.dto';
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
@@ -23,19 +24,8 @@ export class CreateAdminModalComponent implements OnInit {
 		});
 	}
 
-	public emitUserData(): void {
-		// const loanToAdd: AllPaymentsDTO = {
-		// 	$requestId: this.loanFullData.$requestId,
-		// 	$userId: this.loanFullData.$userId,
-		// 	$investorId: this.loanFullData.$investorId,
-		// 	$investorDocId: this.loanFullData.$investorDocId,
-		// 	$suggestionId: this.loanFullData.$suggestionId,
-		// 	amount: Number(this.loanFullData.installment),
-		// 	date: moment().format('YYYY-MM-DD'),
-		// 	overdue: this.overdueAmount
-		// };
-
-		this.createAdmin.emit();
+	public emitUserData(userData: RegisterUserDTO): void {
+		this.createAdmin.emit(userData);
 		this.activeModal.close();
 	}
 
