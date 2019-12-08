@@ -50,10 +50,6 @@ export class ShowInvestmentComponent implements OnInit, OnDestroy {
       .subscribe((querySnapshot: AllPaymentsDTO[]) => {
         this.allPayments = querySnapshot;
         this.amountLeft = this.amount;
-<<<<<<< HEAD
-=======
-
->>>>>>> cd46e6bf35a69f9e1aeca776648812b36b6a9339
         this.allPayments.forEach((data) => (this.amountLeft -= data.amount));
         return this.amountLeft;
       });
