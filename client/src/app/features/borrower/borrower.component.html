@@ -2,9 +2,16 @@
   <br />
   <div class="row">
     <div
-      class="justify-content-center align-items-center mb-1 col-md-6 col-sm-12 col-xs-12"
+    class="justify-content-center align-items-center mb-1 col-md-6 col-sm-12 col-xs-12"
     >
-      <div class="col-12">
+    <div class="col-12">
+        <button
+          type="button"
+          class="btn col-12 crate-req-btn"
+          (click)="this.createLoanRequestModal()"
+        >
+          <b>Create Loan Request</b>
+        </button>
         <div class="card card-pricing">
           <div class="card-header">
             <h4 class="card-title">Current Loans</h4>
@@ -26,13 +33,6 @@
       class="justify-content-center align-items-center mb-1 col-md-6 col-sm-12 col-xs-12"
     >
       <div class="col-12">
-        <button
-          type="button"
-          class="btn col-12 crate-req-btn"
-          (click)="this.createLoanRequestModal()"
-        >
-          <b>Create Loan Request</b>
-        </button>
 
         <div class="card card-pricing">
           <div class="card-header">

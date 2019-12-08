@@ -24,6 +24,8 @@
 		"@angular/platform-browser": "~8.2.4",
 		"@angular/platform-browser-dynamic": "~8.2.4",
 		"@angular/router": "~8.2.4",
+		"@glue42/desktop": "^4.6.3",
+		"@glue42/ng-glue": "^1.0.0",
 		"@ng-bootstrap/ng-bootstrap": "^4.0.0",
 		"@ng-bootstrap/schematics": "^2.0.0-alpha.1",
 		"@types/bootstrap": "^4.3.1",
