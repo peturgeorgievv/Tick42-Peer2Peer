@@ -20,6 +20,12 @@
           <b>{{ this.loanFullData.installment }} $</b>
         </div>
       </div>
+      <div class="form-group col-12" *ngIf="!this.enoughMoney">
+        <label for="exampleInputEmail1" style="color: red;"><b>Error: </b></label>
+        <div>
+          <b>Insufficient funds!</b>
+        </div>
+      </div>
       <div class="form-group col-6" *ngIf="this.overdueAmount">
         <label for="exampleInputEmail1">Overdue: </label>
         <div>
@@ -41,7 +47,7 @@
       >
         Close
       </button>
-      <button type="submit" class="btn btn-outline-dark">
+      <button type="submit" class="btn btn-outline-dark" [disabled]="!this.enoughMoney">
         Submit Payment
       </button>
     </div>

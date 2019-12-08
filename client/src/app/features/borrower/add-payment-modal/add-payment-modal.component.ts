@@ -14,10 +14,18 @@ export class AddPaymentModalComponent implements OnInit {
 	@Output() public readonly createPayment: EventEmitter<AllPaymentsDTO> = new EventEmitter();
 	@Input() loanFullData: CurrentLoanDTO;
 	@Input() overdueAmount: number;
+	@Input() userCurrentBalance: number;
+	public enoughMoney = true;
 
 	constructor(public activeModal: NgbActiveModal) {}
 
-	ngOnInit() {}
+	ngOnInit() {
+		console.log(this.userCurrentBalance);
+		console.log(this.loanFullData.installment);
+		if (this.userCurrentBalance < this.loanFullData.installment) {
+			this.enoughMoney = false;
+		}
+	}
 
 	public calcInstallment(amount, interestRate, period) {
 		return calculateInstallment(amount, interestRate, period);

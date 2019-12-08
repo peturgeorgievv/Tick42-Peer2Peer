@@ -51,10 +51,33 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 		private readonly modalService: NgbModal
 	) {}
 
+	public ngOnInit(): void {
+		this.getPayments(this.loanData.$suggestionId, this.loanData.$userId);
+		this.amount = this.loanData.amount;
+		this.date = this.loanData.date;
+		this.installment = this.loanData.installment;
+		this.interestRate = this.loanData.interestRate;
+		this.penalty = this.loanData.penalty + this.loanData.interestRate;
+		this.period = this.loanData.period;
+
+		this.dateEndOfContract = calculateEndOfContractDate(this.date, this.period);
+		this.totalAmount = overallAmount(this.amount, this.interestRate, this.period);
+		this.subscriptions.push(
+			this.authService.userBalanceDataSubject$.subscribe((res) => {
+				this.userBalanceData = res;
+			})
+		);
+	}
+
+	public ngOnDestroy(): void {
+		this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+	}
+
 	openAddPaymentsModal() {
 		const addPaymentsModal = this.modalService.open(AddPaymentModalComponent);
 		addPaymentsModal.componentInstance.loanFullData = this.loanData;
 		addPaymentsModal.componentInstance.overdueAmount = this.overdueAmount();
+		addPaymentsModal.componentInstance.userCurrentBalance = this.userBalanceData.currentBalance;
 		addPaymentsModal.componentInstance.createPayment.subscribe((data) => {
 			this.subscriptions.push(
 				this.borrowerService.getOneLoan(this.user.uid, this.loanData.$suggestionId).subscribe((loanData) => {
@@ -99,28 +122,6 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 		const showPaymentsModal = this.modalService.open(ShowPaymentsComponent);
 		showPaymentsModal.componentInstance.loanPayments = this.currentLoanPayments();
 		showPaymentsModal.componentInstance.loanSuggestionId = this.loanData.$suggestionId;
-	}
-
-	public ngOnInit(): void {
-		this.getPayments(this.loanData.$suggestionId, this.loanData.$userId);
-		this.amount = this.loanData.amount;
-		this.date = this.loanData.date;
-		this.installment = this.loanData.installment;
-		this.interestRate = this.loanData.interestRate;
-		this.penalty = this.loanData.penalty + this.loanData.interestRate;
-		this.period = this.loanData.period;
-
-		this.dateEndOfContract = calculateEndOfContractDate(this.date, this.period);
-		this.totalAmount = overallAmount(this.amount, this.interestRate, this.period);
-		this.subscriptions.push(
-			this.authService.userBalanceDataSubject$.subscribe((res) => {
-				this.userBalanceData = res;
-			})
-		);
-	}
-
-	public ngOnDestroy(): void {
-		this.subscriptions.forEach((subscription) => subscription.unsubscribe());
 	}
 
 	public getPayments(suggestionId: string, userId: string): void {
