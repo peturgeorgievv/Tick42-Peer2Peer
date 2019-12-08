@@ -12,8 +12,7 @@
 		"test": "ng test --color --verbose",
 		"lint": "ng lint",
 		"e2e": "ng e2e",
-		"test:majestic": "majestic",
-		"heroku-postbuild": "ng build --prod"
+		"test:majestic": "majestic"
 	},
 	"private": true,
 	"dependencies": {
@@ -25,7 +24,7 @@
 		"@angular/platform-browser": "~8.2.4",
 		"@angular/platform-browser-dynamic": "~8.2.4",
 		"@angular/router": "~8.2.4",
-		"@ng-bootstrap/ng-bootstrap": "^2.0.0-alpha.0",
+		"@ng-bootstrap/ng-bootstrap": "^4.0.0",
 		"@ng-bootstrap/schematics": "^2.0.0-alpha.1",
 		"@types/bootstrap": "^4.3.1",
 		"@types/jquery": "^3.3.31",
