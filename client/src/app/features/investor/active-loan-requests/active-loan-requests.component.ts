@@ -1,8 +1,7 @@
-import { Subscription } from "rxjs";
 import { ProposeModalComponent } from './../propose-modal/propose-modal.component';
 import { UserDTO } from './../../../common/models/users/user-data.dto';
 import { AuthenticationService } from './../../../core/services/authentication.service';
-import { Component, OnInit, Input, OnDestroy } from "@angular/core";
+import { Component, OnInit, Input } from '@angular/core';
 import { InvestorService } from 'src/app/core/services/investor.service';
 import { NotificatorService } from 'src/app/core/services/notificator.service';
 import * as moment from 'moment';
@@ -17,12 +16,11 @@ import { PartialProposeModalComponent } from '../partial-propose-modal/partial-p
   templateUrl: './active-loan-requests.component.html',
   styleUrls: ['./active-loan-requests.component.css']
 })
-export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
+export class ActiveLoanRequestsComponent implements OnInit {
   @Input() requestData;
   @Input() user: User;
 
   public userBalanceData: UserDTO;
-
 
   public loanReqId;
   public loanUser;
@@ -53,7 +51,6 @@ export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
     this.loanReqId = this.requestData.$requestId;
     this.loanUser = this.user.uid;
   }
-
 
   public createSuggestion(suggestion): void {
     this.investorService
