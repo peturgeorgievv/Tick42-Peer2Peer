@@ -7,6 +7,7 @@ import { ProposeModalComponent } from './propose-modal/propose-modal.component';
 import { ShowInvestmentComponent } from './show-investment/show-investment.component';
 import { ActiveLoanRequestsComponent } from './active-loan-requests/active-loan-requests.component';
 import { PartialProposeModalComponent } from './partial-propose-modal/partial-propose-modal.component';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -19,8 +20,10 @@ import { PartialProposeModalComponent } from './partial-propose-modal/partial-pr
   imports: [
     CommonModule,
     SharedModule,
-    InvestorRouterModule
+    InvestorRouterModule,
+    NgbModalModule,
   ],
-  exports: [InvestorComponent]
+  exports: [InvestorComponent],
+  entryComponents: [ProposeModalComponent, PartialProposeModalComponent]
 })
 export class InvestorModule { }

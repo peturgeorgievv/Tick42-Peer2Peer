@@ -1,3 +1,4 @@
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -11,16 +12,17 @@ export class ProposeModalComponent implements OnInit {
   public addLoanSuggestion: FormGroup;
 
   @Input() requestData;
-  @Input() userBalanceData;
-
   @Output() public readonly createSuggestion: EventEmitter<any> = new EventEmitter();
 
-  constructor(private readonly formBuilder: FormBuilder) { }
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    public activeModal: NgbActiveModal,
+  ) { }
 
   ngOnInit() {
     this.addLoanSuggestion = this.formBuilder.group({
-      interestRate: ['', [Validators.required, Validators.min(0)]],
-      penalty: ['', [Validators.required, Validators.min(0)]],
+      interestRate: ['', [Validators.required, Validators.min(1)]],
+      penalty: ['', [Validators.required, Validators.min(1)]],
       period: [{ value: this.requestData.period, disabled: true }, [Validators.required]],
       amount: [{ value: this.requestData.amount, disabled: true }, [Validators.required]]
     });
@@ -38,5 +40,10 @@ export class ProposeModalComponent implements OnInit {
       period: this.requestData.period,
       amount: this.requestData.amount
     });
+    this.activeModal.close();
+  }
+
+  public closeModal(): void {
+    this.activeModal.dismiss();
   }
 }

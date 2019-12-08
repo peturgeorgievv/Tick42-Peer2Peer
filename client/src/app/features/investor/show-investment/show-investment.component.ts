@@ -1,13 +1,7 @@
 import { InvestorService } from './../../../core/services/investor.service';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { User } from 'firebase';
-import {
-  calculateNextDueDate,
-  calculateOverdueDays,
-  calculatePenaltyAmount,
-  calculateEndOfContractDate,
-  overallAmount
-} from '../../../common/calculate-functions/calculate-func';
+import { calculateNextDueDate } from '../../../common/calculate-functions/calculate-func';
 import { AllPaymentsDTO } from './../../../common/models/all-payments.dto';
 import { Subscription } from 'rxjs';
 
@@ -36,7 +30,6 @@ export class ShowInvestmentComponent implements OnInit, OnDestroy {
   constructor(private readonly investorService: InvestorService) { }
 
   ngOnInit() {
-    console.log(this.investmentData);
     this.getPayments(this.investmentData.$suggestionId, this.investmentData.$userId);
 
     this.amount = this.investmentData.amount;
@@ -46,8 +39,6 @@ export class ShowInvestmentComponent implements OnInit, OnDestroy {
     this.interestRate = this.investmentData.interestRate;
     this.date = this.investmentData.date;
   }
-
-  // amount * (1 + interestRate / 100 / 12 * period);
 
   ngOnDestroy() {
     this.paymentsSubscription.unsubscribe();
@@ -59,9 +50,6 @@ export class ShowInvestmentComponent implements OnInit, OnDestroy {
       .subscribe((querySnapshot: AllPaymentsDTO[]) => {
         this.allPayments = querySnapshot;
         this.amountLeft = this.amount;
-        console.log(this.amountLeft);
-        console.log(this.amount);
-
 
         this.allPayments.forEach((data) => (this.amountLeft -= data.amount));
         return this.amountLeft;

@@ -5,7 +5,7 @@
         <div class="card-body text-success">
           <h6 class="card-title">Account Balance</h6>
           <hr />
-          <p class="card-text">User: {{ this.userData.email }}</p>
+          <p class="card-text">User: {{ this.userData.firstName }} {{this.userData.lastName}}</p>
           <p class="card-text">
             Current balance: ${{
               this.userData.currentBalance | number: "1.2-2"
