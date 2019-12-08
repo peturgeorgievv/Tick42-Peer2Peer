@@ -1,3 +1,4 @@
+import { RegisterUserDTO } from './../../common/models/users/register-user.dto';
 import { CreateAdminModalComponent } from './create-admin-modal/create-admin-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthenticationService } from './../../core/services/authentication.service';
@@ -22,15 +23,14 @@ export class UsersComponent implements OnInit {
 	public ngOnInit(): void {
 		this.usersService.getAllUsers().subscribe((userData: UserDTO[]) => {
 			this.users = userData;
-			console.log(userData);
 		});
 	}
 
 	public openCreateAdminModal(): void {
 		const createAdminModal = this.modalService.open(CreateAdminModalComponent);
-	}
-
-	public signUp() {
-		// this.authService.signUp();
+		createAdminModal.componentInstance.createAdmin.subscribe((data: RegisterUserDTO) => {
+			console.log(data);
+			this.authService.signUp(data.email, data.password, data.firstName, data.lastName, 'admin');
+		});
 	}
 }
