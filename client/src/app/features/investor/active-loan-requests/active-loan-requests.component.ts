@@ -1,4 +1,3 @@
-
 import { ProposeModalComponent } from './../propose-modal/propose-modal.component';
 import { UserDTO } from './../../../common/models/users/user-data.dto';
 import { AuthenticationService } from './../../../core/services/authentication.service';
@@ -22,7 +21,6 @@ export class ActiveLoanRequestsComponent implements OnInit {
   @Input() user: User;
 
   public userBalanceData: UserDTO;
-
 
   public loanReqId;
   public loanUser;

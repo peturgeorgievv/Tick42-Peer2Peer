@@ -50,7 +50,6 @@ export class ShowInvestmentComponent implements OnInit, OnDestroy {
       .subscribe((querySnapshot: AllPaymentsDTO[]) => {
         this.allPayments = querySnapshot;
         this.amountLeft = this.amount;
-
         this.allPayments.forEach((data) => (this.amountLeft -= data.amount));
         return this.amountLeft;
       });
@@ -59,6 +58,7 @@ export class ShowInvestmentComponent implements OnInit, OnDestroy {
   public calcNextDueDate(): string {
     return calculateNextDueDate(this.date, this.historyAmountsLength(this.allPayments));
   }
+
   private historyAmountsLength(payments: AllPaymentsDTO[]): number {
     const history = [...payments];
     return history.reduce((acc, data) => {
