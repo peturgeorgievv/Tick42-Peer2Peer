@@ -1,6 +1,6 @@
 <div
   class="card-body"
-  *ngIf="this.loanData && this.allPayments && this.userBalanceData"
+  *ngIf="this.loanData && this.allPayments && this.userBalanceData && this.investorFirstName && this.investorLastName"
 >
   <ul class="list-unstyled" style="border: 2px solid gray; padding: 5px;">
     <div class="row" style="padding: 2px 16px;">
@@ -22,7 +22,7 @@
           <div class="d-flex justify-content-between">
             <div>
               <p>
-                Investor: <b>{{ this.userBalanceData.firstName }} {{ this.userBalanceData.lastName }}</b>
+                Investor: <b>{{ this.investorFirstName }} {{ this.investorLastName }}</b>
               </p>
               <p>
                 Next Due Date:

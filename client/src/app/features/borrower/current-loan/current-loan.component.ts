@@ -40,6 +40,8 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 	public period: number;
 	public amountLeft: number;
 	public showFullLoanData = false;
+	public investorFirstName: string;
+	public investorLastName: string;
 
 	public dateEndOfContract: string;
 	public totalAmount: number;
@@ -53,6 +55,13 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 
 	public ngOnInit(): void {
 		this.getPayments(this.loanData.$suggestionId, this.loanData.$userId);
+		this.subscriptions.push(
+			this.borrowerService.getOneUser(this.loanData.$investorDocId).subscribe((data) => {
+				const userData = data.data();
+				this.investorFirstName = userData.firstName;
+				this.investorLastName = userData.lastName;
+			})
+		);
 		this.amount = this.loanData.amount;
 		this.date = this.loanData.date;
 		this.installment = this.loanData.installment;

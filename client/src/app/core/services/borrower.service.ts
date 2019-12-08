@@ -17,6 +17,10 @@ export class BorrowerService {
 			.valueChanges();
 	}
 
+	public getOneUser(userDocId: string) {
+		return this.angularFireStore.collection('users').doc(userDocId).get();
+	}
+
 	public getOneLoan(userId: string, suggestionId: string) {
 		return this.angularFireStore
 			.collection('loans', (ref) =>
