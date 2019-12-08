@@ -20,7 +20,10 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
     DashboardRouterModule,
     NgbModalModule
   ],
-  exports: [DashboardComponent, RouterModule],
+  exports: [
+    DashboardComponent,
+    RouterModule,
+  ],
   entryComponents: [
     CreateDepositComponent,
     CreateWithdrawComponent,

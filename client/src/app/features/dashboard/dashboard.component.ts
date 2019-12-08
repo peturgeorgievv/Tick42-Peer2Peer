@@ -4,11 +4,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserDTO } from './../../common/models/users/user-data.dto';
 import { DashboardService } from './../../core/services/dashboard.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { User } from 'firebase';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from './../../core/services/authentication.service';
-import { NotificatorService } from '../../core/services/notificator.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +17,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public userData: UserDTO;
   public user: User;
   private userSubscription: Subscription;
-  private currentData;
   private userLoansSubscription: Subscription;
   private userInvestmentSubscription: Subscription;
 
@@ -33,7 +30,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private readonly dashboardService: DashboardService,
     private readonly authService: AuthenticationService,
     private readonly modalService: NgbModal,
-    private readonly notificatorService: NotificatorService,
   ) {
     this.userSubscription = this.authService.loggedUser$.subscribe((res) => {
       return (this.user = res);
