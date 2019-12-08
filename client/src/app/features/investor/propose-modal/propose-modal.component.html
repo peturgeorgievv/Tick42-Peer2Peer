@@ -1,109 +1,85 @@
-<div
-  class="modal fade"
-  id="exampleModal{{ this.requestData.$requestId }}"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="exampleModal"
-  aria-hidden="true"
->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModal">New Loan Proposal</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
+<div class="modal-header">
+  <h5 class="modal-title">
+    New Loan Proposal
+  </h5>
+</div>
+<div class="modal-body">
+  <form
+    class="container"
+    [formGroup]="this.addLoanSuggestion"
+    (ngSubmit)="this.emitSuggsetion(this.addLoanSuggestion.value)"
+  >
+    <div class="row">
+      <div class="form-group col-6">
+        <label for="exampleInputEmail1">Interest Rate: </label>
+        <input
+          type="number"
+          class="form-control"
+          id="int-rate"
+          placeholder="Interest rate"
+          formControlName="interestRate"
+        />
+        <span
+          class="font-italic font-weight-bold text-danger"
+          *ngIf="addLoanSuggestion.controls.interestRate?.errors?.min"
         >
-          <span aria-hidden="true">&times;</span>
-        </button>
+          Invalid interest rate!
+        </span>
       </div>
-
-      <div class="modal-body">
-        <form
-          class="container"
-          [formGroup]="this.addLoanSuggestion"
-          (ngSubmit)="this.emitSuggsetion(this.addLoanSuggestion.value)"
+      <div class="form-group col-6">
+        <label for="exampleInputEmail1">Penalty Per Day: </label>
+        <input
+          type="number"
+          class="form-control"
+          id="pen-rate"
+          placeholder="Penalty rate"
+          formControlName="penalty"
+        />
+        <span
+          class="font-italic font-weight-bold text-danger"
+          *ngIf="addLoanSuggestion.controls.penalty?.errors?.min"
         >
-          <div class="row">
-            <div class="form-group col-6">
-              <label for="recipient-name" class="col-form-label"
-                >Interest Rate</label
-              >
-              <input
-                type="number"
-                class="form-control"
-                id="recipient-name"
-                formControlName="interestRate"
-              />
-              <span
-              class="font-italic font-weight-bold text-danger"
-              *ngIf="addLoanSuggestion.controls.interestRate?.errors?.min"
-            >
-              Invalid interest rate!
-            </span>
-            </div>
-            <div class="form-group col-6">
-              <label for="recipient-name" class="col-form-label"
-                >Penalty Per Day:</label
-              >
-              <input
-                type="number"
-                class="form-control"
-                id="recipient-name"
-                formControlName="penalty"
-              />
-              <span
-              class="font-italic font-weight-bold text-danger"
-              *ngIf="addLoanSuggestion.controls.penalty?.errors?.min"
-            >
-              Invalid penalty rate!
-            </span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="form-group col-6">
-              <label for="recipient-name" class="col-form-label"
-                >Period of Months:</label
-              >
-              <input
-                type="number"
-                class="form-control"
-                id="recipient-name"
-                formControlName="period"
-              />
-            </div>
-            <div class="form-group col-6">
-              <label for="recipient-name" class="col-form-label"
-                >Total Amount:</label
-              >
-              <input
-                type="number"
-                class="form-control"
-                id="recipient-name"
-                formControlName="amount"
-              />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            <button
-              type="submit"
-              class="btn btn-primary"
-              [disabled]="addLoanSuggestion.invalid"
-            >
-              Send Suggestion
-            </button>
-          </div>
-        </form>
+          Invalid penalty rate!
+        </span>
       </div>
     </div>
-  </div>
+    <div class="row">
+      <div class="form-group col-6">
+        <label for="recipient-name" class="col-form-label"
+          >Period of Months:</label
+        >
+        <input
+          type="number"
+          class="form-control"
+          id="recipient-name"
+          formControlName="period"
+        />
+      </div>
+      <div class="form-group col-6">
+        <label for="recipient-name" class="col-form-label">Total Amount:</label>
+        <input
+          type="number"
+          class="form-control"
+          id="recipient-name"
+          formControlName="amount"
+        />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="this.closeModal()"
+      >
+        Close
+      </button>
+      <button
+        type="submit"
+        [disabled]="addLoanSuggestion.invalid"
+        class="btn btn-outline-dark"
+      >
+        Send Suggestion
+      </button>
+    </div>
+  </form>
 </div>
