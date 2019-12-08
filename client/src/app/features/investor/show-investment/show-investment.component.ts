@@ -36,7 +36,7 @@ export class ShowInvestmentComponent implements OnInit, OnDestroy {
   constructor(private readonly investorService: InvestorService) { }
 
   ngOnInit() {
-    console.log(this.investmentData);
+    // console.log(this.investmentData);
     this.getPayments(this.investmentData.$suggestionId, this.investmentData.$userId);
 
     this.amount = this.investmentData.amount;
@@ -59,8 +59,8 @@ export class ShowInvestmentComponent implements OnInit, OnDestroy {
       .subscribe((querySnapshot: AllPaymentsDTO[]) => {
         this.allPayments = querySnapshot;
         this.amountLeft = this.amount;
-        console.log(this.amountLeft);
-        console.log(this.amount);
+        // console.log(this.amountLeft);
+        // console.log(this.amount);
 
 
         this.allPayments.forEach((data) => (this.amountLeft -= data.amount));
