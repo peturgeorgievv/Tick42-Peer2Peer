@@ -22,7 +22,7 @@ export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
   @Input() user: User;
 
   public userBalanceData: UserDTO;
-  public userSubscribtion: Subscription;
+
 
   public loanReqId;
   public loanUser;
@@ -54,9 +54,6 @@ export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
     this.loanUser = this.user.uid;
   }
 
-  ngOnDestroy() {
-    this.userSubscribtion.unsubscribe();
-  }
 
   public createSuggestion(suggestion): void {
     this.investorService
