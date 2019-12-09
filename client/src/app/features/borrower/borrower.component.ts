@@ -45,22 +45,25 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 				.pipe(
 					switchMap((res) => {
 						this.user = res;
-						return merge(
-							this.borrowerService
-								.getUserLoans(this.user.uid)
-								.pipe(tap((userLoans: CurrentLoanDTO[]) => (this.currentLoans = userLoans))),
-							this.borrowerService
-								.getUserSuggestions()
-								.pipe(
-									tap(
-										(userSuggestions: LoanSuggestionDTO[]) =>
-											(this.loanSuggestions = userSuggestions)
-									)
-								),
-							this.borrowerService
-								.getAllPayments(this.user.uid)
-								.pipe(tap((allPayment: AllPaymentsDTO[]) => (this.allPayments = allPayment)))
-						);
+						if (this.user) {
+							return merge(
+								this.borrowerService
+									.getUserLoans(this.user.uid)
+									.pipe(tap((userLoans: CurrentLoanDTO[]) => (this.currentLoans = userLoans))),
+								this.borrowerService
+									.getUserSuggestions()
+									.pipe(
+										tap(
+											(userSuggestions: LoanSuggestionDTO[]) =>
+												(this.loanSuggestions = userSuggestions)
+										)
+									),
+								this.borrowerService
+									.getAllPayments(this.user.uid)
+									.pipe(tap((allPayment: AllPaymentsDTO[]) => (this.allPayments = allPayment)))
+							);
+						}
+						return [];
 					})
 				)
 				.subscribe(() => {
