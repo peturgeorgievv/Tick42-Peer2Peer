@@ -4,6 +4,7 @@ export class CurrentLoanDTO {
 	$investorDocId: string;
 	$suggestionId: string;
 	$userId: string;
+	$userDocId: string;
 	amount: number;
 	date: string;
 	installment: number;

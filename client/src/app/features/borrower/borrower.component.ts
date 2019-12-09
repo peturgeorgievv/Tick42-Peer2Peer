@@ -1,3 +1,4 @@
+import { UserDTO } from './../../common/models/users/user-data.dto';
 import { CreateLoanModalComponent } from './create-loan-modal/create-loan-modal.component';
 import { StatusENUM } from './../../common/enums/status.enum';
 import { CurrentLoanDTO } from './../../common/models/current-loan.dto';
@@ -9,8 +10,9 @@ import { AuthenticationService } from './../../core/services/authentication.serv
 import { BorrowerService } from './../../core/services/borrower.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { User } from 'firebase';
-import { Subscription } from 'rxjs';
+import { Subscription, merge } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { switchMap, filter, tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-borrower',
@@ -25,6 +27,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 	public loanSuggestions: LoanSuggestionDTO[] = [];
 
 	public user: User;
+	public userBalanceData: UserDTO;
 
 	public allPayments: AllPaymentsDTO[] = [];
 	public amountPaid = 0;
@@ -38,33 +41,35 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 
 	public ngOnInit(): void {
 		this.subscriptions.push(
-			this.authService.loggedUser$.subscribe((res) => {
-				this.user = res;
-				this.subscriptions.push(
-					this.borrowerService
-						.getUserLoans(this.user.uid)
-						.subscribe((querySnapshot: CurrentLoanDTO[]): CurrentLoanDTO[] => {
-							return (this.currentLoans = querySnapshot);
-						})
-				);
-				this.orderLoansAsc('amount');
-
-				this.subscriptions.push(
-					this.borrowerService
-						.getUserSuggestions()
-						.subscribe((snaphost: LoanSuggestionDTO[]): LoanSuggestionDTO[] => {
-							return (this.loanSuggestions = snaphost);
-						})
-				);
-
-				this.subscriptions.push(
-					this.borrowerService
-						.getAllPayments(this.user.uid)
-						.subscribe((snapshot: AllPaymentsDTO[]): AllPaymentsDTO[] => {
-							return (this.allPayments = snapshot);
-						})
-				);
-				return res;
+			this.authService.loggedUser$
+				.pipe(
+					switchMap((res) => {
+						this.user = res;
+						return merge(
+							this.borrowerService
+								.getUserLoans(this.user.uid)
+								.pipe(tap((userLoans: CurrentLoanDTO[]) => (this.currentLoans = userLoans))),
+							this.borrowerService
+								.getUserSuggestions()
+								.pipe(
+									tap(
+										(userSuggestions: LoanSuggestionDTO[]) =>
+											(this.loanSuggestions = userSuggestions)
+									)
+								),
+							this.borrowerService
+								.getAllPayments(this.user.uid)
+								.pipe(tap((allPayment: AllPaymentsDTO[]) => (this.allPayments = allPayment)))
+						);
+					})
+				)
+				.subscribe(() => {
+					this.orderLoansAsc('amount');
+				})
+		);
+		this.subscriptions.push(
+			this.authService.userBalanceDataSubject$.subscribe((res) => {
+				this.userBalanceData = res;
 			})
 		);
 	}
@@ -79,6 +84,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 			this.borrowerService
 				.createLoanRequest({
 					$userId: this.user.uid,
+					$userDocId: this.userBalanceData.$userDocId,
 					status: StatusENUM.requestOpen,
 					...loanData
 				})
