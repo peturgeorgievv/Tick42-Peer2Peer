@@ -20,8 +20,6 @@ export class AddPaymentModalComponent implements OnInit {
 	constructor(public activeModal: NgbActiveModal) {}
 
 	ngOnInit() {
-		console.log(this.userCurrentBalance);
-		console.log(this.loanFullData.installment);
 		if (this.userCurrentBalance < this.loanFullData.installment) {
 			this.enoughMoney = false;
 		}

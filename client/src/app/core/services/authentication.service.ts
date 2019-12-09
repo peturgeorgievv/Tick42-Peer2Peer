@@ -1,3 +1,4 @@
+import { calculateNextDueDate } from './../../common/calculate-functions/calculate-func';
 import { UserDTO } from './../../common/models/users/user-data.dto';
 import { CurrentLoanDTO } from './../../common/models/current-loan.dto';
 import { Injectable } from '@angular/core';
@@ -6,6 +7,8 @@ import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { User } from 'firebase';
 import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { switchMap, tap, map } from 'rxjs/operators';
+import * as moment from 'moment';
 
 @Injectable({
 	providedIn: 'root'
@@ -35,6 +38,44 @@ export class AuthenticationService {
 				JSON.parse(localStorage.getItem('user'));
 			}
 		});
+	}
+
+	public getNextDueDate(userId: string) {
+		let loans = [];
+		let payments = [];
+		let nextDueDate = [];
+		return this.angularFireStore
+			.collection('loans', (ref) => ref.where('$userId', '==', userId))
+			.valueChanges()
+			.pipe(
+				switchMap((loansData) => {
+					loans = loansData;
+					return this.angularFireStore
+						.collection('paymentsHistory', (ref) => ref.where('$userId', '==', userId))
+						.valueChanges();
+				})
+			)
+			.pipe(
+				map((data) => {
+					nextDueDate = [];
+					payments = data;
+					loans.forEach((loanData: CurrentLoanDTO) => {
+						const paymentsHistory = payments.reduce((acc, paymentData) => {
+							if (paymentData.$requestId === loanData.$requestId) {
+								return (acc += 1);
+							}
+							return acc;
+						}, 0);
+						nextDueDate.push(calculateNextDueDate(loanData.date, paymentsHistory));
+						nextDueDate.sort((a, b) => {
+							a = a.split('/').reverse().join('');
+							b = b.split('/').reverse().join('');
+							return a.localeCompare(b);
+						});
+					});
+					return nextDueDate;
+				})
+			);
 	}
 
 	private userBalanceDataCalculation() {

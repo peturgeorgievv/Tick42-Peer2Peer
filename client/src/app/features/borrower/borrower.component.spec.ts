@@ -35,6 +35,9 @@ describe('BorrowerComponent', () => {
 		authService = {
 			get loggedUser$() {
 				return of();
+			},
+			get userBalanceDataSubject$() {
+				return of();
 			}
 		};
 
@@ -57,8 +60,12 @@ describe('BorrowerComponent', () => {
 			getAllPayments() {
 				return of();
 			},
-			createLoanRequest() {},
-			addRequestIdToLoan() {},
+			createLoanRequest() {
+				return of();
+			},
+			addRequestIdToLoan() {
+				return of();
+			},
 			getUserRequestsAsc() {
 				return of();
 			},
@@ -227,16 +234,32 @@ describe('BorrowerComponent', () => {
 				partial: true,
 				status: 'loan-request'
 			};
-			const mockedLoanRequestData: LoanRequestDTO[] = [ mockedLoanRequest ];
-			component.user = mockedUser as any;
-			const spyUserLoanRequests = jest.spyOn(borrowerService, 'getUserRequestsAsc').mockImplementation(() =>
-				of(mockedLoanRequestData).subscribe((data) => {
-					console.log(data);
-					expect(data).toBe(mockedLoanRequestData);
+			jest.spyOn(borrowerService, 'getUserLoans').mockImplementation(() =>
+				of(1).subscribe((data) => {
+					expect(data).toBe(1);
 					done();
 				})
 			);
+			jest.spyOn(borrowerService, 'getUserSuggestions').mockImplementation(() =>
+				of(1).subscribe((data) => {
+					expect(data).toBe(1);
+					done();
+				})
+			);
+			jest.spyOn(borrowerService, 'getAllPayments').mockImplementation(() =>
+				of(1).subscribe((data) => {
+					expect(data).toBe(1);
+					done();
+				})
+			);
+
+			const mockedLoanRequestData: LoanRequestDTO[] = [ mockedLoanRequest ];
+			component.user = mockedUser as any;
+			const spyUserLoanRequests = jest
+				.spyOn(borrowerService, 'getUserRequestsAsc')
+				.mockImplementation(() => of(mockedLoanRequestData));
 			// Act
+			component.ngOnInit();
 			component.orderLoansAsc(property);
 
 			// Assert

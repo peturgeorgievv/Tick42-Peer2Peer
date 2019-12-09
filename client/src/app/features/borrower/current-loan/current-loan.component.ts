@@ -39,6 +39,7 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 	public penalty: number;
 	public period: number;
 	public amountLeft: number;
+	public amountLeftWithInterest: number;
 	public showFullLoanData = false;
 	public investorFirstName: string;
 	public investorLastName: string;
@@ -138,7 +139,11 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
 			this.borrowerService.getPayments(suggestionId, userId).subscribe((querySnapshot: AllPaymentsDTO[]) => {
 				this.allPayments = querySnapshot;
 				this.amountLeft = this.amount;
-				this.allPayments.forEach((data) => (this.amountLeft -= data.amount));
+				this.amountLeftWithInterest = this.totalAmount;
+				this.allPayments.forEach((data) => {
+					this.amountLeft -= data.amount;
+					this.amountLeftWithInterest -= data.amount;
+				});
 				return this.amountLeft;
 			})
 		);

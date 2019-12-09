@@ -127,7 +127,8 @@
                       <div ngbDropdown class="d-inline-block">
                         <button class="btn secondary-navbar-btns" id="dropdownBasic1" ngbDropdownToggle> <span class="sec-navbar-text">{{ this.userBalanceData.email }} </span></button>
                         <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="dropdown-menu">
-                          <div ngbDropdownItem class="dropdown-text">Next Due Date: <br/>12-12-2012</div>
+                          <div ngbDropdownItem class="dropdown-text" *ngIf="this.nextDueDate">Next Due Date: <br/>{{this.nextDueDate}}</div>
+                          <div ngbDropdownItem class="dropdown-text" *ngIf="!this.nextDueDate">Next Due Date: <br/> No loans at the moment</div>
                           <div ngbDropdownItem class="dropdown-text">Overdue Debts: 5</div>
                         </div>
                       </div>
