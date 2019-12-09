@@ -1,9 +1,10 @@
 import { CurrentLoanDTO } from './../../common/models/current-loan.dto';
 import { StatusENUM } from './../../common/enums/status.enum';
 import { LoanSuggestionDTO } from './../../common/models/loan-suggestion.dto';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { LoanRequestDTO } from 'src/app/common/models/loan-request.dto';
 
 @Injectable({
 	providedIn: 'root'
@@ -11,7 +12,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class BorrowerService {
 	constructor(private angularFireStore: AngularFirestore) {}
 
-	public getUserLoans(userId: string) {
+	public getUserLoans(userId: string): Observable<any> {
 		return this.angularFireStore
 			.collection('loans', (ref) => ref.where('$userId', '==', userId).where('status', '==', StatusENUM.current))
 			.valueChanges();
@@ -64,7 +65,7 @@ export class BorrowerService {
 			.valueChanges();
 	}
 
-	public createLoanRequest(loanData) {
+	public createLoanRequest(loanData: LoanRequestDTO) {
 		return this.angularFireStore.collection('requests').add(loanData);
 	}
 

@@ -130,7 +130,6 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 					suggestion.period
 				).toFixed(2),
 				...suggestion,
-				$userDocId: this.userBalanceData.$userDocId,
 				$userId: this.user.uid,
 				status: StatusENUM.current
 			})
