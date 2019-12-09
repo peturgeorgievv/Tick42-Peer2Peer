@@ -34,8 +34,8 @@ export class InvestorService {
       .valueChanges();
   }
 
-  public getUserDocData(userId: string) {
-    return this.angularFireStore.collection('users').doc(userId).get();
+  public getUserDocData(userDocId: string) {
+    return this.angularFireStore.collection('users').doc(userDocId).get();
   }
 
   public getPayments(suggestionId: string, userId: string) {

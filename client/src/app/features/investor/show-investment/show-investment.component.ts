@@ -1,7 +1,7 @@
 import { InvestorService } from './../../../core/services/investor.service';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { User } from 'firebase';
-import { calculateNextDueDate } from '../../../common/calculate-functions/calculate-func';
+import { calculateNextDueDate, overallAmount } from '../../../common/calculate-functions/calculate-func';
 import { AllPaymentsDTO } from './../../../common/models/all-payments.dto';
 import { Subscription } from 'rxjs';
 
@@ -16,6 +16,7 @@ export class ShowInvestmentComponent implements OnInit, OnDestroy {
   @Input() user: User;
 
   private paymentsSubscription: Subscription;
+  private userDocSubscription: Subscription;
 
 
   public amount: number;
@@ -26,22 +27,33 @@ export class ShowInvestmentComponent implements OnInit, OnDestroy {
   public date: string;
   public allPayments: AllPaymentsDTO[] = [];
   public amountLeft: number;
+  public firstName: string;
+  public lastName: string;
+  public totalAmount: number;
 
   constructor(private readonly investorService: InvestorService) { }
 
   ngOnInit() {
     this.getPayments(this.investmentData.$suggestionId, this.investmentData.$userId);
 
+    this.userDocSubscription = this.investorService.getUserDocData(this.investmentData.$userDocId).subscribe((data) => {
+      const userData = data.data();
+      this.lastName = userData.lastName;
+      this.firstName = userData.firstName;
+    });
+
     this.amount = this.investmentData.amount;
     this.period = this.investmentData.period;
-    this.$userId = this.investmentData.$userId;
     this.installment = this.investmentData.installment;
     this.interestRate = this.investmentData.interestRate;
     this.date = this.investmentData.date;
+
+    this.totalAmount = overallAmount(this.amount, this.interestRate, this.period);
   }
 
   ngOnDestroy() {
     this.paymentsSubscription.unsubscribe();
+    this.userDocSubscription.unsubscribe();
   }
 
   public getPayments(suggestionId: string, userId: string): void {
@@ -49,7 +61,7 @@ export class ShowInvestmentComponent implements OnInit, OnDestroy {
       .getPayments(suggestionId, userId)
       .subscribe((querySnapshot: AllPaymentsDTO[]) => {
         this.allPayments = querySnapshot;
-        this.amountLeft = this.amount;
+        this.amountLeft = this.totalAmount;
         this.allPayments.forEach((data) => (this.amountLeft -= data.amount));
         return this.amountLeft;
       });

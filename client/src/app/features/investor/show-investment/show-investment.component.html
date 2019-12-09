@@ -6,13 +6,13 @@
         <div class="d-flex justify-content-between">
           <div>
             <p>
-              Borrower: <b>{{ this.$userId }}</b>
+              Borrower: <b>{{ this.firstName}} {{this.lastName}}</b>
             </p>
             <p>
               Date: <b>{{ this.date }}</b>
             </p>
             <p>
-              Total Amount:<b> ${{ this.amount | number: "1.2-2" }}</b>
+              Total Amount:<b> ${{ this.totalAmount | number: "1.2-2" }}</b>
             </p>
             <p>Total Amount Left: <b> ${{ this.amountLeft | number: "1.2-2" }}</b></p>
             <p>
@@ -22,12 +22,9 @@
               Installment:
               <b> ${{ this.installment | number: "1.2-2" }}</b>
             </p>
-            <p>Installments Left: <b>to be calculated</b></p>
             <p>
               Next Due Date: <b>{{ this.calcNextDueDate() }}</b>
             </p>
-            <p>Overdue installments: <b>to be calculated</b></p>
-            <p>Penalties: <b>to be calculated</b></p>
           </div>
         </div>
       </div>
