@@ -15,9 +15,7 @@ export class ShowInvestmentComponent implements OnInit, OnDestroy {
   @Input() investmentData;
   @Input() user: User;
 
-  private paymentsSubscription: Subscription;
-  private userDocSubscription: Subscription;
-
+  private subscriptions: Subscription[] = [];
 
   public amount: number;
   public period: number;
@@ -36,11 +34,11 @@ export class ShowInvestmentComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getPayments(this.investmentData.$suggestionId, this.investmentData.$userId);
 
-    this.userDocSubscription = this.investorService.getUserDocData(this.investmentData.$userDocId).subscribe((data) => {
+    this.subscriptions.push(this.investorService.getUserDocData(this.investmentData.$userDocId).subscribe((data) => {
       const userData = data.data();
       this.lastName = userData.lastName;
       this.firstName = userData.firstName;
-    });
+    }));
 
     this.amount = this.investmentData.amount;
     this.period = this.investmentData.period;
@@ -52,19 +50,18 @@ export class ShowInvestmentComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.paymentsSubscription.unsubscribe();
-    this.userDocSubscription.unsubscribe();
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   public getPayments(suggestionId: string, userId: string): void {
-    this.paymentsSubscription = this.investorService
+    this.subscriptions.push(this.investorService
       .getPayments(suggestionId, userId)
       .subscribe((querySnapshot: AllPaymentsDTO[]) => {
         this.allPayments = querySnapshot;
         this.amountLeft = this.totalAmount;
         this.allPayments.forEach((data) => (this.amountLeft -= data.amount));
         return this.amountLeft;
-      });
+      }));
   }
 
   public calcNextDueDate(): string {

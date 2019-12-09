@@ -9,33 +9,30 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 })
 export class HomepageComponent implements OnInit, OnDestroy {
   public allUsers: number;
-  public allUsersSub: Subscription;
   public allLoans: number;
-  public allLoansSub: Subscription;
   public allRequests: number;
-  public allRequestsSub: Subscription;
+
+  private subscriptions: Subscription[] = [];
 
 
   constructor(private readonly homepageService: HomepageService) { }
 
   ngOnInit() {
-    this.allUsersSub = this.homepageService
+    this.subscriptions.push(this.homepageService
       .getAllUsers()
-      .subscribe(data => this.allUsers = data.docs.length);
+      .subscribe(data => this.allUsers = data.docs.length));
 
-    this.allLoansSub = this.homepageService
+    this.subscriptions.push(this.homepageService
       .getAllLoans()
-      .subscribe(data => this.allLoans = data.docs.length);
+      .subscribe(data => this.allLoans = data.docs.length));
 
-    this.allRequestsSub = this.homepageService
+    this.subscriptions.push(this.homepageService
       .getAllRequests()
-      .subscribe(data => this.allRequests = data.docs.length);
+      .subscribe(data => this.allRequests = data.docs.length));
   }
 
   ngOnDestroy() {
-    this.allUsersSub.unsubscribe();
-    this.allLoansSub.unsubscribe();
-    this.allRequestsSub.unsubscribe();
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
 }

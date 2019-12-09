@@ -1,7 +1,7 @@
 import { ProposeModalComponent } from './../propose-modal/propose-modal.component';
 import { UserDTO } from './../../../common/models/users/user-data.dto';
 import { AuthenticationService } from './../../../core/services/authentication.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { InvestorService } from 'src/app/core/services/investor.service';
 import { NotificatorService } from 'src/app/core/services/notificator.service';
 import * as moment from 'moment';
@@ -9,6 +9,7 @@ import { StatusENUM } from 'src/app/common/enums/status.enum';
 import { User } from 'firebase';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PartialProposeModalComponent } from '../partial-propose-modal/partial-propose-modal.component';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { PartialProposeModalComponent } from '../partial-propose-modal/partial-p
   templateUrl: './active-loan-requests.component.html',
   styleUrls: ['./active-loan-requests.component.css']
 })
-export class ActiveLoanRequestsComponent implements OnInit {
+export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
   @Input() requestData;
   @Input() user: User;
 
@@ -31,15 +32,17 @@ export class ActiveLoanRequestsComponent implements OnInit {
   public dateSubmited;
   public partial;
 
+  private subscriptions: Subscription[] = [];
+
   constructor(
     private readonly investorService: InvestorService,
     private readonly notificatorService: NotificatorService,
     private readonly authService: AuthenticationService,
     private readonly modalService: NgbModal,
   ) {
-    this.authService.userBalanceDataSubject$.subscribe((res) => {
+    this.subscriptions.push(this.authService.userBalanceDataSubject$.subscribe((res) => {
       this.userBalanceData = res;
-    });
+    }));
   }
 
   ngOnInit() {
@@ -50,6 +53,10 @@ export class ActiveLoanRequestsComponent implements OnInit {
     this.partial = this.requestData.partial;
     this.loanReqId = this.requestData.$requestId;
     this.loanUser = this.user.uid;
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   public createSuggestion(suggestion): void {
