@@ -1,8 +1,6 @@
 import { AuthenticationService } from './../../core/services/authentication.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-register',
@@ -18,7 +16,6 @@ export class RegisterComponent implements OnInit {
   constructor(
     public authenticationService: AuthenticationService,
     public formBuilder: FormBuilder,
-    public router: Router,
   ) { }
 
 
@@ -34,7 +31,6 @@ export class RegisterComponent implements OnInit {
   signUp() {
     const data = this.registerUserForm.value;
     this.authenticationService.signUp(data.email, data.password, data.firstName, data.lastName, this.status);
-    this.router.navigate(['/']);
   }
 }
 
