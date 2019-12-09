@@ -1,7 +1,7 @@
 <div class="header">
-  <h4 class="modal-title" id="basic-title">
+  <h6 class="modal-title" id="basic-title">
     Please provide the following details:
-  </h4>
+  </h6>
 </div>
 <div class="body">
   <form class="container" [formGroup]="this.registerUserForm">
@@ -76,7 +76,7 @@
         Back
       </button>
       <button
-        type="submit"
+        type="button"
         class="btn btn-outline-dark"
         [disabled]="!this.registerUserForm.valid"
         (click)="signUp()"

@@ -1,6 +1,7 @@
 import { AuthenticationService } from './../../core/services/authentication.service';
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -12,15 +13,12 @@ export class RegisterComponent implements OnInit {
 
   public registerUserForm: FormGroup;
 
-  public email: string;
-  public password: string;
-  public firstName: string;
-  public lastName: string;
   public status = 'basic';
 
   constructor(
     public authenticationService: AuthenticationService,
     public formBuilder: FormBuilder,
+    public router: Router,
   ) { }
 
 
@@ -35,13 +33,8 @@ export class RegisterComponent implements OnInit {
 
   signUp() {
     const data = this.registerUserForm.value;
-    console.log(data);
-
     this.authenticationService.signUp(data.email, data.password, data.firstName, data.lastName, this.status);
-    this.email = '';
-    this.password = '';
-    this.firstName = '';
-    this.lastName = '';
+    this.router.navigate(['/']);
   }
 }
 
