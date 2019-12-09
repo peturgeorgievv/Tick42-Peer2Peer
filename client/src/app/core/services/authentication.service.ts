@@ -11,7 +11,7 @@ import { switchMap, tap, map } from 'rxjs/operators';
 import * as moment from 'moment';
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root'
 })
 export class AuthenticationService {
 	private readonly user$: BehaviorSubject<User> = new BehaviorSubject(this.loggedUser());
