@@ -6,7 +6,7 @@ import { NotificatorService } from './../../core/services/notificator.service';
 import { AuthenticationService } from './../../core/services/authentication.service';
 import { BorrowerComponent } from './borrower.component';
 import { of } from 'rxjs';
-import { ComponentFixture, async, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { CreateLoanModalComponent } from './create-loan-modal/create-loan-modal.component';
 import { CurrentLoanComponent } from './current-loan/current-loan.component';
@@ -17,60 +17,58 @@ describe('BorrowerComponent', () => {
 	let notificatorService;
 	let modalService;
 	let borrowerService;
+	let mockedUser;
 
 	let fixture: ComponentFixture<BorrowerComponent>;
 	let component: BorrowerComponent;
 
-	beforeEach(
-		async(() => {
-			jest.clearAllMocks();
+	beforeEach(async () => {
+		jest.clearAllMocks();
 
-			authService = {
-				get loggedUser$() {
-					return of();
-				}
-			};
+		mockedUser = {
+			uid: '1'
+		};
 
-			modalService = {
-				open() {}
-			};
+		authService = {
+			get loggedUser$() {
+				return of();
+			}
+		};
 
-			notificatorService = {
-				success() {},
-				error() {}
-			};
+		modalService = {
+			open() {}
+		};
 
-			borrowerService = {
-				getUserLoans: () => {},
-				getUserSuggestions() {},
-				getAllPayments() {},
-				createLoanRequest() {},
-				addRequestIdToLoan() {},
-				getUserRequestsAsc() {},
-				getUserRequestsDesc() {}
-			};
+		notificatorService = {
+			success() {},
+			error() {}
+		};
 
-			TestBed.configureTestingModule({
-				imports: [ CommonModule, SharedModule ],
-				declarations: [
-					BorrowerComponent,
-					CreateLoanModalComponent,
-					CurrentLoanComponent,
-					LoanRequestsComponent
-				],
-				providers: [ BorrowerService, AuthenticationService, NotificatorService, NgbModal ]
-			})
-				.overrideProvider(BorrowerService, { useValue: borrowerService })
-				.overrideProvider(AuthenticationService, { useValue: authService })
-				.overrideProvider(NotificatorService, { useValue: notificatorService })
-				.overrideProvider(NgbModal, { useValue: modalService })
-				.compileComponents()
-				.then(() => {
-					fixture = TestBed.createComponent(BorrowerComponent);
-					component = fixture.debugElement.componentInstance;
-				});
+		borrowerService = {
+			getUserLoans() {},
+			getUserSuggestions() {},
+			getAllPayments() {},
+			createLoanRequest() {},
+			addRequestIdToLoan() {},
+			getUserRequestsAsc() {},
+			getUserRequestsDesc() {}
+		};
+
+		await TestBed.configureTestingModule({
+			imports: [ CommonModule, SharedModule ],
+			declarations: [ BorrowerComponent, CreateLoanModalComponent, CurrentLoanComponent, LoanRequestsComponent ],
+			providers: [ BorrowerService, AuthenticationService, NotificatorService, NgbModal ]
 		})
-	);
+			.overrideProvider(BorrowerService, { useValue: borrowerService })
+			.overrideProvider(AuthenticationService, { useValue: authService })
+			.overrideProvider(NotificatorService, { useValue: notificatorService })
+			.overrideProvider(NgbModal, { useValue: modalService })
+			.compileComponents();
+		// .then(() => {
+		fixture = TestBed.createComponent(BorrowerComponent);
+		component = fixture.debugElement.componentInstance;
+		// });
+	});
 
 	it('should be defined', () => {
 		// Arrange & Act & Assert
@@ -95,13 +93,45 @@ describe('BorrowerComponent', () => {
 				status: 'current'
 			};
 			const mockedLoans: CurrentLoanDTO[] = [ mockedLoansData ];
-			const spy = jest.spyOn(borrowerService, 'getUserLoans').mockReturnValue(of(mockedLoans));
-
+			const spyLoggedUser = jest
+				.spyOn(authService, 'loggedUser$', 'get')
+				.mockImplementation(() => of(mockedUser));
+			const spyUserLoans = jest.spyOn(borrowerService, 'getUserLoans').mockImplementation(() => of(mockedLoans));
 			// Act
 			component.ngOnInit();
 
 			// Assert
-			expect(spy).toHaveBeenCalledTimes(1);
+			expect(spyLoggedUser).toHaveBeenCalledTimes(1);
+			expect(spyUserLoans).toHaveBeenCalledTimes(1);
+		});
+
+		it('should subscribe to the borrowerService.getUserLoans once', () => {
+			// Arrange
+			const mockedLoansData: CurrentLoanDTO = {
+				$requestId: '1',
+				$investorId: '1',
+				$investorDocId: '1',
+				$suggestionId: '1',
+				$userId: '1',
+				amount: 1,
+				date: '12-12-2020',
+				installment: 1,
+				interestRate: 1,
+				penalty: 1,
+				period: 1,
+				status: 'current'
+			};
+			const mockedLoans: CurrentLoanDTO[] = [ mockedLoansData ];
+			const spyLoggedUser = jest
+				.spyOn(authService, 'loggedUser$', 'get')
+				.mockImplementation(() => of(mockedUser));
+			const spyUserLoans = jest.spyOn(borrowerService, 'getUserSuggestions').mockImplementation(() => of(mockedLoans));
+			// Act
+			component.ngOnInit();
+
+			// Assert
+			expect(spyLoggedUser).toHaveBeenCalledTimes(1);
+			expect(spyUserLoans).toHaveBeenCalledTimes(1);
 		});
 
 		// it('should set the loggedUserData field with the passed value', () => {

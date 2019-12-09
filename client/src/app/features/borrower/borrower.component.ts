@@ -34,39 +34,38 @@ export class BorrowerComponent implements OnInit, OnDestroy {
 		private readonly notificatorService: NotificatorService,
 		private readonly authService: AuthenticationService,
 		private readonly modalService: NgbModal
-	) {
-		this.subscriptions.push(
-			this.authService.loggedUser$.subscribe((res) => {
-				return (this.user = res);
-			})
-		);
-	}
+	) {}
 
 	public ngOnInit(): void {
 		this.subscriptions.push(
-			this.borrowerService
-				.getUserLoans(this.user.uid)
-				.subscribe((querySnapshot: CurrentLoanDTO[]): CurrentLoanDTO[] => {
-					return (this.currentLoans = querySnapshot);
-				})
-		);
+			this.authService.loggedUser$.subscribe((res) => {
+				this.user = res;
+				this.subscriptions.push(
+					this.borrowerService
+						.getUserLoans(this.user.uid)
+						.subscribe((querySnapshot: CurrentLoanDTO[]): CurrentLoanDTO[] => {
+							return (this.currentLoans = querySnapshot);
+						})
+				);
+				this.orderLoansAsc('amount');
 
-		this.orderLoansAsc('amount');
+				this.subscriptions.push(
+					this.borrowerService
+						.getUserSuggestions()
+						.subscribe((snaphost: LoanSuggestionDTO[]): LoanSuggestionDTO[] => {
+							return (this.loanSuggestions = snaphost);
+						})
+				);
 
-		this.subscriptions.push(
-			this.borrowerService
-				.getUserSuggestions()
-				.subscribe((snaphost: LoanSuggestionDTO[]): LoanSuggestionDTO[] => {
-					return (this.loanSuggestions = snaphost);
-				})
-		);
-
-		this.subscriptions.push(
-			this.borrowerService
-				.getAllPayments(this.user.uid)
-				.subscribe((snapshot: AllPaymentsDTO[]): AllPaymentsDTO[] => {
-					return (this.allPayments = snapshot);
-				})
+				this.subscriptions.push(
+					this.borrowerService
+						.getAllPayments(this.user.uid)
+						.subscribe((snapshot: AllPaymentsDTO[]): AllPaymentsDTO[] => {
+							return (this.allPayments = snapshot);
+						})
+				);
+				return res;
+			})
 		);
 	}
 
