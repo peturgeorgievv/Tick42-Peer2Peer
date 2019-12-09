@@ -1,8 +1,88 @@
-<div>
-    <input type="text" [(ngModel)]="email" placeholder="email">
-    <input type="password" [(ngModel)]="password" placeholder="password">
-    <input type="text" [(ngModel)]="firstName" placeholder="First Name">
-    <input type="text" [(ngModel)]="lastName" placeholder="Last Name">
-
-    <button (click)="signUp()">Register</button>
+<div class="header">
+  <h4 class="modal-title" id="basic-title">
+    Please provide the following details:
+  </h4>
+</div>
+<div class="body">
+  <form class="container" [formGroup]="this.registerUserForm">
+    <div class="row">
+      <div class="form-group col-12">
+        <label for="exampleInputEmail1">First Name: </label>
+        <input
+          type="text"
+          class="form-control"
+          id="firstName"
+          placeholder="Enter your first name"
+          formControlName="firstName"
+        />
+        <span
+          class="font-italic font-weight-bold text-danger"
+          *ngIf="registerUserForm.controls.firstName?.errors?.minlength"
+        >
+          Minimun length 2 characters!
+        </span>
+      </div>
+      <div class="form-group col-12">
+        <label for="exampleInputEmail1">Last Name: </label>
+        <input
+          type="text"
+          class="form-control"
+          id="lastName"
+          placeholder="Enter your last name"
+          formControlName="lastName"
+        />
+        <span
+        class="font-italic font-weight-bold text-danger"
+        *ngIf="registerUserForm.controls.lastName?.errors?.minlength"
+      >
+        Minimun length 2 characters!
+      </span>
+      </div>
+      <div class="form-group col-12">
+        <label for="exampleInputEmail1">E-mail: </label>
+        <input
+          type="text"
+          class="form-control"
+          id="email"
+          placeholder="Enter your E-mail"
+          formControlName="email"
+        />
+        <span
+        class="font-italic font-weight-bold text-danger"
+        *ngIf="registerUserForm.controls.email?.errors?.email"
+      >
+        Please enter a valid password!
+      </span>
+      </div>
+      <div class="form-group col-12">
+        <label for="exampleInputEmail1">Password: </label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          placeholder="Enter your password"
+          formControlName="password"
+        />
+        <span
+        class="font-italic font-weight-bold text-danger"
+        *ngIf="registerUserForm.controls.password?.errors?.minlength"
+      >
+        Minimun length 6 characters!
+      </span>
+      </div>
+    </div>
+    <div style="float: right;">
+      <button type="button" class="btn btn-secondary" [routerLink]="''">
+        Back
+      </button>
+      <button
+        type="submit"
+        class="btn btn-outline-dark"
+        [disabled]="!this.registerUserForm.valid"
+        (click)="signUp()"
+      >
+        Register
+      </button>
+    </div>
+  </form>
 </div>

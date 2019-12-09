@@ -15,7 +15,6 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
-import { GoogleComponent } from './components/sign-in/google/google.component';
 import { SpinnerIntercerptorService } from './interceptors/spinner-interceptor.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -33,7 +32,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 		SignInComponent,
 		RegisterComponent,
 		HomepageComponent,
-		GoogleComponent,
 		NotFoundComponent,
 		ServerErrorComponent
 	],
