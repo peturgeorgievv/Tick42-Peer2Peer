@@ -1,6 +1,6 @@
 <!-- Here to make ngFor!!! -->
 <div class="card-body" *ngIf="this.loanRequestData && this.loanSuggestions">
-  <ul class="list-unstyled" style="border: 2px solid gray; padding: 5px;">
+  <ul class="list-unstyled loan-requests">
     <li>
       <div class="card">
         <div class="card-body">
@@ -83,10 +83,10 @@
         </div>
       </div>
     </li>
-    <li>
+    <li class="loan-suggestions">
       <div *ngFor="let suggestion of this.loanSuggestions">
         <div *ngIf="suggestion.$requestId === $requestId">
-          <h5>Investor: {{ this.suggestion.email }}</h5>
+          <h5 class="one-suggestion">Investor: {{ this.suggestion.email }}</h5>
           <div class="card">
             <div class="card-body">
               <div class="d-flex justify-content-between">
