@@ -16,9 +16,6 @@ import { AuthenticationService } from './../../core/services/authentication.serv
 export class DashboardComponent implements OnInit, OnDestroy {
   public userData: UserDTO;
   public user: User;
-  private userSubscription: Subscription;
-  private userLoansSubscription: Subscription;
-  private userInvestmentSubscription: Subscription;
 
   public curLoans = [];
   public filteredForInvestors = [];
@@ -26,40 +23,40 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public curInvestments = [];
   public filterForBorrowers = [];
 
+  private subscriptions: Subscription[] = [];
+
   constructor(
     private readonly dashboardService: DashboardService,
     private readonly authService: AuthenticationService,
     private readonly modalService: NgbModal,
   ) {
-    this.userSubscription = this.authService.loggedUser$.subscribe((res) => {
+    this.subscriptions.push(this.authService.loggedUser$.subscribe((res) => {
       return (this.user = res);
-    });
+    }));
   }
 
   ngOnInit() {
-    this.authService.userBalanceDataSubject$.subscribe((res) => {
+    this.subscriptions.push(this.authService.userBalanceDataSubject$.subscribe((res) => {
       this.userData = res;
-    });
+    }));
 
-    this.userLoansSubscription = this.dashboardService
+    this.subscriptions.push(this.dashboardService
       .getCurrentUserLoans(this.user.uid)
       .subscribe((querySnapshot) => {
         this.curLoans = querySnapshot;
         this.filteredForInvestors = [...new Set(this.curLoans.map((loan) => loan.$investorId))];
-      });
+      }));
 
-    this.userInvestmentSubscription = this.dashboardService
+    this.subscriptions.push(this.dashboardService
       .getCurrentUserInvestments(this.user.uid)
       .subscribe((querySnapshot) => {
         this.curInvestments = querySnapshot;
         this.filterForBorrowers = [...new Set(this.curInvestments.map((loan) => loan.$userId))];
-      });
+      }));
   }
 
   ngOnDestroy() {
-    this.userSubscription.unsubscribe();
-    this.userLoansSubscription.unsubscribe();
-    this.userInvestmentSubscription.unsubscribe();
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   createDeposit(data) {

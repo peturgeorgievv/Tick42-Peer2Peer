@@ -1,22 +1,29 @@
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../core/services/authentication.service';
 
 @Component({
-	selector: 'app-sign-in',
-	templateUrl: './sign-in.component.html',
-	styleUrls: [ './sign-in.component.css' ]
+  selector: 'app-sign-in',
+  templateUrl: './sign-in.component.html',
+  styleUrls: ['./sign-in.component.css']
 })
 export class SignInComponent implements OnInit {
-	public email: string;
-	public password: string;
+  public signinForm: FormGroup;
 
-	constructor(public authenticationService: AuthenticationService) {}
+  constructor(
+    public authenticationService: AuthenticationService,
+    public formBuilder: FormBuilder,
+  ) { }
 
-	ngOnInit() {}
+  ngOnInit() {
+    this.signinForm = this.formBuilder.group({
+      email: [''],
+      password: ['']
+    });
+  }
 
-	signIn() {
-		this.authenticationService.signIn(this.email, this.password);
-		this.email = '';
-		this.password = '';
-	}
+  signIn() {
+    const data = this.signinForm.value;
+    this.authenticationService.signIn(data.email, data.password);
+  }
 }

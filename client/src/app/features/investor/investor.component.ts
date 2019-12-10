@@ -17,21 +17,20 @@ export class InvestorComponent implements OnInit, OnDestroy {
   public currentInvestments = [];
   public loanRequests = [];
   public user: User;
-  private userSubscription: Subscription;
   public loanReqId;
   public loanUser;
   public userBalanceData: UserDTO;
 
-  public getInvestmentsSubscription: Subscription;
-  public getAllLoanRequests: Subscription;
+  private subscriptions: Subscription[] = [];
+
 
   constructor(
     private readonly investorService: InvestorService,
     public authService: AuthenticationService,
   ) {
-    this.userSubscription = this.authService.loggedUser$.subscribe((res) => {
+    this.subscriptions.push(this.authService.loggedUser$.subscribe((res) => {
       return (this.user = res);
-    });
+    }));
 
   }
 
@@ -40,25 +39,22 @@ export class InvestorComponent implements OnInit, OnDestroy {
       this.userBalanceData = res;
     });
 
-    this.getAllLoanRequests = this.investorService
+    this.subscriptions.push(this.investorService
       .getAllLoanRequests()
       .subscribe((querySnaphost) => {
         this.loanRequests = [];
         this.loanRequests = querySnaphost;
         this.loanRequests = this.loanRequests.filter(loan => loan.$userId !== this.user.uid);
+      }));
 
-      });
-
-    this.getInvestmentsSubscription = this.investorService
+    this.subscriptions.push(this.investorService
       .getUserInvestments(this.user.uid)
       .subscribe((querySnapshot: CurrentLoanDTO[]) => {
         this.currentInvestments = querySnapshot;
-      });
+      }));
   }
 
   ngOnDestroy() {
-    this.userSubscription.unsubscribe();
-    this.getInvestmentsSubscription.unsubscribe();
-    this.getAllLoanRequests.unsubscribe();
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
