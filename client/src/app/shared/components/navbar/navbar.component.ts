@@ -11,7 +11,6 @@ import { User } from 'firebase';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 	@Input() user: User;
-	private userBalanceDataSubscription: Subscription;
 	private subscriptions: Subscription[] = [];
 	public nextDueDate: string[];
 
@@ -20,8 +19,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
 	constructor(public authService: AuthenticationService) {}
 
 	ngOnInit() {
-		this.userBalanceDataSubscription = this.authService.userBalanceDataSubject$.subscribe(
-			(userBalanceData) => (this.userBalanceData = userBalanceData)
+		this.subscriptions.push(
+			this.authService.userBalanceDataSubject$.subscribe(
+				(userBalanceData) => (this.userBalanceData = userBalanceData)
+			)
 		);
 		if (this.user) {
 			this.subscriptions.push(
@@ -33,7 +34,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.userBalanceDataSubscription.unsubscribe();
 		this.subscriptions.forEach((subscription) => subscription.unsubscribe());
 	}
 
