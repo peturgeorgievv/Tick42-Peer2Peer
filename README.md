@@ -2,11 +2,11 @@
 
 # LENDit
 
-LendIt is P2P lending platform that aims to connect people who need money with people willing to invest their money. The two sides can negotiate loan options as period, interest rate and penalty rates. Upon reaching an agreement, the investor lends the specified amount to the borrower, who is obliged to pay his/her payments on time or will be charged with extra penalty fees.
+LendIt is P2P lending platform that aims to connect people who need money with people willing to invest their money. The two sides can negotiate loan options such as period, interest rate and penalty rates. Upon reaching an agreement, the investor lends the specified amount to the borrower, who is obliged to pay his/her payments on time or will be charged with extra penalty fees.
 
 ## Quick start
 
-In order to use the application you must follow the following steps:
+In order to use the application you must follow these steps:
 
 -   Clone the repository in a folder of your choosing:<br/>
 https://github.com/peturgeorgievv/Tick42-Peer2Peer.git
@@ -15,14 +15,19 @@ https://github.com/peturgeorgievv/Tick42-Peer2Peer.git
 - Run ```ng serve --open``` to run the application and open it in your default browser.<br/> If you want to run it in another just run ```ng serve```
 - To run the tests run ```TO BE ADDED```
 - Feel free to navigate through the app and explore the different functionalities.
-- Or you can just follow this link: <br/>
+
+Or you can just follow this link: <br/>
 https://tick42p2p.firebaseapp.com/
+
+## Technologies used
+
+```Angular 8```, ```Google FireBase```, ```Jest```
 
 ## Contributing
 
 Pull requests are welcome. For changes, please open an issue first to discuss what you would like to change and why.
 
-Please make sure to update tests as appropriate.
+Please make sure to update the tests as appropriate.
 
 ## Authors and acknowledgment
 Petur Georgiev - https://github.com/peturgeorgievv<br/>
