@@ -222,12 +222,13 @@ describe('BorrowerComponent', () => {
 	// 		expect(spyUserLoanRequests).toHaveBeenCalledTimes(1);
 	// 	});
 	describe('orderLoansAsc()', () => {
-		it('should call borrowerService.getUserRequestsAsc with correct params', (done) => {
+		it('should call borrowerService.getUserRequestsAsc', (done) => {
 			// Arrange
 			const property = 'asc';
 			const mockedLoanRequest: LoanRequestDTO = {
 				$requestId: '1',
 				$userId: '1',
+				$userDocId: '1',
 				amount: 1,
 				period: 1,
 				dateSubmited: '12-12-2020',
