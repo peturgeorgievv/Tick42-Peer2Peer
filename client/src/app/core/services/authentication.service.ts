@@ -21,8 +21,8 @@ export class AuthenticationService {
 	private subscriptions: Subscription[] = [];
 
 	constructor(
-		private angularFireAuth: AngularFireAuth,
-		private angularFireStore: AngularFirestore,
+		private readonly angularFireAuth: AngularFireAuth,
+		private readonly angularFireStore: AngularFirestore,
 		private readonly router: Router
 	) {
 		this.angularFireAuth.authState.subscribe((user) => {
