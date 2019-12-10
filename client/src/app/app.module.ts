@@ -15,8 +15,6 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
-import { SpinnerIntercerptorService } from './interceptors/spinner-interceptor.service';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
@@ -49,13 +47,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 		NgxSpinnerModule,
 		NgbModule.forRoot()
 	],
-	providers: [
-		{
-			provide: HTTP_INTERCEPTORS,
-			useClass: SpinnerIntercerptorService,
-			multi: true
-		}
-	],
+	providers: [],
 	bootstrap: [ AppComponent ]
 })
 export class AppModule {}

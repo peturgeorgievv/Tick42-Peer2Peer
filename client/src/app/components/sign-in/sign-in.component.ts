@@ -1,6 +1,7 @@
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../core/services/authentication.service';
+import { SignInDTO } from 'src/app/common/models/users/sign-in.dto';
 
 @Component({
 	selector: 'app-sign-in',
@@ -9,6 +10,7 @@ import { AuthenticationService } from '../../core/services/authentication.servic
 })
 export class SignInComponent implements OnInit {
 	public signinForm: FormGroup;
+	public data: SignInDTO;
 
 	constructor(public authenticationService: AuthenticationService, public formBuilder: FormBuilder) {}
 
@@ -20,7 +22,7 @@ export class SignInComponent implements OnInit {
 	}
 
 	signIn() {
-		const data = this.signinForm.value;
-		this.authenticationService.signIn(data.email, data.password);
+		this.data = this.signinForm.value;
+		this.authenticationService.signIn(this.data.email, this.data.password);
 	}
 }
