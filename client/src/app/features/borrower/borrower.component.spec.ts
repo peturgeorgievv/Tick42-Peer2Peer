@@ -42,7 +42,9 @@ describe('BorrowerComponent', () => {
 		};
 
 		modalService = {
-			open() {}
+			open() {
+				return of();
+			}
 		};
 
 		notificatorService = {
@@ -189,38 +191,46 @@ describe('BorrowerComponent', () => {
 			expect(spyUserLoanPayments).toHaveBeenCalledTimes(1);
 		});
 	});
-	// describe('createLoanRequestModal()', () => {
-	// 	beforeEach(async () => {
-	// 		const createLoanRequestModal = modalService.open();
-	// 		createLoanRequestModal.componentInstance = of('data');
-	// 	});
 
-	// 	it('should call borrowerService.createLoanRequest with correct params', (done) => {
-	// 		// Arrange
-	// 		const mockedLoanRequest: LoanRequestDTO = {
-	// 			$requestId: '1',
-	// 			$userId: '1',
-	// 			amount: 1,
-	// 			period: 1,
-	// 			dateSubmited: '12-12-2020',
-	// 			partial: true,
-	// 			status: 'loan-request'
-	// 		};
-	// 		const mockedLoanRequestData: LoanRequestDTO[] = [ mockedLoanRequest ];
+	describe('createLoanRequestModal()', () => {
+		beforeEach(async () => {});
 
-	// 		const spyUserLoanRequests = jest.spyOn(borrowerService, 'createLoanRequest').mockImplementation(() =>
-	// 			of(mockedLoanRequestData).subscribe((data) => {
-	// 				expect(data).toBe(mockedLoanRequestData);
-	// 				done();
-	// 			})
-	// 		);
+		it('should call borrowerService.createLoanRequest with correct params', (done) => {
+			// Arrange
+			jest.spyOn(modalService, 'open').mockImplementation(() =>
+				of('component').subscribe((data) => {
+					expect(data).toBe('component');
+					done();
+				})
+			);
+			const mockedLoanRequest: LoanRequestDTO = {
+				$requestId: '1',
+				$userId: '1',
+				$userDocId: '1',
+				amount: 1,
+				period: 1,
+				dateSubmited: '12-12-2020',
+				partial: true,
+				status: 'loan-request'
+			};
+			const mockedLoanRequestData: LoanRequestDTO[] = [ mockedLoanRequest ];
 
-	// 		// Act
-	// 		component.createLoanRequestModal();
+			const spyUserLoanRequests = jest.spyOn(borrowerService, 'createLoanRequest').mockImplementation(() =>
+				of(mockedLoanRequestData).subscribe((data) => {
+					console.log(data);
+					expect(data).toBe(mockedLoanRequestData);
+					done();
+				})
+			);
 
-	// 		// Assert
-	// 		expect(spyUserLoanRequests).toHaveBeenCalledTimes(1);
-	// 	});
+			// Act
+			component.createLoanRequestModal();
+
+			// Assert
+			expect(spyUserLoanRequests).toHaveBeenCalledTimes(1);
+		});
+	});
+
 	describe('orderLoansAsc()', () => {
 		it('should call borrowerService.getUserRequestsAsc', (done) => {
 			// Arrange
