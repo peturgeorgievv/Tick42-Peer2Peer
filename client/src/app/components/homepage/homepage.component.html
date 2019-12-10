@@ -1,5 +1,23 @@
-<div *ngIf="this.allUsers && this.allLoans && this.allRequests">
-  <p>Total users: {{ this.allUsers }}.</p>
-  <p>Total amount of active loans: {{ this.allLoans }}.</p>
-  <p>Total amount of loan-requests listed: {{ this.allRequests }}.</p>
+<div class="main-section">
+  <div class="dashbord">
+    <div class="icon-section">
+      <i class="fa fa-users" aria-hidden="true"></i><br>
+      <small>Users</small>
+      <p>{{ this.allUsers }}</p>
+    </div>
+  </div>
+  <div class="dashbord">
+    <div class="icon-section">
+      <i class="fa fa-money" aria-hidden="true"></i><br>
+      <small>All active loans</small>
+      <p>{{ this.allLoans }}</p>
+    </div>
+  </div>
+  <div class="dashbord">
+    <div class="icon-section">
+      <i class="fa fa-tasks" aria-hidden="true"></i><br>
+      <small>All active requests</small>
+      <p>{{ this.allRequests }}</p>
+    </div>
+  </div>
 </div>

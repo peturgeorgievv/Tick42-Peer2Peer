@@ -108,6 +108,8 @@ export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
   createProposeModal(): void {
     const createProposeModal = this.modalService.open(ProposeModalComponent);
     createProposeModal.componentInstance.requestData = this.requestData;
+    createProposeModal.componentInstance.userBalanceData = this.userBalanceData;
+
 
     createProposeModal.componentInstance.createSuggestion
       .subscribe((proposeData) => {
@@ -118,6 +120,7 @@ export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
   createPartialProposeModal(): void {
     const createPartialProposeModal = this.modalService.open(PartialProposeModalComponent);
     createPartialProposeModal.componentInstance.requestData = this.requestData;
+    createPartialProposeModal.componentInstance.userBalanceData = this.userBalanceData;
 
     createPartialProposeModal.componentInstance.createPartialSuggestion
       .subscribe((proposeData) => {

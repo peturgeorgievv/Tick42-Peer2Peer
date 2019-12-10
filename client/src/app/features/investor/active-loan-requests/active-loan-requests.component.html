@@ -29,6 +29,7 @@
               (click)="this.createProposeModal()"
               class="btn btn-warning col-6"
               [attr.data-target]="'#exampleModal' + this.requestData.$requestId"
+              [disabled]="this.userBalanceData.currentBalance<this.totalAmount"
             >
               <b>Propose</b>
             </button>
@@ -40,6 +41,7 @@
               class="btn btn-warning col-6"
               data-toggle="modal"
               [attr.data-target]="'#partialModal' + this.requestData.$requestId"
+              [disabled]="this.userBalanceData.currentBalance<this.totalAmount"
             >
               <b>Propose</b>
             </button>

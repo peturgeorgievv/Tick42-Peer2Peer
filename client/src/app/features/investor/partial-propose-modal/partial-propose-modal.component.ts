@@ -12,6 +12,7 @@ export class PartialProposeModalComponent implements OnInit {
   public addPartialLoanSuggestion: FormGroup;
 
   @Input() requestData;
+  @Input() userBalanceData;
   @Output() public readonly createPartialSuggestion: EventEmitter<any> = new EventEmitter();
 
   constructor(
@@ -21,10 +22,10 @@ export class PartialProposeModalComponent implements OnInit {
 
   ngOnInit() {
     this.addPartialLoanSuggestion = this.formBuilder.group({
-      interestRate: ['', [Validators.required, Validators.min(0)]],
-      penalty: ['', [Validators.required, Validators.min(0)]],
-      period: ['', [Validators.required, Validators.min(1)]],
-      amount: ['', [Validators.required, Validators.min(1)]]
+      interestRate: ['', [Validators.required, Validators.min(1)]],
+      penalty: ['', [Validators.required, Validators.min(1)]],
+      period: [{ value: this.requestData.period, disabled: true }, [Validators.required]],
+      amount: ['', [Validators.required, Validators.min(1), Validators.max(this.requestData.amount)]]
     });
   }
 
