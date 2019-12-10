@@ -1,6 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { BalanceDataDTO } from './../../../common/models/balance-data.dto';
+import { DepositWithdrawDTO } from './../../../common/models/deposit-withdral.dto';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-create-withdraw',
@@ -11,7 +13,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class CreateWithdrawComponent implements OnInit {
   public createWithdraw: FormGroup;
 
-  @Input() userData;
+  @Input() userData: BalanceDataDTO;
   @Output() public readonly createWithdrawRequest: EventEmitter<any> = new EventEmitter();
 
   constructor(
@@ -25,8 +27,8 @@ export class CreateWithdrawComponent implements OnInit {
     });
   }
 
-  public emitWithdrawData(withdrawData) {
-    const withdrawToRemove = {
+  public emitWithdrawData(withdrawData: DepositWithdrawDTO) {
+    const withdrawToRemove: DepositWithdrawDTO = {
       ...withdrawData
     };
 
@@ -38,5 +40,4 @@ export class CreateWithdrawComponent implements OnInit {
   public closeModal(): void {
     this.activeModal.dismiss();
   }
-
 }

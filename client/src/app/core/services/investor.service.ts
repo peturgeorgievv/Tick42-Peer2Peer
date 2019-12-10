@@ -1,7 +1,6 @@
 import { StatusENUM } from './../../common/enums/status.enum';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { ThrowStmt } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +10,8 @@ export class InvestorService {
 
   public getAllLoanRequests() {
     return this.angularFireStore
-      .collection('requests', (ref) => ref.where('status', '==', StatusENUM.requestOpen))
+      .collection('requests', (ref) => ref
+        .where('status', '==', StatusENUM.requestOpen))
       .valueChanges();
   }
 
@@ -19,7 +19,7 @@ export class InvestorService {
     return this.angularFireStore.collection('suggestions').add(loanData);
   }
 
-  public addSuggestionId(refId) {
+  public addSuggestionId(refId: string) {
     return this.angularFireStore
       .collection('suggestions')
       .doc(refId)
@@ -35,14 +35,17 @@ export class InvestorService {
   }
 
   public getUserDocData(userDocId: string) {
-    return this.angularFireStore.collection('users').doc(userDocId).get();
+    return this.angularFireStore
+      .collection('users')
+      .doc(userDocId)
+      .get();
   }
 
   public getPayments(suggestionId: string, userId: string) {
     return this.angularFireStore
-      .collection('paymentsHistory', (ref) =>
-        ref.where('$suggestionId', '==', suggestionId).where('$userId', '==', userId)
-      )
+      .collection('paymentsHistory', (ref) => ref
+        .where('$suggestionId', '==', suggestionId)
+        .where('$userId', '==', userId))
       .valueChanges();
   }
 }

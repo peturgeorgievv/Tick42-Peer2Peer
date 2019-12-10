@@ -1,6 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { DepositWithdrawDTO } from './../../../common/models/deposit-withdral.dto';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-create-deposit',
@@ -24,8 +25,8 @@ export class CreateDepositComponent implements OnInit {
     });
   }
 
-  public emitDepositData(depositData) {
-    const depositToAdd = {
+  public emitDepositData(depositData: DepositWithdrawDTO) {
+    const depositToAdd: DepositWithdrawDTO = {
       ...depositData
     };
 

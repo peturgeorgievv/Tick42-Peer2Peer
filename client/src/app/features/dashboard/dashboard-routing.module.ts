@@ -1,7 +1,7 @@
-import { AuthGuard } from './../../auth/auth-guard';
-import { DashboardComponent } from './dashboard.component';
 import { NgModule } from '@angular/core';
+import { AuthGuard } from './../../auth/auth-guard';
 import { CommonModule } from '@angular/common';
+import { DashboardComponent } from './dashboard.component';
 import { Routes, RouterModule } from '@angular/router';
 
 const dashboardRoutes: Routes = [

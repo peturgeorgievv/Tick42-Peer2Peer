@@ -1,6 +1,9 @@
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { BalanceDataDTO } from './../../../common/models/balance-data.dto';
+import { RequestDataDTO } from './../../../common/models/request-data.dto';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { ProposeSuggestionDTO } from './../../../common/models/propose-suggestion.dto';
 
 @Component({
   selector: 'app-partial-propose-modal',
@@ -9,15 +12,15 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 })
 
 export class PartialProposeModalComponent implements OnInit {
-  public addPartialLoanSuggestion: FormGroup;
-
-  @Input() requestData;
-  @Input() userBalanceData;
+  @Input() requestData: RequestDataDTO;
+  @Input() userBalanceData: BalanceDataDTO;
   @Output() public readonly createPartialSuggestion: EventEmitter<any> = new EventEmitter();
 
+  public addPartialLoanSuggestion: FormGroup;
+
   constructor(
-    private readonly formBuilder: FormBuilder,
     public activeModal: NgbActiveModal,
+    private readonly formBuilder: FormBuilder,
   ) { }
 
   ngOnInit() {
@@ -29,19 +32,18 @@ export class PartialProposeModalComponent implements OnInit {
     });
   }
 
-  public emitPartialSuggestion(suggestion) {
+  public emitPartialSuggestion(suggestion: ProposeSuggestionDTO) {
     const suggestionToAdd = {
-      ...suggestion
+      ...suggestion,
+      period: this.requestData.period,
     };
 
     this.createPartialSuggestion.emit(suggestionToAdd);
     this.addPartialLoanSuggestion.reset();
-
     this.activeModal.close();
   }
 
   public closeModal(): void {
     this.activeModal.dismiss();
   }
-
 }

@@ -1,6 +1,8 @@
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { RequestDataDTO } from './../../../common/models/request-data.dto';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { ProposeSuggestionDTO } from './../../../common/models/propose-suggestion.dto';
 
 
 @Component({
@@ -11,7 +13,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class ProposeModalComponent implements OnInit {
   public addLoanSuggestion: FormGroup;
 
-  @Input() requestData;
+  @Input() requestData: RequestDataDTO;
   @Output() public readonly createSuggestion: EventEmitter<any> = new EventEmitter();
 
   constructor(
@@ -28,8 +30,8 @@ export class ProposeModalComponent implements OnInit {
     });
   }
 
-  public emitSuggsetion(suggestion) {
-    const suggestionToAdd = {
+  public emitSuggsetion(suggestion: ProposeSuggestionDTO) {
+    const suggestionToAdd: ProposeSuggestionDTO = {
       ...suggestion,
       period: this.requestData.period,
       amount: this.requestData.amount
