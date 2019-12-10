@@ -1,7 +1,7 @@
-import { AuthGuard } from './../../auth/auth-guard';
-import { InvestorComponent } from './investor.component';
 import { NgModule } from '@angular/core';
+import { AuthGuard } from './../../auth/auth-guard';
 import { CommonModule } from '@angular/common';
+import { InvestorComponent } from './investor.component';
 import { Routes, RouterModule } from '@angular/router';
 
 const investorRoutes: Routes = [
@@ -12,7 +12,6 @@ const investorRoutes: Routes = [
 		pathMatch: 'full'
 	}
 ];
-
 @NgModule({
 	declarations: [],
 	imports: [ CommonModule, RouterModule.forChild(investorRoutes) ],

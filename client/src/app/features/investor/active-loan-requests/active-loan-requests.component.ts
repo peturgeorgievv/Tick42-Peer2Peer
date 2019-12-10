@@ -1,15 +1,17 @@
-import { ProposeModalComponent } from './../propose-modal/propose-modal.component';
+import { User } from 'firebase';
 import { UserDTO } from './../../../common/models/users/user-data.dto';
-import { AuthenticationService } from './../../../core/services/authentication.service';
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { StatusENUM } from '../../../common/enums/status.enum';
+import { Subscription } from 'rxjs';
+import { RequestDataDTO } from './../../../common/models/request-data.dto';
 import { InvestorService } from 'src/app/core/services/investor.service';
 import { NotificatorService } from 'src/app/core/services/notificator.service';
-import * as moment from 'moment';
-import { StatusENUM } from 'src/app/common/enums/status.enum';
-import { User } from 'firebase';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ProposeSuggestionDTO } from './../../../common/models/propose-suggestion.dto';
+import { ProposeModalComponent } from './../propose-modal/propose-modal.component';
+import { AuthenticationService } from './../../../core/services/authentication.service';
 import { PartialProposeModalComponent } from '../partial-propose-modal/partial-propose-modal.component';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import * as moment from 'moment';
 
 
 @Component({
@@ -18,21 +20,18 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./active-loan-requests.component.css']
 })
 export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
-  @Input() requestData;
   @Input() user: User;
+  @Input() requestData: RequestDataDTO;
 
-  public userBalanceData: UserDTO;
-
-  public loanReqId;
-  public loanUser;
-
-  public firstName: string;
+  public period: number;
+  public partial: boolean;
   public lastName: string;
-  public totalAmount;
-  public period;
-  public dateSubmited;
-  public partial;
-
+  public loanUser: string;
+  public loanReqId: string;
+  public firstName: string;
+  public totalAmount: number;
+  public dateSubmited: string;
+  public userBalanceData: UserDTO;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -62,10 +61,10 @@ export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription: Subscription) => subscription.unsubscribe());
   }
 
-  public createSuggestion(suggestion): void {
+  public createSuggestion(suggestion: ProposeSuggestionDTO): void {
     this.investorService
       .createLoanSuggestion({
         $requestId: this.loanReqId,
@@ -85,7 +84,7 @@ export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
       });
   }
 
-  public createPartialSuggestion(suggestion): void {
+  public createPartialSuggestion(suggestion: ProposeSuggestionDTO): void {
     this.investorService
       .createLoanSuggestion({
         $requestId: this.loanReqId,
@@ -110,7 +109,6 @@ export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
     createProposeModal.componentInstance.requestData = this.requestData;
     createProposeModal.componentInstance.userBalanceData = this.userBalanceData;
 
-
     createProposeModal.componentInstance.createSuggestion
       .subscribe((proposeData) => {
         this.createSuggestion(proposeData);
@@ -127,5 +125,4 @@ export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
         this.createPartialSuggestion(proposeData);
       });
   }
-
 }
