@@ -26,7 +26,6 @@ export class PartialProposeModalComponent implements OnInit {
       period: ['', [Validators.required, Validators.min(1)]],
       amount: ['', [Validators.required, Validators.min(1)]]
     });
-
   }
 
   public emitPartialSuggestion(suggestion) {

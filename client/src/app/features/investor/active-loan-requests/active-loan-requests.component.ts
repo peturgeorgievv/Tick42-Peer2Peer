@@ -26,7 +26,8 @@ export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
   public loanReqId;
   public loanUser;
 
-  public name;
+  public firstName: string;
+  public lastName: string;
   public totalAmount;
   public period;
   public dateSubmited;
@@ -46,7 +47,12 @@ export class ActiveLoanRequestsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.name = this.requestData.$userId;
+    this.subscriptions.push(this.investorService.getUserDocData(this.requestData.$userDocId).subscribe((data) => {
+      const userData = data.data();
+      this.firstName = userData.firstName;
+      this.lastName = userData.lastName;
+    }));
+
     this.totalAmount = this.requestData.amount;
     this.period = this.requestData.period;
     this.dateSubmited = this.requestData.dateSubmited;
