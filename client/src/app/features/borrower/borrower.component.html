@@ -1,4 +1,4 @@
-<div *ngIf="this.user">
+<div *ngIf="this.user && this.userBalanceData">
   <br />
   <div class="row">
     <div
@@ -9,6 +9,7 @@
           type="button"
           class="btn col-12 crate-req-btn"
           (click)="this.createLoanRequestModal()"
+          [disabled]="this.userBalanceData.status === 'admin'"
         >
           <b>Create Loan Request</b>
         </button>

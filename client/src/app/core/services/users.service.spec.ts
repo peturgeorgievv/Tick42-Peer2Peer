@@ -12,6 +12,9 @@ describe('UsersService', () => {
 		},
 		getUserPayments() {
 			return of();
+		},
+		getUserLoans() {
+			return of();
 		}
 	};
 
@@ -70,5 +73,20 @@ describe('UsersService', () => {
 		// Assert
 		expect(spyUserPayments).toHaveBeenCalledTimes(1);
 		expect(spyUserPayments).toReturnWith(of());
+	});
+
+	it('getUserLoans should be called once and return observebale', () => {
+		// Arrange
+		const userId = '1';
+		const spyUserLoans = jest.spyOn(userService, 'getUserLoans').mockImplementation(() => {
+			return of();
+		});
+
+		// Act
+		service.getUserLoans(userId);
+
+		// Assert
+		expect(spyUserLoans).toHaveBeenCalledTimes(1);
+		expect(spyUserLoans).toReturnWith(of());
 	});
 });

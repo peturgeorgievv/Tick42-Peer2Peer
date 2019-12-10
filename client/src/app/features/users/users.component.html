@@ -26,15 +26,11 @@
     <td>{{ user.currentBalance | number: "1.2-2" }} $</td>
     <td>{{ user.status }}</td>
     <td>          <button
-        class="btn col-6"
+        class="btn col-12"
+        (click)="this.openShowDetailsModal(user.$userId)"
       >
         <b>Details</b>
       </button>
-      <button
-      class="btn col-6"
-    >
-      <b>Ban User</b>
-    </button>
     </td>
   </tr>
   </tbody>

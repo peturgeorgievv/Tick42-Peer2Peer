@@ -1,3 +1,4 @@
+import { ShowDetailsModalComponent } from './show-details-modal/show-details-modal.component';
 import { RegisterUserDTO } from './../../common/models/users/register-user.dto';
 import { CreateAdminModalComponent } from './create-admin-modal/create-admin-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -32,5 +33,10 @@ export class UsersComponent implements OnInit {
 			console.log(data);
 			this.authService.signUp(data.email, data.password, data.firstName, data.lastName, 'admin');
 		});
+	}
+
+	public openShowDetailsModal(userId: string): void {
+		const showDetailsModal = this.modalService.open(ShowDetailsModalComponent);
+		showDetailsModal.componentInstance.userId = userId;
 	}
 }

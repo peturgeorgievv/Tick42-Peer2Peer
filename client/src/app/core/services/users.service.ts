@@ -20,4 +20,8 @@ export class UsersService {
 			.collection('paymentsHistory', (ref) => ref.where('$userId', '==', userId))
 			.valueChanges();
 	}
+
+	public getUserLoans(userId: string) {
+		return this.angularFireStore.collection('loans', (ref) => ref.where('$userId', '==', userId)).valueChanges();
+	}
 }

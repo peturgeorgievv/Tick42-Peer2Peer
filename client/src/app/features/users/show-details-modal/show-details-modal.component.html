@@ -1,1 +1,55 @@
-<p>show-details-modal works!</p>
+<div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><i>Loans</i></h5>
+            <button type="button" class="close" (click)="this.closeModal()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" *ngIf="this.loans">
+            <div *ngIf="!this.loans.length">
+              User doesn't have any loans yet!
+            </div>
+            <div class="card" *ngFor="let loan of this.loans">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <p>
+                      Loan Amount: 
+                      <b>{{ this.loan.amount | number: "1.2-2" }} $</b>
+                    </p>
+                    <p>
+                            Installment:
+                            <b>{{ this.loan.installment }} $</b>
+                          </p>
+                          <p>
+                            Date Created: <b>{{ this.loan.date }}</b>
+                          </p>
+                          <p>
+                            Total Amount Without Interest:
+                            <b>{{ this.loan.amount | number: "1.2-2" }} $</b>
+                          </p>
+                          <p>
+                            Penalty Rate: <b>{{ this.loan.penalty }} %</b>
+                          </p>
+                          <p>
+                            Status: <b>{{ this.loan.status }}</b>
+                          </p>
+                  </div>
+                </div>
+              </div>
+              <br />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="this.closeModal()"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+      
