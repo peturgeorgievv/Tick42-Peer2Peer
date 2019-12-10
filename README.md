@@ -1,4 +1,4 @@
-![Alt text](client/src/assets/Logo_08_12.png)
+![Alt text](client/src/assets/Logo_readme.png)
 
 # LENDit
 
