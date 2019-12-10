@@ -10,4 +10,14 @@ export class UsersService {
 	public getAllUsers() {
 		return this.angularFireStore.collection('users', (ref) => ref.orderBy('firstName', 'asc')).valueChanges();
 	}
+
+	public getUserDoc(userDocId: string) {
+		return this.angularFireStore.collection('users').doc(userDocId).get();
+	}
+
+	public getUserPayments(userId: string) {
+		return this.angularFireStore
+			.collection('paymentsHistory', (ref) => ref.where('$userId', '==', userId))
+			.valueChanges();
+	}
 }

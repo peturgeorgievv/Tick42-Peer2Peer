@@ -26,9 +26,9 @@
                   />
                         <span
                           class="font-italic font-weight-bold text-danger"
-                          *ngIf="createAdminDataForm.controls.email?.errors?.minlength"
+                          *ngIf="createAdminDataForm.controls.email?.errors?.email"
                         >
-                          You're E-mail must be at least {{createAdminDataForm.controls.email?.errors?.minlength.requiredLength}} characters!
+                          Please Enter valid E-mail!
                         </span>
             </div>
             <div class="form-group col-12">

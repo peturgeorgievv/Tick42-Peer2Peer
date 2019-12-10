@@ -17,7 +17,7 @@ export class CreateAdminModalComponent implements OnInit {
 
 	public ngOnInit(): void {
 		this.createAdminDataForm = this.formBuilder.group({
-			email: [ '', [ Validators.required, Validators.minLength(6) ] ],
+			email: [ '', [ Validators.required, Validators.email ] ],
 			firstName: [ '', [ Validators.required, Validators.minLength(2) ] ],
 			lastName: [ '', [ Validators.required, Validators.minLength(2) ] ],
 			password: [ '', [ Validators.required, Validators.minLength(6) ] ]

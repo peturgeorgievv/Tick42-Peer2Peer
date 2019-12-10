@@ -12,7 +12,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { User } from 'firebase';
 import { Subscription, merge } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { switchMap, filter, tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-borrower',
