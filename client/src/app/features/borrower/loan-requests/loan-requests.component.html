@@ -13,7 +13,7 @@
                 <p>
                   Total Amount:
                   <b *ngIf="!this.edit"
-                    >{{ this.amount | number: "1.2-2" }} $</b
+                    >{{ this.amount | number: '1.2-2' }} $</b
                   >
 
                   <b *ngIf="this.edit" style="display: inline-flex;">
@@ -31,7 +31,8 @@
                     class="font-italic font-weight-bold text-danger"
                     *ngIf="editLoanForm.controls.amount?.errors?.min"
                   >
-                    You can't edit amount less than - {{this.editLoanForm.controls.amount?.errors?.min.min}} $!
+                    You can't edit amount less than -
+                    {{ this.editLoanForm.controls.amount?.errors?.min.min }} $!
                   </span>
                 </p>
                 <p>
@@ -46,7 +47,7 @@
                 </p>
                 <p *ngIf="this.partial && this.amountLeftToInvest > 0">
                   Amount Left To Invest:
-                  <b>{{ this.amountLeftToInvest | number: "1.2-2" }} $</b>
+                  <b>{{ this.amountLeftToInvest | number: '1.2-2' }} $</b>
                 </p>
               </div>
             </div>
@@ -83,17 +84,21 @@
         </div>
       </div>
     </li>
+    <h3 style="text-align: center;">Suggestions</h3>
     <li class="loan-suggestions">
       <div *ngFor="let suggestion of this.loanSuggestions">
         <div *ngIf="suggestion.$requestId === $requestId">
-          <h5 class="one-suggestion">Investor: {{ this.suggestion.email }}</h5>
           <div class="card">
             <div class="card-body">
               <div class="d-flex justify-content-between">
                 <div>
                   <p>
+                      Investor:
+                    <b>{{ this.suggestion.email }}</b>
+                  </p>
+                  <p>
                     Amount:
-                    <b>{{ this.suggestion.amount | number: "1.2-2" }} $</b>
+                    <b>{{ this.suggestion.amount | number: '1.2-2' }} $</b>
                   </p>
                   <p>
                     Total Amount:
@@ -103,7 +108,7 @@
                           this.suggestion.amount,
                           this.suggestion.interestRate,
                           this.suggestion.period
-                        ) | number: "1.2-2"
+                        ) | number: '1.2-2'
                       }}
                       $</b
                     >
@@ -123,7 +128,7 @@
                           100 /
                           this.suggestion.period +
                           this.suggestion.amount / this.suggestion.period
-                          | number: "1.2-2"
+                          | number: '1.2-2'
                       }}
                       $</b
                     >
