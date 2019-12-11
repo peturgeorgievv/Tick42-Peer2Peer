@@ -1,7 +1,7 @@
 <br />
 <div
   class="row"
-  *ngIf="this.userData && this.curInvestments[0] && this.curLoans[0]"
+  *ngIf="this.userData && this.curInvestments && this.curLoans"
 >
   <div
     class="justify-content-center align-items-center mb-1 col-md-4 col-sm-12 col-xs-12"
@@ -91,12 +91,12 @@
                       Number of borrowers:
                       <b>{{ this.filterForBorrowers.length }}</b>
                     </p>
-                    <p>
+                    <!-- <p>
                       Overdue investments: SHOULD
                     </p>
                     <p>
                       Next Due Date and Amount: SHOULD
-                    </p>
+                    </p> -->
                   </div>
                 </div>
               </div>
@@ -134,12 +134,12 @@
                       Number of investors:
                       <b>{{ this.filteredForInvestors.length }}</b>
                     </p>
-                    <p>
+                    <!-- <p>
                       Overdue Loans: SHOULD
                     </p>
                     <p>
                       Next Due Date and Amount: SHOULD
-                    </p>
+                    </p> -->
                   </div>
                 </div>
               </div>
