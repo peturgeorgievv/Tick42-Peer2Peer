@@ -1,103 +1,151 @@
-<div class="container-fluid my-3" *ngIf="userData">
-  <div class="row">
-    <div class="col-md-4">
-      <div class="card border-success mb-3">
-        <div class="card-body text-success">
-          <h6 class="card-title">Account Balance</h6>
-          <hr />
-          <p class="card-text">User: {{ this.userData.firstName }} {{this.userData.lastName}}</p>
-          <p class="card-text">
-            Current balance: ${{
-              this.userData.currentBalance | number: "1.2-2"
-            }}
-          </p>
-          <p class="card-text">
-            Current debt: ${{ this.userData.totalDebt | number: "1.2-2" }}
-          </p>
-          <p class="card-text">
-            Total investments: ${{
-              this.userData.totalInvestment | number: "1.2-2"
-            }}
-          </p>
-        </div>
+<br />
+<div class="row" *ngIf="this.userData && this.curInvestments[0] && this.curLoans[0]">
+  <div
+    class="justify-content-center align-items-center mb-1 col-md-4 col-sm-12 col-xs-12"
+  >
+    <div class="card card-pricing">
+      <div class="card-header">
+        <h4 class="card-title">Account Balance</h4>
+      </div>
+      <div class="card-body">
+        <ul class="list-unstyled current-loans">
+          <li>
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <p>
+                      User:
+                      <b
+                        >{{ this.userData.firstName }}
+                        {{ this.userData.lastName }}</b
+                      >
+                    </p>
+                    <p>
+                      Current balance:
+                      <b
+                        >${{
+                          this.userData.currentBalance | number: '1.2-2'
+                        }}</b
+                      >
+                    </p>
+                    <p>
+                      Current Debt:
+                      <b> ${{ this.userData.totalDebt | number: '1.2-2' }}</b>
+                    </p>
+                    <p>
+                      Current Investments:
+                      <b
+                        >${{
+                          this.userData.totalInvestment | number: '1.2-2'
+                        }}</b
+                      >
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <button class="btn col-6" (click)="this.createDepositModal()">
+            <b>Deposit</b>
+          </button>
+
+          <button
+            type="button"
+            class="btn col-6"
+            (click)="this.createWithdrawModal()"
+          >
+            <b>Withdraw</b>
+          </button>
+        </ul>
       </div>
     </div>
-    <ul type="none">
-      <li>
-        <button
-          type="button"
-          class="btn btn-outline-success waves-effect"
-          (click)="this.createDepositModal()"
-        >
-          Deposit
-        </button>
-      </li>
-      <li>
-        <button
-          type="button"
-          class="btn btn-outline-success waves-effect"
-          (click)="this.createWithdrawModal()"
-        >
-          Withdraw
-        </button>
-      </li>
-      <li></li>
-    </ul>
   </div>
-  <div class="row">
-    <div class="col-md-4">
-      <div class="card border-success mb-3">
-        <div class="card-body text-success">
-          <h6 class="card-title">Total investments</h6>
-          <hr />
-          <div *ngIf="this.curInvestments[0]" class="card-text">
-            Total period of all investments:
-            {{ this.curInvestments[0].period }} months.
-          </div>
-          <div *ngIf="!this.curInvestments[0]" class="card-text">
-            No any investments at the moment!
-          </div>
-          <div class="card-text">
-            Number of borrowers: {{ this.filterForBorrowers.length }}
-          </div>
-          <div class="card-text">Overdue investments: SHOULD</div>
-          <div class="card-text">Next Due Date and Amount: SHOULD</div>
-          <hr />
-          <button
-            type="button"
-            class="btn btn-outline-success waves-effect"
-            [routerLink]="'/investor'"
-          >
-            Invest Panel
+
+  <div
+    class="justify-content-center align-items-center mb-1 col-md-4 col-sm-12 col-xs-12"
+  >
+    <div class="card card-pricing">
+      <div class="card-header">
+        <h4 class="card-title">Total investments</h4>
+      </div>
+      <div class="card-body">
+        <ul class="list-unstyled current-loans">
+          <li>
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <p *ngIf="this.curInvestments[0]">
+                      Total period of all investments:
+                      <b>{{ this.curInvestments[0].period }} months</b>
+                    </p>
+                    <p *ngIf="!this.curInvestments[0]">
+                      Total period of all investments:
+                      <b> No any investments at the moment!</b>
+                    </p>
+                    <p>
+                      Number of borrowers:
+                      <b>{{ this.filterForBorrowers.length }}</b>
+                    </p>
+                    <p>
+                      Overdue investments: SHOULD
+                    </p>
+                    <p>
+                      Next Due Date and Amount: SHOULD
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <button class="btn col-12" [routerLink]="'/investor'">
+            <b>Invest Panel</b>
           </button>
-        </div>
+        </ul>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card border-success mb-3">
-        <div class="card-body text-success">
-          <h6 class="card-title">Total debts</h6>
-          <hr />
-          <div *ngIf="this.curLoans[0]" class="card-text">
-            Total period of all debts: {{ this.curLoans[0].period }} months.
-          </div>
-          <div *ngIf="!this.curLoans[0]" class="card-text">
-            No any debts at the moment!
-          </div>
-          <div class="card-text">
-            Number of investors: {{ this.filteredForInvestors.length }}
-          </div>
-          <div class="card-text">Overdue Loans: SHOULD</div>
-          <div class="card-text">Next Due Date and Amount: SHOULD</div>
-          <hr />
-          <button
-            type="button"
-            class="btn btn-outline-success waves-effect"
-            [routerLink]="'/borrower'"
-          >
-            Borrow Panel
+  </div>
+  <div
+    class="justify-content-center align-items-center mb-1 col-md-4 col-sm-12 col-xs-12"
+  >
+    <div class="card card-pricing">
+      <div class="card-header">
+        <h4 class="card-title">Total debts</h4>
+      </div>
+      <div class="card-body">
+        <ul class="list-unstyled current-loans">
+          <li>
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <p *ngIf="this.curLoans[0]">
+                      Total period of all debts:
+                      <b>{{ this.curLoans[0].period }} months</b>
+                    </p>
+                    <p *ngIf="!this.curLoans[0]">
+                      No any debts at the moment!
+                    </p>
+                    <p>
+                      Number of investors:
+                      <b>{{ this.filteredForInvestors.length }}</b>
+                    </p>
+                    <p>
+                      Overdue Loans: SHOULD
+                    </p>
+                    <p>
+                      Next Due Date and Amount: SHOULD
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <button class="btn col-12" [routerLink]="'/borrower'">
+            <b>Borrow Panel</b>
           </button>
-        </div>
+        </ul>
       </div>
     </div>
   </div>
