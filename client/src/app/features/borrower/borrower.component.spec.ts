@@ -16,265 +16,421 @@ import { CurrentLoanComponent } from './current-loan/current-loan.component';
 import { LoanRequestsComponent } from './loan-requests/loan-requests.component';
 
 describe('BorrowerComponent', () => {
-	let authService;
-	let notificatorService;
-	let modalService;
-	let borrowerService;
-	let mockedUser;
+  let authService;
+  let notificatorService;
+  let modalService;
+  let borrowerService;
+  let mockedUser;
 
-	let fixture: ComponentFixture<BorrowerComponent>;
-	let component: BorrowerComponent;
+  let fixture: ComponentFixture<BorrowerComponent>;
+  let component: BorrowerComponent;
 
-	beforeEach(async () => {
-		jest.clearAllMocks();
+  beforeEach(async () => {
+    jest.clearAllMocks();
 
-		mockedUser = {
-			uid: '1'
-		};
+    mockedUser = {
+      uid: '1'
+    };
 
-		authService = {
-			get loggedUser$() {
-				return of();
-			},
-			get userBalanceDataSubject$() {
-				return of();
-			}
-		};
+    authService = {
+      get loggedUser$() {
+        return of();
+      },
+      get userBalanceDataSubject$() {
+        return of();
+      }
+    };
 
-		modalService = {
-			open() {
-				return of();
-			}
-		};
+    modalService = {
+      open() {
+        return of();
+      }
+    };
 
-		notificatorService = {
-			success() {},
-			error() {}
-		};
+    notificatorService = {
+      success() {},
+      error() {}
+    };
 
-		borrowerService = {
-			getUserLoans() {
-				return of();
-			},
-			getUserSuggestions() {
-				return of();
-			},
-			getAllPayments() {
-				return of();
-			},
-			createLoanRequest() {
-				return of();
-			},
-			addRequestIdToLoan() {
-				return of();
-			},
-			getUserRequestsAsc() {
-				return of();
-			},
-			getUserRequestsDesc() {
-				return of();
-			}
-		};
+    borrowerService = {
+      getUserLoans() {
+        return of();
+      },
+      getUserSuggestions() {
+        return of();
+      },
+      getAllPayments() {
+        return of();
+      },
+      createLoanRequest() {
+        return of();
+      },
+      addRequestIdToLoan() {
+        return of();
+      },
+      getUserRequestsAsc() {
+        return of();
+      },
+      getUserRequestsDesc() {
+        return of();
+      }
+    };
 
-		await TestBed.configureTestingModule({
-			imports: [ CommonModule, SharedModule ],
-			declarations: [ BorrowerComponent, CreateLoanModalComponent, CurrentLoanComponent, LoanRequestsComponent ],
-			providers: [ BorrowerService, AuthenticationService, NotificatorService, NgbModal ]
-		})
-			.overrideProvider(BorrowerService, { useValue: borrowerService })
-			.overrideProvider(AuthenticationService, { useValue: authService })
-			.overrideProvider(NotificatorService, { useValue: notificatorService })
-			.overrideProvider(NgbModal, { useValue: modalService })
-			.compileComponents();
+    await TestBed.configureTestingModule({
+      imports: [CommonModule, SharedModule],
+      declarations: [
+        BorrowerComponent,
+        CreateLoanModalComponent,
+        CurrentLoanComponent,
+        LoanRequestsComponent
+      ],
+      providers: [
+        BorrowerService,
+        AuthenticationService,
+        NotificatorService,
+        NgbModal
+      ]
+    })
+      .overrideProvider(BorrowerService, { useValue: borrowerService })
+      .overrideProvider(AuthenticationService, { useValue: authService })
+      .overrideProvider(NotificatorService, { useValue: notificatorService })
+      .overrideProvider(NgbModal, { useValue: modalService })
+      .compileComponents();
 
-		fixture = TestBed.createComponent(BorrowerComponent);
-		component = fixture.debugElement.componentInstance;
-		fixture.detectChanges();
+    fixture = TestBed.createComponent(BorrowerComponent);
+    component = fixture.debugElement.componentInstance;
+    fixture.detectChanges();
 
-		jest.spyOn(authService, 'loggedUser$', 'get').mockImplementation(() => of(mockedUser));
-	});
+    jest
+      .spyOn(authService, 'loggedUser$', 'get')
+      .mockImplementation(() => of(mockedUser));
+  });
 
-	it('should be defined', () => {
-		// Arrange & Act & Assert
-		expect(component).toBeDefined();
-	});
+  it('should be defined', () => {
+    // Arrange & Act & Assert
+    expect(component).toBeDefined();
+  });
 
-	describe('ngOnInit()', () => {
-		it('should subscribe to borrowerService.getUserLoans and return correct data', (done) => {
-			// Arrange
-			const mockedLoansData: CurrentLoanDTO = {
-				$requestId: '1',
-				$investorId: '1',
-				$investorDocId: '1',
-				$suggestionId: '1',
-				$userId: '1',
-				$userDocId: '1',
-				amount: 1,
-				date: '12-12-2020',
-				installment: 1,
-				interestRate: 1,
-				penalty: 1,
-				period: 1,
-				status: 'current'
-			};
-			const mockedLoans: CurrentLoanDTO[] = [ mockedLoansData ];
+  describe('ngOnInit()', () => {
+    it('should subscribe to borrowerService.getUserLoans and return correct data', done => {
+      // Arrange
+      const mockedLoansData: CurrentLoanDTO = {
+        $requestId: '1',
+        $investorId: '1',
+        $investorDocId: '1',
+        $suggestionId: '1',
+        $userId: '1',
+        $userDocId: '1',
+        amount: 1,
+        date: '12-12-2020',
+        installment: 1,
+        interestRate: 1,
+        penalty: 1,
+        period: 1,
+        status: 'current'
+      };
+      const mockedLoans: CurrentLoanDTO[] = [mockedLoansData];
 
-			const spyUserLoans = jest.spyOn(borrowerService, 'getUserLoans').mockImplementation(() =>
-				of(mockedLoans).subscribe((data) => {
-					expect(data).toBe(mockedLoans);
-					done();
-				})
-			);
+      const spyUserLoans = jest
+        .spyOn(borrowerService, 'getUserLoans')
+        .mockImplementation(() =>
+          of(mockedLoans).subscribe(data => {
+            expect(data).toBe(mockedLoans);
+            done();
+          })
+        );
 
-			// Act
-			component.ngOnInit();
+      // Act
+      component.ngOnInit();
 
-			// Assert
-			expect(spyUserLoans).toHaveBeenCalledTimes(1);
-		});
+      // Assert
+      expect(spyUserLoans).toHaveBeenCalledTimes(1);
+    });
 
-		it('should subscribe to borrowerService.getUserSuggestions and return correct data', (done) => {
-			// Arrange
-			const mockedLoanSuggestions: LoanSuggestionDTO = {
-				$requestId: '1',
-				$investorId: '1',
-				$investorDocId: '1',
-				$suggestionId: '1',
-				$userId: '1',
-				amount: 1,
-				interestRate: 1,
-				penalty: 1,
-				period: 1,
-				status: 'current'
-			};
-			const mockedLoanSuggestionsData: LoanSuggestionDTO[] = [ mockedLoanSuggestions ];
+    it('should subscribe to borrowerService.getUserSuggestions and return correct data', done => {
+      // Arrange
+      const mockedLoanSuggestions: LoanSuggestionDTO = {
+        $requestId: '1',
+        $investorId: '1',
+        $investorDocId: '1',
+        $suggestionId: '1',
+        $userId: '1',
+        amount: 1,
+        interestRate: 1,
+        penalty: 1,
+        period: 1,
+        status: 'current'
+      };
+      const mockedLoanSuggestionsData: LoanSuggestionDTO[] = [
+        mockedLoanSuggestions
+      ];
 
-			const spyUserLoanSuggestions = jest.spyOn(borrowerService, 'getUserSuggestions').mockImplementation(() =>
-				of(mockedLoanSuggestionsData).subscribe((data) => {
-					expect(data).toBe(mockedLoanSuggestionsData);
-					done();
-				})
-			);
+      const spyUserLoanSuggestions = jest
+        .spyOn(borrowerService, 'getUserSuggestions')
+        .mockImplementation(() =>
+          of(mockedLoanSuggestionsData).subscribe(data => {
+            expect(data).toBe(mockedLoanSuggestionsData);
+            done();
+          })
+        );
 
-			// Act
-			component.ngOnInit();
+      // Act
+      component.ngOnInit();
 
-			// Assert
-			expect(spyUserLoanSuggestions).toHaveBeenCalledTimes(1);
-		});
+      // Assert
+      expect(spyUserLoanSuggestions).toHaveBeenCalledTimes(1);
+    });
 
-		it('should subscribe to borrowerService.getAllPayments and return correct data', (done) => {
-			// Arrange
-			const mockedLoanPayments: AllPaymentsDTO = {
-				$requestId: '1',
-				$investorId: '1',
-				$investorDocId: '1',
-				$suggestionId: '1',
-				$userId: '1',
-				amount: 1,
-				date: '12-12-2020',
-				overdue: 0
-			};
-			const mockedLoanPaymentsData: AllPaymentsDTO[] = [ mockedLoanPayments ];
+    it('should subscribe to borrowerService.getAllPayments and return correct data', done => {
+      // Arrange
+      const mockedLoanPayments: AllPaymentsDTO = {
+        $requestId: '1',
+        $investorId: '1',
+        $investorDocId: '1',
+        $suggestionId: '1',
+        $userId: '1',
+        amount: 1,
+        date: '12-12-2020',
+        overdue: 0
+      };
+      const mockedLoanPaymentsData: AllPaymentsDTO[] = [mockedLoanPayments];
 
-			const spyUserLoanPayments = jest.spyOn(borrowerService, 'getAllPayments').mockImplementation(() =>
-				of(mockedLoanPaymentsData).subscribe((data) => {
-					expect(data).toBe(mockedLoanPaymentsData);
-					done();
-				})
-			);
+      const spyUserLoanPayments = jest
+        .spyOn(borrowerService, 'getAllPayments')
+        .mockImplementation(() =>
+          of(mockedLoanPaymentsData).subscribe(data => {
+            expect(data).toBe(mockedLoanPaymentsData);
+            done();
+          })
+        );
 
-			// Act
-			component.ngOnInit();
+      // Act
+      component.ngOnInit();
 
-			// Assert
-			expect(spyUserLoanPayments).toHaveBeenCalledTimes(1);
-		});
-	});
+      // Assert
+      expect(spyUserLoanPayments).toHaveBeenCalledTimes(1);
+    });
+  });
 
-	// describe('createLoanRequestModal()', () => {
-	// 	beforeEach(async () => {});
+  //   describe('createLoanRequestModal()', () => {
+  //     beforeEach(async () => {});
 
-	// 	it('should call borrowerService.createLoanRequest with correct params', (done) => {
-	// 		// Arrange
-	// 		jest.spyOn(modalService, 'open').mockImplementation(() =>
-	// 			of('component').subscribe((data) => {
-	// 				expect(data).toBe('component');
-	// 				done();
-	// 			})
-	// 		);
-	// 		const mockedLoanRequest: LoanRequestDTO = {
-	// 			$requestId: '1',
-	// 			$userId: '1',
-	// 			$userDocId: '1',
-	// 			amount: 1,
-	// 			period: 1,
-	// 			dateSubmited: '12-12-2020',
-	// 			partial: true,
-	// 			status: 'loan-request'
-	// 		};
-	// 		const mockedLoanRequestData: LoanRequestDTO[] = [ mockedLoanRequest ];
+  //     it('should call borrowerService.createLoanRequest with correct params', done => {
+  //       // Arrange
+  //       jest.spyOn(modalService, 'open').mockImplementation(() => {
+  //         return { componentInstance: 'createLoanRequest' };
+  //       });
+  //       const mockedLoanRequest: LoanRequestDTO = {
+  //         $requestId: '1',
+  //         $userId: '1',
+  //         $userDocId: '1',
+  //         amount: 1,
+  //         period: 1,
+  //         dateSubmited: '12-12-2020',
+  //         partial: true,
+  //         status: 'loan-request'
+  //       };
+  //       const mockedLoanRequestData: LoanRequestDTO[] = [mockedLoanRequest];
 
-	// 		const spyUserLoanRequests = jest.spyOn(borrowerService, 'createLoanRequest').mockImplementation(() =>
-	// 			of(mockedLoanRequestData).subscribe((data) => {
-	// 				console.log(data);
-	// 				expect(data).toBe(mockedLoanRequestData);
-	// 				done();
-	// 			})
-	// 		);
+  //       const spyUserLoanRequests = jest
+  //         .spyOn(borrowerService, 'createLoanRequest')
+  //         .mockImplementation(() =>
+  //           of(mockedLoanRequestData).subscribe(data => {
+  //             console.log(data);
+  //             expect(data).toBe(mockedLoanRequestData);
+  //             done();
+  //           })
+  //         );
 
-	// 		// Act
-	// 		component.createLoanRequestModal();
+  //       // Act
+  //       component.createLoanRequestModal();
 
-	// 		// Assert
-	// 		expect(spyUserLoanRequests).toHaveBeenCalledTimes(1);
-	// 	});
-	// });
+  //       // Assert
+  //       expect(spyUserLoanRequests).toHaveBeenCalledTimes(1);
+  //     });
+  //   });
 
-	describe('orderLoansAsc()', () => {
-		it('should call borrowerService.getUserRequestsAsc', (done) => {
-			// Arrange
-			const property = 'asc';
-			const mockedLoanRequest: LoanRequestDTO = {
-				$requestId: '1',
-				$userId: '1',
-				$userDocId: '1',
-				amount: 1,
-				period: 1,
-				dateSubmited: '12-12-2020',
-				partial: true,
-				status: 'loan-request'
-			};
-			jest.spyOn(borrowerService, 'getUserLoans').mockImplementation(() =>
-				of(1).subscribe((data) => {
-					expect(data).toBe(1);
-					done();
-				})
-			);
-			jest.spyOn(borrowerService, 'getUserSuggestions').mockImplementation(() =>
-				of(1).subscribe((data) => {
-					expect(data).toBe(1);
-					done();
-				})
-			);
-			jest.spyOn(borrowerService, 'getAllPayments').mockImplementation(() =>
-				of(1).subscribe((data) => {
-					expect(data).toBe(1);
-					done();
-				})
-			);
+  describe('orderLoansAsc()', () => {
+    it('should call borrowerService.getUserRequestsAsc once', done => {
+      // Arrange
+      const property = 'asc';
+      const mockedLoanRequest: LoanRequestDTO = {
+        $requestId: '1',
+        $userId: '1',
+        $userDocId: '1',
+        amount: 1,
+        period: 1,
+        dateSubmited: '12-12-2020',
+        partial: true,
+        status: 'loan-request'
+      };
+      jest.spyOn(borrowerService, 'getUserLoans').mockImplementation(() =>
+        of(1).subscribe(data => {
+          expect(data).toBe(1);
+          done();
+        })
+      );
+      jest.spyOn(borrowerService, 'getUserSuggestions').mockImplementation(() =>
+        of(1).subscribe(data => {
+          expect(data).toBe(1);
+          done();
+        })
+      );
+      jest.spyOn(borrowerService, 'getAllPayments').mockImplementation(() =>
+        of(1).subscribe(data => {
+          expect(data).toBe(1);
+          done();
+        })
+      );
 
-			const mockedLoanRequestData: LoanRequestDTO[] = [ mockedLoanRequest ];
-			component.user = mockedUser as any;
-			const spyUserLoanRequests = jest
-				.spyOn(borrowerService, 'getUserRequestsAsc')
-				.mockImplementation(() => of(mockedLoanRequestData));
-			// Act
-			component.ngOnInit();
-			component.orderLoansAsc(property);
+      const mockedLoanRequestData: LoanRequestDTO[] = [mockedLoanRequest];
+      component.user = mockedUser as any;
+      const spyUserLoanRequests = jest
+        .spyOn(borrowerService, 'getUserRequestsAsc')
+        .mockImplementation(() => of(mockedLoanRequestData));
+      // Act
+      component.ngOnInit();
+      component.orderLoansAsc(property);
 
-			// Assert
-			expect(spyUserLoanRequests).toHaveBeenCalledTimes(1);
-		});
-	});
+      // Assert
+      expect(spyUserLoanRequests).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call borrowerService.getUserRequestsAsc and assign loanRequests', done => {
+      // Arrange
+      const property = 'asc';
+      const mockedLoanRequest: LoanRequestDTO = {
+        $requestId: '1',
+        $userId: '1',
+        $userDocId: '1',
+        amount: 1,
+        period: 1,
+        dateSubmited: '12-12-2020',
+        partial: true,
+        status: 'loan-request'
+      };
+      jest.spyOn(borrowerService, 'getUserLoans').mockImplementation(() =>
+        of(1).subscribe(data => {
+          expect(data).toBe(1);
+          done();
+        })
+      );
+      jest.spyOn(borrowerService, 'getUserSuggestions').mockImplementation(() =>
+        of(1).subscribe(data => {
+          expect(data).toBe(1);
+          done();
+        })
+      );
+      jest.spyOn(borrowerService, 'getAllPayments').mockImplementation(() =>
+        of(1).subscribe(data => {
+          expect(data).toBe(1);
+          done();
+        })
+      );
+
+      const mockedLoanRequestData: LoanRequestDTO[] = [mockedLoanRequest];
+      component.user = mockedUser as any;
+      const spyUserLoanRequests = jest
+        .spyOn(borrowerService, 'getUserRequestsAsc')
+        .mockImplementation(() => of(mockedLoanRequestData));
+      // Act
+      component.ngOnInit();
+      component.orderLoansAsc(property);
+
+      // Assert
+      expect(component.loanRequests).toBe(mockedLoanRequestData);
+    });
+  });
+
+  describe('orderLoansDesc()', () => {
+    it('should call borrowerService.getUserRequestsDesc once', done => {
+      // Arrange
+      const property = 'desc';
+      const mockedLoanRequest: LoanRequestDTO = {
+        $requestId: '1',
+        $userId: '1',
+        $userDocId: '1',
+        amount: 1,
+        period: 1,
+        dateSubmited: '12-12-2020',
+        partial: true,
+        status: 'loan-request'
+      };
+      jest.spyOn(borrowerService, 'getUserLoans').mockImplementation(() =>
+        of(1).subscribe(data => {
+          expect(data).toBe(1);
+          done();
+        })
+      );
+      jest.spyOn(borrowerService, 'getUserSuggestions').mockImplementation(() =>
+        of(1).subscribe(data => {
+          expect(data).toBe(1);
+          done();
+        })
+      );
+      jest.spyOn(borrowerService, 'getAllPayments').mockImplementation(() =>
+        of(1).subscribe(data => {
+          expect(data).toBe(1);
+          done();
+        })
+      );
+
+      const mockedLoanRequestData: LoanRequestDTO[] = [mockedLoanRequest];
+      component.user = mockedUser as any;
+      const spyUserLoanRequests = jest
+        .spyOn(borrowerService, 'getUserRequestsDesc')
+        .mockImplementation(() => of(mockedLoanRequestData));
+      // Act
+      component.ngOnInit();
+      component.orderLoansDesc(property);
+
+      // Assert
+      expect(spyUserLoanRequests).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call borrowerService.getUserRequestsDesc and assign loanRequests', done => {
+      // Arrange
+      const property = 'asc';
+      const mockedLoanRequest: LoanRequestDTO = {
+        $requestId: '1',
+        $userId: '1',
+        $userDocId: '1',
+        amount: 1,
+        period: 1,
+        dateSubmited: '12-12-2020',
+        partial: true,
+        status: 'loan-request'
+      };
+      jest.spyOn(borrowerService, 'getUserLoans').mockImplementation(() =>
+        of(1).subscribe(data => {
+          expect(data).toBe(1);
+          done();
+        })
+      );
+      jest.spyOn(borrowerService, 'getUserSuggestions').mockImplementation(() =>
+        of(1).subscribe(data => {
+          expect(data).toBe(1);
+          done();
+        })
+      );
+      jest.spyOn(borrowerService, 'getAllPayments').mockImplementation(() =>
+        of(1).subscribe(data => {
+          expect(data).toBe(1);
+          done();
+        })
+      );
+
+      const mockedLoanRequestData: LoanRequestDTO[] = [mockedLoanRequest];
+      component.user = mockedUser as any;
+      const spyUserLoanRequests = jest
+        .spyOn(borrowerService, 'getUserRequestsDesc')
+        .mockImplementation(() => of(mockedLoanRequestData));
+      // Act
+      component.ngOnInit();
+      component.orderLoansDesc(property);
+
+      // Assert
+      expect(component.loanRequests).toBe(mockedLoanRequestData);
+    });
+  });
 });

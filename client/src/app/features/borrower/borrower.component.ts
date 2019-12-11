@@ -15,109 +15,125 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { switchMap, tap } from 'rxjs/operators';
 
 @Component({
-	selector: 'app-borrower',
-	templateUrl: './borrower.component.html',
-	styleUrls: [ './borrower.component.css' ]
+  selector: 'app-borrower',
+  templateUrl: './borrower.component.html',
+  styleUrls: ['./borrower.component.css']
 })
 export class BorrowerComponent implements OnInit, OnDestroy {
-	private subscriptions: Subscription[] = [];
+  private subscriptions: Subscription[] = [];
 
-	public currentLoans: CurrentLoanDTO[] = [];
-	public loanRequests: LoanRequestDTO[] = [];
-	public loanSuggestions: LoanSuggestionDTO[] = [];
+  public currentLoans: CurrentLoanDTO[] = [];
+  public loanRequests: LoanRequestDTO[] = [];
+  public loanSuggestions: LoanSuggestionDTO[] = [];
 
-	public user: User;
-	public userBalanceData: UserDTO;
+  public user: User;
+  public userBalanceData: UserDTO;
 
-	public allPayments: AllPaymentsDTO[] = [];
-	public amountPaid = 0;
+  public allPayments: AllPaymentsDTO[] = [];
+  public amountPaid = 0;
 
-	constructor(
-		private readonly borrowerService: BorrowerService,
-		private readonly notificatorService: NotificatorService,
-		private readonly authService: AuthenticationService,
-		private readonly modalService: NgbModal
-	) {}
+  constructor(
+    private readonly borrowerService: BorrowerService,
+    private readonly notificatorService: NotificatorService,
+    private readonly authService: AuthenticationService,
+    private readonly modalService: NgbModal
+  ) {}
 
-	public ngOnInit(): void {
-		this.subscriptions.push(
-			this.authService.loggedUser$
-				.pipe(
-					switchMap((res) => {
-						this.user = res;
-						if (this.user) {
-							return merge(
-								this.borrowerService
-									.getUserLoans(this.user.uid)
-									.pipe(tap((userLoans: CurrentLoanDTO[]) => (this.currentLoans = userLoans))),
-								this.borrowerService
-									.getUserSuggestions()
-									.pipe(
-										tap(
-											(userSuggestions: LoanSuggestionDTO[]) =>
-												(this.loanSuggestions = userSuggestions)
-										)
-									),
-								this.borrowerService
-									.getAllPayments(this.user.uid)
-									.pipe(tap((allPayment: AllPaymentsDTO[]) => (this.allPayments = allPayment)))
-							);
-						}
-						return [];
-					})
-				)
-				.subscribe(() => {
-					this.orderLoansAsc('amount');
-				})
-		);
-		this.subscriptions.push(
-			this.authService.userBalanceDataSubject$.subscribe((res) => {
-				this.userBalanceData = res;
-			})
-		);
-	}
+  public ngOnInit(): void {
+    this.subscriptions.push(
+      this.authService.loggedUser$
+        .pipe(
+          switchMap(res => {
+            this.user = res;
+            if (this.user) {
+              return merge(
+                this.borrowerService
+                  .getUserLoans(this.user.uid)
+                  .pipe(
+                    tap(
+                      (userLoans: CurrentLoanDTO[]) =>
+                        (this.currentLoans = userLoans)
+                    )
+                  ),
+                this.borrowerService
+                  .getUserSuggestions()
+                  .pipe(
+                    tap(
+                      (userSuggestions: LoanSuggestionDTO[]) =>
+                        (this.loanSuggestions = userSuggestions)
+                    )
+                  ),
+                this.borrowerService
+                  .getAllPayments(this.user.uid)
+                  .pipe(
+                    tap(
+                      (allPayment: AllPaymentsDTO[]) =>
+                        (this.allPayments = allPayment)
+                    )
+                  )
+              );
+            }
+            return [];
+          })
+        )
+        .subscribe(() => {
+          this.orderLoansAsc('amount');
+        })
+    );
+    this.subscriptions.push(
+      this.authService.userBalanceDataSubject$.subscribe(res => {
+        this.userBalanceData = res;
+      })
+    );
+  }
 
-	public ngOnDestroy(): void {
-		this.subscriptions.forEach((subscription) => subscription.unsubscribe());
-	}
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
 
-	createLoanRequestModal(): void {
-		const createLoanRequestModal = this.modalService.open(CreateLoanModalComponent);
-		createLoanRequestModal.componentInstance.createLoanRequest.subscribe((loanData) => {
-			this.borrowerService
-				.createLoanRequest({
-					$userId: this.user.uid,
-					$userDocId: this.userBalanceData.$userDocId,
-					status: StatusENUM.requestOpen,
-					...loanData
-				})
-				.then((ref) => {
-					this.borrowerService.addRequestIdToLoan(ref.id);
-					this.notificatorService.success('Your request have been added to pending!');
-				})
-				.catch(() => {
-					this.notificatorService.error('Oops, something went wrong!');
-				});
-		});
-	}
+  createLoanRequestModal(): void {
+    const createLoanRequestModal = this.modalService.open(
+      CreateLoanModalComponent
+    );
+    createLoanRequestModal.componentInstance.createLoanRequest.subscribe(
+      loanData => {
+        this.borrowerService
+          .createLoanRequest({
+            $userId: this.user.uid,
+            $userDocId: this.userBalanceData.$userDocId,
+            status: StatusENUM.requestOpen,
+            ...loanData
+          })
+          .then(ref => {
+            this.borrowerService.addRequestIdToLoan(ref.id);
+            this.notificatorService.success(
+              'Your request have been added to pending!'
+            );
+          })
+          .catch(() => {
+            this.notificatorService.error('Oops, something went wrong!');
+          });
+      }
+    );
+  }
 
-	public orderLoansAsc(property: string): void {
-		this.subscriptions.push(
-			this.borrowerService
-				.getUserRequestsAsc(this.user.uid, property)
-				.subscribe((querySnapshot: LoanRequestDTO[]): LoanRequestDTO[] => {
-					return (this.loanRequests = querySnapshot);
-				})
-		);
-	}
+  public orderLoansAsc(property: string): void {
+    this.subscriptions.push(
+      this.borrowerService
+        .getUserRequestsAsc(this.user.uid, property)
+        .subscribe((querySnapshot: LoanRequestDTO[]): LoanRequestDTO[] => {
+          return (this.loanRequests = querySnapshot);
+        })
+    );
+  }
 
-	public orderLoansDesc(property: string): void {
-		this.subscriptions.push(
-			this.borrowerService
-				.getUserRequestsDesc(this.user.uid, property)
-				.subscribe((querySnapshot: LoanRequestDTO[]): LoanRequestDTO[] => {
-					return (this.loanRequests = querySnapshot);
-				})
-		);
-	}
+  public orderLoansDesc(property: string): void {
+    this.subscriptions.push(
+      this.borrowerService
+        .getUserRequestsDesc(this.user.uid, property)
+        .subscribe((querySnapshot: LoanRequestDTO[]): LoanRequestDTO[] => {
+          return (this.loanRequests = querySnapshot);
+        })
+    );
+  }
 }
