@@ -1,26 +1,28 @@
 <div class="card-body">
-  <ul class="list-unstyled" style="border: 2px solid gray; padding: 5px;">
-    Investment:
+  <ul class="list-unstyled current-investments">
     <li>
       <div class="card-body">
         <div class="d-flex justify-content-between">
           <div>
             <p>
-              Borrower: <b>{{ this.firstName}} {{this.lastName}}</b>
+              Borrower: <b>{{ this.firstName }} {{ this.lastName }}</b>
             </p>
             <p>
               Date: <b>{{ this.date }}</b>
             </p>
             <p>
-              Total Amount:<b> ${{ this.totalAmount | number: "1.2-2" }}</b>
+              Total Amount:<b> ${{ this.totalAmount | number: '1.2-2' }}</b>
             </p>
-            <p>Total Amount Left: <b> ${{ this.amountLeft | number: "1.2-2" }}</b></p>
             <p>
-              Interest rate: <b>{{ this.interestRate | number: "1.2-2" }}%</b>
+              Total Amount Left:
+              <b> ${{ this.amountLeft | number: '1.2-2' }}</b>
+            </p>
+            <p>
+              Interest rate: <b>{{ this.interestRate | number: '1.2-2' }}%</b>
             </p>
             <p>
               Installment:
-              <b> ${{ this.installment | number: "1.2-2" }}</b>
+              <b> ${{ this.installment | number: '1.2-2' }}</b>
             </p>
             <p>
               Next Due Date: <b>{{ this.calcNextDueDate() }}</b>

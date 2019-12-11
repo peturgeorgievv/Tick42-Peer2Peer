@@ -1,15 +1,14 @@
 <div class="card-body">
-  <ul class="list-unstyled" style="border: 2px solid gray; padding: 5px;">
-    Request:
+  <ul class="list-unstyled loan-requests">
     <li>
       <div class="card-body">
         <div class="d-flex justify-content-between">
           <div>
             <p>
-              Name: <b>{{ this.firstName }} {{this.lastName}}</b>
+              Name: <b>{{ this.firstName }} {{ this.lastName }}</b>
             </p>
             <p>
-              Total Amount: <b> ${{ this.totalAmount | number: "1.2-2" }}</b>
+              Total Amount: <b> ${{ this.totalAmount | number: '1.2-2' }}</b>
             </p>
             <p>
               Target Period: <b>{{ this.period }} months</b>
@@ -22,31 +21,25 @@
               <b *ngIf="this.partial">Yes</b>
               <b *ngIf="!this.partial">No</b>
             </p>
-          <button
-              *ngIf="!this.partial"
-              type="button"
-              (click)="(this.loanReqId && this.loanUser)"
-              (click)="this.createProposeModal()"
-              class="btn btn-warning col-6"
-              [attr.data-target]="'#exampleModal' + this.requestData.$requestId"
-              [disabled]="this.userBalanceData.currentBalance<this.totalAmount"
-            >
-              <b>Propose</b>
-            </button>
-            <button
-              *ngIf="this.partial"
-              type="button"
-              (click)="(this.loanReqId && this.loanUser)"
-              (click)="this.createPartialProposeModal()"
-              class="btn btn-warning col-6"
-              data-toggle="modal"
-              [attr.data-target]="'#partialModal' + this.requestData.$requestId"
-              [disabled]="this.userBalanceData.currentBalance<this.totalAmount"
-            >
-              <b>Propose</b>
-            </button>
           </div>
         </div>
+        <button
+          *ngIf="!this.partial"
+          type="button"
+          (click)="this.createProposeModal()"
+          class="btn col-12"
+          [disabled]="this.userBalanceData.currentBalance < this.totalAmount"
+        >
+          <b>Propose</b>
+        </button>
+        <button
+          *ngIf="this.partial"
+          type="button"
+          (click)="this.createPartialProposeModal()"
+          class="btn col-12"
+        >
+          <b>Propose</b>
+        </button>
       </div>
     </li>
   </ul>
