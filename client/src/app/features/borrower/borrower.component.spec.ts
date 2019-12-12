@@ -42,9 +42,7 @@ describe('BorrowerComponent', () => {
     };
 
     modalService = {
-      open() {
-        return of();
-      }
+      open() {}
     };
 
     notificatorService = {
@@ -63,7 +61,7 @@ describe('BorrowerComponent', () => {
         return of();
       },
       createLoanRequest() {
-        return of();
+        return {};
       },
       addRequestIdToLoan() {
         return of();
@@ -212,43 +210,51 @@ describe('BorrowerComponent', () => {
     });
   });
 
-  //   describe('createLoanRequestModal()', () => {
-  //     beforeEach(async () => {});
+  describe('createLoanRequestModal()', () => {
+    it('should call modalService.open once', () => {
+      // Arrange
+      const mockedLoanRequest = new LoanRequestDTO();
 
-  //     it('should call borrowerService.createLoanRequest with correct params', done => {
-  //       // Arrange
-  //       jest.spyOn(modalService, 'open').mockImplementation(() => {
-  //         return { componentInstance: 'createLoanRequest' };
-  //       });
-  //       const mockedLoanRequest: LoanRequestDTO = {
-  //         $requestId: '1',
-  //         $userId: '1',
-  //         $userDocId: '1',
-  //         amount: 1,
-  //         period: 1,
-  //         dateSubmited: '12-12-2020',
-  //         partial: true,
-  //         status: 'loan-request'
-  //       };
-  //       const mockedLoanRequestData: LoanRequestDTO[] = [mockedLoanRequest];
+      const spyModal = jest
+        .spyOn(modalService, 'open')
+        .mockImplementation(() => ({
+          componentInstance: {
+            createLoanRequest: of(mockedLoanRequest)
+          }
+        }));
 
-  //       const spyUserLoanRequests = jest
-  //         .spyOn(borrowerService, 'createLoanRequest')
-  //         .mockImplementation(() =>
-  //           of(mockedLoanRequestData).subscribe(data => {
-  //             console.log(data);
-  //             expect(data).toBe(mockedLoanRequestData);
-  //             done();
-  //           })
-  //         );
+      // Act
+      component.createLoanRequestModal();
 
-  //       // Act
-  //       component.createLoanRequestModal();
+      // Assert
 
-  //       // Assert
-  //       expect(spyUserLoanRequests).toHaveBeenCalledTimes(1);
-  //     });
-  //   });
+      expect(spyModal).toBeCalledTimes(1);
+    });
+
+    // it('should call borrowerService.createLoanRequest once', done => {
+    //   // Arrange
+    //   const mockedLoanRequest = new LoanRequestDTO();
+
+    //   const spyUserLoanRequests = jest
+    //     .spyOn(borrowerService, 'createLoanRequest')
+    //     .mockImplementation(() => of(mockedLoanRequest));
+
+    //   const spyModal = jest
+    //     .spyOn(modalService, 'open')
+    //     .mockImplementation(() => ({
+    //       componentInstance: {
+    //         createLoanRequest: of(mockedLoanRequest)
+    //       }
+    //     }));
+
+    //   // Act
+    //   fixture.detectChanges();
+    //   component.createLoanRequestModal();
+
+    //   // Assert
+    //   expect(spyUserLoanRequests).toBeCalledTimes(1);
+    // });
+  });
 
   describe('orderLoansAsc()', () => {
     it('should call borrowerService.getUserRequestsAsc once', done => {
