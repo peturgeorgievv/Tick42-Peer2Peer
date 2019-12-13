@@ -44,6 +44,26 @@
                   </div>
                 </div>
               </div>
+              <div class="col-6 btn-div">
+                <button
+                  class="btn btn-block"
+                  *ngIf="!this.isGraphShowed"
+                  (click)="
+                    this.createGraph(); this.isGraphShowed = !this.isGraphShowed
+                  "
+                >
+                  <b>Show Graph</b>
+                </button>
+                <button
+                  class="btn btn-block"
+                  *ngIf="this.isGraphShowed"
+                  (click)="
+                    this.createGraph(); this.isGraphShowed = !this.isGraphShowed
+                  "
+                >
+                  <b>Hide Graph</b>
+                </button>
+              </div>
             </div>
           </li>
           <div class="row">
@@ -72,6 +92,40 @@
   >
     <div class="card card-pricing">
       <div class="card-header">
+        <h4 class="card-title">Total Debts</h4>
+      </div>
+      <div class="card-body">
+        <ul class="list-unstyled current-loans">
+          <li>
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <p *ngIf="this.curLoans[0]">
+                      Total period of all debts:
+                      <b>{{ this.curLoans[0].period }} months</b>
+                    </p>
+                    <p *ngIf="!this.curLoans[0]">
+                      No any debts at the moment!
+                    </p>
+                    <p>
+                      Number of investors:
+                      <b>{{ this.filteredForInvestors.length }}</b>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <button class="btn col-12" [routerLink]="'/borrower'">
+            <b>Borrow Panel</b>
+          </button>
+        </ul>
+      </div>
+    </div>
+    <br />
+    <div class="card card-pricing">
+      <div class="card-header">
         <h4 class="card-title">Total Investments</h4>
       </div>
       <div class="card-body">
@@ -93,12 +147,6 @@
                       Number of borrowers:
                       <b>{{ this.filterForBorrowers.length }}</b>
                     </p>
-                    <!-- <p>
-                      Overdue investments: SHOULD
-                    </p>
-                    <p>
-                      Next Due Date and Amount: SHOULD
-                    </p> -->
                   </div>
                 </div>
               </div>
@@ -114,44 +162,19 @@
   <div
     class="justify-content-center align-items-center mb-1 col-lg-4 col-md-12 col-sm-12 col-xs-12"
   >
-    <div class="card card-pricing">
-      <div class="card-header">
-        <h4 class="card-title">Total Debts</h4>
-      </div>
-      <div class="card-body">
-        <ul class="list-unstyled current-loans">
-          <li>
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex justify-content-between">
-                  <div>
-                    <p *ngIf="this.curLoans[0]">
-                      Total period of all debts:
-                      <b>{{ this.curLoans[0].period }} months</b>
-                    </p>
-                    <p *ngIf="!this.curLoans[0]">
-                      No any debts at the moment!
-                    </p>
-                    <p>
-                      Number of investors:
-                      <b>{{ this.filteredForInvestors.length }}</b>
-                    </p>
-                    <!-- <p>
-                      Overdue Loans: SHOULD
-                    </p>
-                    <p>
-                      Next Due Date and Amount: SHOULD
-                    </p> -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <button class="btn col-12" [routerLink]="'/borrower'">
-            <b>Borrow Panel</b>
-          </button>
-        </ul>
-      </div>
+    <div
+      id="#chart-container-ele"
+      [ngStyle]="getStyle()"
+      *ngIf="this.isGraphShowed && this.dataSource"
+    >
+      <fusioncharts
+        width="100%"
+        height="100%"
+        type="pie3d"
+        [dataSource]="dataSource"
+        (initialized)="initialized($event)"
+      >
+      </fusioncharts>
     </div>
   </div>
 </div>
