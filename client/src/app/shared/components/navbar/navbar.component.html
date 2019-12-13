@@ -99,106 +99,127 @@
     *ngIf="this.user && this.userBalanceData !== undefined"
   >
     <a class="navbar-brand" href="#"></a>
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
-    <form class="form-inline my-2 my-lg-0">
-      <div class="user-info">
-        <div
-          class="btn secondary-navbar-btns"
-          *ngIf="this.userBalanceData.status !== 'admin'"
-        >
-          <span class="sec-navbar-text">Balance:</span>
-          <span class="badge badge-light badge-size"
-            >{{ this.userBalanceData.currentBalance | number: '1.2-2' }} $</span
-          >
-        </div>
-      </div>
-      <div class="user-info">
-        <div
-          class="btn secondary-navbar-btns"
-          *ngIf="this.userBalanceData.status !== 'admin'"
-        >
-          <span class="sec-navbar-text">Debts:</span>
-          <span class="badge badge-light badge-size"
-            >{{ this.userBalanceData.totalDebt | number: '1.2-2' }} $</span
-          >
-        </div>
-      </div>
-      <div
-        class="user-info"
-        *ngIf="this.userBalanceData.status !== 'admin'"
-        style="margin: 0px;"
-      >
-        <div class="btn secondary-navbar-btns">
-          <span class="sec-navbar-text">Investments:</span>
-          <span class="badge badge-light badge-size"
-            >{{
-              this.userBalanceData.totalInvestment | number: '1.2-2'
-            }}
-            $</span
-          >
-        </div>
-      </div>
-      <div class="user-info">
-        <a
-          *ngIf="this.userBalanceData.status === 'admin'"
-          class="btn secondary-navbar-btns"
-          role="button"
-          [routerLink]="['/users']"
-          ><span class="sec-navbar-text">Users</span></a
-        >
-      </div>
-      <div class="user-info">
-        <a
-          *ngIf="this.userBalanceData.status === 'admin'"
-          class="btn secondary-navbar-btns"
-          role="button"
-        >
-          <span class="badge badge-light badge-size">Admin</span>
-          <span class="sec-navbar-text"
-            >{{ this.userBalanceData.firstName }}
-            {{ this.userBalanceData.lastName }}</span
-          ></a
-        >
-      </div>
-      <div
-        class="col"
-        style="padding: 0px;"
-        *ngIf="this.userBalanceData.status !== 'admin'"
-      >
-        <div ngbDropdown class="d-inline-block">
-          <button
-            class="btn secondary-navbar-btns"
-            id="dropdownBasic1"
-            ngbDropdownToggle
-          >
-            <span class="badge badge-light badge-size">{{
-              this.userBalanceData.totalInvestment | investmentBadge
-            }}</span>
-            <span class="sec-navbar-text"
-              >{{ this.userBalanceData.firstName }}
-              {{ this.userBalanceData.lastName }}
-            </span>
-          </button>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarBalance"
+      aria-controls="navbarBalance"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <b class="small-balance">Balance</b>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarBalance">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
+      <form class="form-inline my-2 my-lg-0">
+        <div class="user-info">
           <div
-            ngbDropdownMenu
-            aria-labelledby="dropdownBasic1"
-            class="dropdown-menu"
+            class="btn secondary-navbar-btns"
+            *ngIf="this.userBalanceData.status !== 'admin'"
           >
-            <div ngbDropdownItem class="dropdown-text" *ngIf="this.nextDueDate">
-              Next Due Date: <br />{{ this.nextDueDate }}
-            </div>
-            <div
-              ngbDropdownItem
-              class="dropdown-text"
-              *ngIf="!this.nextDueDate"
+            <span class="sec-navbar-text">Balance:</span>
+            <span class="badge badge-light badge-size"
+              >{{
+                this.userBalanceData.currentBalance | number: '1.2-2'
+              }}
+              $</span
             >
-              Next Due Date: <br />
-              No loans at the moment
-            </div>
-            <div ngbDropdownItem class="dropdown-text">Overdue Debts: 5</div>
           </div>
         </div>
-      </div>
-    </form>
+        <div class="user-info">
+          <div
+            class="btn secondary-navbar-btns"
+            *ngIf="this.userBalanceData.status !== 'admin'"
+          >
+            <span class="sec-navbar-text">Debts:</span>
+            <span class="badge badge-light badge-size"
+              >{{ this.userBalanceData.totalDebt | number: '1.2-2' }} $</span
+            >
+          </div>
+        </div>
+        <div
+          class="user-info"
+          *ngIf="this.userBalanceData.status !== 'admin'"
+          style="margin: 0px;"
+        >
+          <div class="btn secondary-navbar-btns">
+            <span class="sec-navbar-text">Investments:</span>
+            <span class="badge badge-light badge-size"
+              >{{
+                this.userBalanceData.totalInvestment | number: '1.2-2'
+              }}
+              $</span
+            >
+          </div>
+        </div>
+        <div class="user-info">
+          <a
+            *ngIf="this.userBalanceData.status === 'admin'"
+            class="btn secondary-navbar-btns"
+            role="button"
+            [routerLink]="['/users']"
+            ><span class="sec-navbar-text">Users</span></a
+          >
+        </div>
+        <div class="user-info">
+          <a
+            *ngIf="this.userBalanceData.status === 'admin'"
+            class="btn secondary-navbar-btns"
+            role="button"
+          >
+            <span class="badge badge-light badge-size">Admin</span>
+            <span class="sec-navbar-text"
+              >{{ this.userBalanceData.firstName }}
+              {{ this.userBalanceData.lastName }}</span
+            ></a
+          >
+        </div>
+        <div
+          class="col"
+          style="padding: 0px;"
+          *ngIf="this.userBalanceData.status !== 'admin'"
+        >
+          <div ngbDropdown class="d-inline-block">
+            <button
+              class="btn secondary-navbar-btns"
+              id="dropdownBasic1"
+              ngbDropdownToggle
+            >
+              <span class="badge badge-light badge-size">{{
+                this.userBalanceData.totalInvestment | investmentBadge
+              }}</span>
+              <span class="sec-navbar-text"
+                >{{ this.userBalanceData.firstName }}
+                {{ this.userBalanceData.lastName }}
+              </span>
+            </button>
+            <div
+              ngbDropdownMenu
+              aria-labelledby="dropdownBasic1"
+              class="dropdown-menu"
+            >
+              <div
+                ngbDropdownItem
+                class="dropdown-text"
+                *ngIf="this.nextDueDate"
+              >
+                Next Due Date: <br />{{ this.nextDueDate }}
+              </div>
+              <div
+                ngbDropdownItem
+                class="dropdown-text"
+                *ngIf="!this.nextDueDate"
+              >
+                Next Due Date: <br />
+                No loans at the moment
+              </div>
+              <div ngbDropdownItem class="dropdown-text">Overdue Debts: 5</div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
   </nav>
 </div>
