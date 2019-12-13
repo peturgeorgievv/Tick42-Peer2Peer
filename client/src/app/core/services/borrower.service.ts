@@ -167,7 +167,6 @@ export class BorrowerService {
   }
 
   public rejectBiggerLoanSuggestions(requestId: string, amount: number) {
-    console.log(amount);
     return this.angularFireStore
       .collection('suggestions', ref =>
         ref
@@ -187,7 +186,6 @@ export class BorrowerService {
   }
 
   public rejectBiggerPartialLoanSuggestions(requestId: string, amount: number) {
-    console.log(amount);
     return this.angularFireStore
       .collection('suggestions', ref =>
         ref
