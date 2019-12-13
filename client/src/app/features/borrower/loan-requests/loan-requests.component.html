@@ -51,35 +51,35 @@
                 </p>
               </div>
             </div>
-            <button
-              class="btn col-6"
-              *ngIf="!this.edit"
-              (click)="this.resetForm(); this.editFormValidation()"
-            >
-              <b>Edit</b>
-            </button>
-            <button
-              class="btn col-6"
-              type="submit"
-              *ngIf="this.edit"
-              [disabled]="editLoanForm.invalid"
-            >
-              <b>Save</b>
-            </button>
-            <button
-              *ngIf="this.edit"
-              class="btn col-6"
-              (click)="this.resetForm()"
-            >
-              <b>Cancel</b>
-            </button>
-            <button
-              *ngIf="!this.edit"
-              class="btn col-6"
-              (click)="this.deleteRequest()"
-            >
-              <b>Delete</b>
-            </button>
+            <div class="row">
+              <div class="col-6 btn-div" *ngIf="!this.edit">
+                <button
+                  class="btn btn-block"
+                  (click)="this.resetForm(); this.editFormValidation()"
+                >
+                  <b>Edit</b>
+                </button>
+              </div>
+              <div class="col-6 btn-div" *ngIf="this.edit">
+                <button
+                  class="btn btn-block"
+                  type="submit"
+                  [disabled]="editLoanForm.invalid"
+                >
+                  <b>Save</b>
+                </button>
+              </div>
+              <div class="col-6 btn-div" *ngIf="this.edit">
+                <button class="btn btn-block" (click)="this.resetForm()">
+                  <b>Cancel</b>
+                </button>
+              </div>
+              <div class="col-6 btn-div" *ngIf="!this.edit">
+                <button class="btn btn-block" (click)="this.deleteRequest()">
+                  <b>Delete</b>
+                </button>
+              </div>
+            </div>
           </form>
         </div>
       </div>
@@ -93,7 +93,7 @@
               <div class="d-flex justify-content-between">
                 <div>
                   <p>
-                      Investor:
+                    Investor:
                     <b>{{ this.suggestion.email }}</b>
                   </p>
                   <p>

@@ -1,28 +1,33 @@
 <div
   class="card-body"
-  *ngIf="this.loanData && this.allPayments && this.userBalanceData && this.investorFirstName && this.investorLastName"
+  *ngIf="
+    this.loanData &&
+    this.allPayments &&
+    this.userBalanceData &&
+    this.investorFirstName &&
+    this.investorLastName
+  "
 >
   <ul class="list-unstyled current-loans">
     <div class="row" style="padding: 2px 16px;">
-    <span class="col-6">
-
-  </span>
-    <button
-    type="button"
-    class="btn col-6"
-    (click)="this.showFullLoanData = !this.showFullLoanData"
-  >
-    <b *ngIf="!this.showFullLoanData">Show More <img class="arrow-down" src="../../../../assets/arrow-down-solid.svg"/></b>
-    <b *ngIf="this.showFullLoanData">Hide <img class="arrow-down" src="../../../../assets/arrow-down-solid.svg"/></b>
-  </button>
-</div>
+      <span class="col-6"> </span>
+      <button
+        type="button"
+        class="btn col-6"
+        (click)="this.showFullLoanData = !this.showFullLoanData"
+      >
+        <b *ngIf="!this.showFullLoanData">Show</b>
+        <b *ngIf="this.showFullLoanData">Hide</b>
+      </button>
+    </div>
     <li>
       <div class="card">
         <div class="card-body">
           <div class="d-flex justify-content-between">
             <div>
               <p>
-                Investor: <b>{{ this.investorFirstName }} {{ this.investorLastName }}</b>
+                Investor:
+                <b>{{ this.investorFirstName }} {{ this.investorLastName }}</b>
               </p>
               <p>
                 Next Due Date:
@@ -33,34 +38,34 @@
                 <b>{{ this.installment }} $</b>
               </p>
               <div *ngIf="showFullLoanData">
-              <p>
-                Date Created: <b>{{ this.loanData.date }}</b>
-              </p>
-              <p>
-                Date End Of Contract:
-                <b>{{ this.dateEndOfContract }}</b>
-              </p>
-              <p>
-                Total Amount Without Interest:
-                <b>{{ this.amount | number: "1.2-2" }} $</b>
-              </p>
-              <p>
-                Total Amount:
-                <b>{{ this.totalAmount | number: "1.2-2" }} $</b>
-              </p>
-              <p *ngIf="this.overdueDays() > 0">
-                Overdue Days:
-                <b>{{ this.overdueDays() }} $</b>
-              </p>
-              <p *ngIf="this.overdueDays() > 0">
-                Overdue Payment:
-                <b>{{ this.overdueAmount() | number: "1.2-2" }} $</b>
-              </p>
-              <p>
-                Penalty Rate: <b>{{ this.penalty }} %</b>
-              </p>
+                <p>
+                  Date Created: <b>{{ this.loanData.date }}</b>
+                </p>
+                <p>
+                  Date End Of Contract:
+                  <b>{{ this.dateEndOfContract }}</b>
+                </p>
+                <p>
+                  Total Amount Without Interest:
+                  <b>{{ this.amount | number: '1.2-2' }} $</b>
+                </p>
+                <p>
+                  Total Amount:
+                  <b>{{ this.totalAmount | number: '1.2-2' }} $</b>
+                </p>
+                <p *ngIf="this.overdueDays() > 0">
+                  Overdue Days:
+                  <b>{{ this.overdueDays() }} $</b>
+                </p>
+                <p *ngIf="this.overdueDays() > 0">
+                  Overdue Payment:
+                  <b>{{ this.overdueAmount() | number: '1.2-2' }} $</b>
+                </p>
+                <p>
+                  Penalty Rate: <b>{{ this.penalty }} %</b>
+                </p>
+              </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
@@ -77,7 +82,7 @@
               <p><b>Amount Left to Pay:</b></p>
             </div>
             <h3 class="fw-bold">
-              {{ this.amountLeftWithInterest | number: "1.2-2" }}
+              {{ this.amountLeftWithInterest | number: '1.2-2' }}
               $
             </h3>
           </div>
@@ -85,14 +90,19 @@
             <div
               class="progress-bar my-progress-bar"
               role="progressbar"
-              [style.width.%]="(this.amountLeftWithInterest / this.totalAmount) * 100"
+              [style.width.%]="
+                (this.amountLeftWithInterest / this.totalAmount) * 100
+              "
               aria-valuemin="0"
               aria-valuemax="100"
             ></div>
           </div>
           <div class="d-flex justify-content-between mt-2">
             <p class="text-muted mb-0">
-              {{ (this.amountLeftWithInterest / this.totalAmount) * 100 | number: "1.2-2" }}
+              {{
+                (this.amountLeftWithInterest / this.totalAmount) * 100
+                  | number: '1.2-2'
+              }}
               %
             </p>
           </div>
@@ -111,16 +121,21 @@
       </div>
     </li>
 
-    <button class="btn col-6" (click)="openAddPaymentsModal()">
-      <b>Pay</b>
-    </button>
-
-    <button
-      type="button"
-      class="btn col-6"
-      (click)="this.openShowPaymentsModal()"
-    >
-      <b>History</b>
-    </button>
+    <div class="row">
+      <div class="col-6 btn-div">
+        <button class="btn btn-block" (click)="openAddPaymentsModal()">
+          <b>Pay</b>
+        </button>
+      </div>
+      <div class="col-6 btn-div">
+        <button
+          type="button"
+          class="btn btn-block"
+          (click)="this.openShowPaymentsModal()"
+        >
+          <b>History</b>
+        </button>
+      </div>
+    </div>
   </ul>
 </div>

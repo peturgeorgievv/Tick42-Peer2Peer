@@ -1,82 +1,75 @@
-<div class="modal-dialog" role="document">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title">
-        Please enter your Loan preferences:
-      </h5>
-      <button type="button" class="close" (click)="this.closeModal()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">
+      Please enter your Loan preferences:
+    </h5>
+  </div>
 
-    <div class="modal-body">
-      <form
-        class="container"
-        [formGroup]="this.createLoan"
-        (ngSubmit)="this.emitLoanData(this.createLoan.value)"
-      >
-        <div class="row">
-          <div class="form-group col-6">
-            <label for="exampleInputEmail1">Period: </label>
-            <input
-              type="number"
-              class="form-control"
-              id="loan-period"
-              placeholder=" Enter your prefered period of months"
-              formControlName="period"
-            />
-            <span
-              class="font-italic font-weight-bold text-danger"
-              *ngIf="createLoan.controls.period?.errors?.min"
-            >
-              Minimum period 1 month!
-            </span>
-          </div>
-          <div class="form-group col-6">
-            <label for="exampleInputEmail1">Amount: </label>
-            <input
-              type="number"
-              class="form-control"
-              id="loan-amount"
-              placeholder=" Enter your prefered amount"
-              formControlName="amount"
-            />
-            <span
-              class="font-italic font-weight-bold text-danger"
-              *ngIf="createLoan.controls.amount?.errors?.min"
-            >
-              Minimum Amount $1!
-            </span>
-          </div>
-          <div class="form-group form-check-inline col-6 checkbox-form">
-            <label for="form-check-label" class="checkbox-label"
-              >Partial:
-            </label>
-            <input
-              type="checkbox"
-              class="form-check-input checkbox-box"
-              id="form-check-label"
-              formControlName="partial"
-            />
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            (click)="this.closeModal()"
+  <div class="modal-body">
+    <form
+      class="container"
+      [formGroup]="this.createLoan"
+      (ngSubmit)="this.emitLoanData(this.createLoan.value)"
+    >
+      <div class="row">
+        <div class="form-group col-6">
+          <label for="exampleInputEmail1">Period: </label>
+          <input
+            type="number"
+            class="form-control"
+            id="loan-period"
+            placeholder=" Enter your prefered period of months"
+            formControlName="period"
+          />
+          <span
+            class="font-italic font-weight-bold text-danger"
+            *ngIf="createLoan.controls.period?.errors?.min"
           >
-            Close
-          </button>
-          <button
-            type="submit"
-            [disabled]="createLoan.invalid"
-            class="btn btn-outline-dark"
-          >
-            Submit Loan
-          </button>
+            Minimum period 1 month!
+          </span>
         </div>
-      </form>
-    </div>
+        <div class="form-group col-6">
+          <label for="exampleInputEmail1">Amount: </label>
+          <input
+            type="number"
+            class="form-control"
+            id="loan-amount"
+            placeholder=" Enter your prefered amount"
+            formControlName="amount"
+          />
+          <span
+            class="font-italic font-weight-bold text-danger"
+            *ngIf="createLoan.controls.amount?.errors?.min"
+          >
+            Minimum Amount $1!
+          </span>
+        </div>
+        <div class="form-group form-check-inline col-6 checkbox-form">
+          <label for="form-check-label" class="checkbox-label">Partial: </label>
+          <input
+            type="checkbox"
+            class="form-check-input checkbox-box"
+            id="form-check-label"
+            formControlName="partial"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary btn-modal-close"
+          (click)="this.closeModal()"
+        >
+          Close
+        </button>
+        <button
+          type="submit"
+          [disabled]="createLoan.invalid"
+          class="btn btn-outline-dark btn-modal"
+        >
+          Submit Loan
+        </button>
+      </div>
+    </form>
   </div>
 </div>

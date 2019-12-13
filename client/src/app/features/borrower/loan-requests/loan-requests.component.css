@@ -1,26 +1,26 @@
 .btn {
-	background-color: #8b728e;
-	color: white;
+  background-color: #8b728e;
+  color: white;
 }
 
 .btn:hover {
-	background-color: #694873;
-	color: white;
+  background-color: #694873;
+  color: white;
 }
 
 .loan-suggestions {
-	margin: 10px;
-	padding: 5px;
+  margin: 10px;
+  padding: 5px;
 }
 
 .loan-requests {
-	border: 2px solid gray;
-	padding: 5px;
-	border-radius: 5px;
+  border: 2px solid gray;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .one-suggestion {
-	border-top: 2px solid gray;
-	border-radius: 2px;
-	margin-top: 10px;
+  border-top: 2px solid gray;
+  border-radius: 2px;
+  margin-top: 10px;
 }

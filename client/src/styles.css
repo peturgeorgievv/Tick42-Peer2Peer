@@ -1,6 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.css';
 body {
-	background-image: url("./assets/BG_01_1920_1080.jpg");
-	background-size: 100%;
+  background-image: url('./assets/BG_01_1920_1080.jpg');
+  background-size: 100%;
+}
+
+.btn-div {
+  padding: 10px;
+}
+
+.btn-modal-close {
+  background-color: #ef9b8b !important;
+}
+
+.btn-modal-close:hover {
+  background-color: #ea816b !important;
+}
+
+.btn-modal {
+  background-color: #8b728e !important;
+  color: white !important;
+}
+.btn-modal:hover:enabled {
+  background-color: #694873 !important;
+  color: white !important;
 }
