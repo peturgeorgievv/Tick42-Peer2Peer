@@ -55,7 +55,7 @@
                 </p>
                 <p *ngIf="this.overdueDays() > 0">
                   Overdue Days:
-                  <b>{{ this.overdueDays() }} $</b>
+                  <b>{{ this.overdueDays() }}</b>
                 </p>
                 <p *ngIf="this.overdueDays() > 0">
                   Overdue Payment:
@@ -74,7 +74,7 @@
       <div
         *ngIf="this.amountLeft"
         class="card"
-        [style.background-color]="this.overdueAmount() > 0 ? '#F27B83' : ''"
+        [style.background-color]="this.overdueAmount() > 0 ? '#f03d3d' : ''"
       >
         <div class="card-body">
           <div class="d-flex justify-content-between">
@@ -98,7 +98,9 @@
             ></div>
           </div>
           <div class="d-flex justify-content-between mt-2">
-            <p class="text-muted mb-0">
+            <p
+              [ngClass]="this.overdueAmount() > 0 ? '' : 'text-muted mb-0'"
+            >
               {{
                 (this.amountLeftWithInterest / this.totalAmount) * 100
                   | number: '1.2-2'

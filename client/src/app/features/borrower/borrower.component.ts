@@ -97,11 +97,6 @@ export class BorrowerComponent implements OnInit, OnDestroy {
     );
     createLoanRequestModal.componentInstance.createLoanRequest.subscribe(
       loanData => {
-        console.log(loanData);
-        console.log(this.borrowerService);
-        (function logger() {
-          console.log('123');
-        })();
         this.borrowerService
           .createLoanRequest({
             $userId: this.user.uid,
