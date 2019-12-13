@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   public dataSource;
   public innerWidth;
-  public size = 'secondSize';
+  public size = 'third';
   public allSizes = {
     firstSize: { width: '360px', height: '220px' },
     secondSize: { width: '400px', height: '280px' },
@@ -62,10 +62,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (window.innerWidth < 980) {
-      this.size = 'firstSize';
-    }
     this.innerWidth = window.innerWidth;
+    if (this.innerWidth < 1100) {
+      this.size = 'firstSize';
+    } else if (this.innerWidth > 1100 && this.innerWidth < 1450) {
+      this.size = 'secondSize';
+    } else if (this.innerWidth > 1450) {
+      this.size = 'thirdSize';
+    }
     this.subscriptions.push(
       this.authService.userBalanceDataSubject$.subscribe((res: UserDTO) => {
         this.userData = res;
