@@ -23,7 +23,7 @@ export class HomepageService {
 
   public getAllRequests() {
     return this.angularFireStore
-      .collection('requests', (ref)=> ref.where('status', '==', StatusENUM.requestOpen))
+      .collection('requests', (ref) => ref.where('status', '==', StatusENUM.requestOpen))
       .get();
   }
 }
