@@ -42,9 +42,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.innerWidth = window.innerWidth;
     if (this.innerWidth < 1100) {
       this.onSelectionChange('firstSize');
-    } else if (this.innerWidth < 1450) {
+    } else if (this.innerWidth > 1100 && this.innerWidth < 1450) {
       this.onSelectionChange('secondSize');
-    } else if (this.innerWidth > 1100) {
+    } else if (this.innerWidth > 1450) {
       this.onSelectionChange('thirdSize');
     }
   }

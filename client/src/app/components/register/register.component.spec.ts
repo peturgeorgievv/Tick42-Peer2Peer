@@ -36,6 +36,9 @@ describe('SignInComponent', () => {
       providers: [AuthenticationService, FormBuilder]
     })
       .overrideProvider(AuthenticationService, { useValue: authService })
+      .overrideComponent(DashboardComponent, {
+        set: { selector: 'comp', template: 'newText' }
+      })
       .compileComponents();
 
     router = TestBed.get(Router);
