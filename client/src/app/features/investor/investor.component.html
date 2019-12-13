@@ -4,6 +4,14 @@
     class="justify-content-center align-items-center mb-1 col-lg-6 col-md-12 col-sm-12 col-xs-12"
   >
     <div class="col-12" *ngIf="this.userBalanceData">
+      <button
+        type="button"
+        class="btn col-12 show-proposals-btn"
+        (click)="this.createShowProposalsModal()"
+        [disabled]="this.userBalanceData.status === 'admin'"
+      >
+        <b>Show Proposals</b>
+      </button>
       <div class="card card-pricing">
         <div class="card-header">
           <h4 class="card-title">Current Investments</h4>

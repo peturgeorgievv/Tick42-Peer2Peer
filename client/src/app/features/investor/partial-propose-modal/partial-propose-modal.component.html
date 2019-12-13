@@ -11,11 +11,11 @@
   >
     <div class="row">
       <div class="form-group col-6">
-        <label for="recipient-name" class="col-form-label">Interest Rate</label>
+        <label for="interest-rate" class="col-form-label">Interest Rate</label>
         <input
           type="number"
           class="form-control"
-          id="int-rate"
+          id="interest-rate"
           formControlName="interestRate"
         />
         <span
@@ -26,13 +26,13 @@
         </span>
       </div>
       <div class="form-group col-6">
-        <label for="recipient-name" class="col-form-label"
+        <label for="penalty-per-day" class="col-form-label"
           >Penalty Per Day</label
         >
         <input
           type="number"
           class="form-control"
-          id="recipient-name"
+          id="penalty-per-day"
           formControlName="penalty"
         />
         <span
@@ -45,22 +45,20 @@
     </div>
     <div class="row">
       <div class="form-group col-6">
-        <label for="recipient-name" class="col-form-label"
-          >Period of Months</label
-        >
+        <label for="period" class="col-form-label">Period of Months</label>
         <input
           type="number"
           class="form-control"
-          id="recipient-name"
+          id="period"
           formControlName="period"
         />
       </div>
       <div class="form-group col-6">
-        <label for="recipient-name" class="col-form-label">Total Amount</label>
+        <label for="total-amount" class="col-form-label">Total Amount</label>
         <input
           type="number"
           class="form-control"
-          id="recipient-name"
+          id="total-amount"
           formControlName="amount"
         />
         <span
@@ -80,14 +78,14 @@
     <div class="modal-footer">
       <button
         type="button"
-        class="btn btn-secondary"
+        class="btn btn-secondary btn-modal-close"
         (click)="this.closeModal()"
       >
         Close
       </button>
       <button
         type="submit"
-        class="btn btn-outline-dark"
+        class="btn btn-outline-dark btn-modal"
         [disabled]="addPartialLoanSuggestion.invalid"
       >
         Send Suggestion

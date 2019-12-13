@@ -1,0 +1,76 @@
+<div *ngIf="this.allSuggestions">
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">
+      Your Proposals:
+    </h5>
+  </div>
+  <div class="modal-body" *ngIf="!this.allSuggestions.length">
+    You don't have any active suggestions at the moment!
+  </div>
+  <div class="modal-footer" *ngIf="!this.allSuggestions.length">
+    <button
+      type="button"
+      class="btn btn-secondary btn-modal-close"
+      style="margin-bottom: 5px;"
+      (click)="this.closeModal()"
+    >
+      Close
+    </button>
+  </div>
+  <div class="modal-body" *ngFor="let suggestion of this.allSuggestions">
+    <form class="container">
+      <div class="row">
+        <div class="form-group col-6">
+          <label for="exampleInputEmail1">Amount: </label>
+          <div>
+            <b>{{ this.suggestion.amount }} $</b>
+          </div>
+        </div>
+        <div class="form-group col-6">
+          <label for="exampleInputEmail1">Period: </label>
+          <div>
+            <b>{{ this.suggestion.period }} Months</b>
+          </div>
+        </div>
+        <div class="form-group col-12">
+          <label for="exampleInputEmail1">Date Submited: </label>
+          <div>
+            <b>{{ this.suggestion.dateSubmited }}</b>
+          </div>
+        </div>
+        <div class="form-group col-6">
+          <label for="exampleInputEmail1">Interest Rate: </label>
+          <div>
+            <b>{{ this.suggestion.interestRate }} %</b>
+          </div>
+        </div>
+        <div class="form-group col-6">
+          <label for="exampleInputEmail1">Penalty Rate Per Day: </label>
+          <div>
+            <b>{{ this.suggestion.penalty }} %</b>
+          </div>
+        </div>
+      </div>
+      <br />
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary btn-modal-close"
+          style="margin-bottom: 5px;"
+          (click)="this.closeModal()"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary btn-modal"
+          style="margin-bottom: 5px;"
+          (click)="this.rejectSuggestion(this.suggestion.$suggestionId)"
+        >
+          Delete
+        </button>
+      </div>
+      <div class="modal-footer"></div>
+    </form>
+  </div>
+</div>

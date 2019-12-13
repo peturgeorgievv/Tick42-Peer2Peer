@@ -1,18 +1,37 @@
 import { StatusENUM } from './../../common/enums/status.enum';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InvestorService {
-  constructor(private angularFireStore: AngularFirestore) { }
+  constructor(private angularFireStore: AngularFirestore) {}
 
   public getAllLoanRequests() {
     return this.angularFireStore
-      .collection('requests', (ref) => ref
-        .where('status', '==', StatusENUM.requestOpen))
+      .collection('requests', ref =>
+        ref.where('status', '==', StatusENUM.requestOpen)
+      )
       .valueChanges();
+  }
+
+  public getUserProposals(userId: string) {
+    return this.angularFireStore
+      .collection('suggestions', ref =>
+        ref
+          .where('$investorId', '==', userId)
+          .where('status', '==', StatusENUM.suggestionPending)
+      )
+      .valueChanges();
+  }
+
+  public rejectLoanSuggestion(suggestionId: string) {
+    return this.angularFireStore
+      .collection('suggestions')
+      .doc(suggestionId)
+      .set({ status: StatusENUM.suggestionRejected }, { merge: true });
   }
 
   public createLoanSuggestion(loanData) {
@@ -28,9 +47,11 @@ export class InvestorService {
 
   public getUserInvestments(userId: string) {
     return this.angularFireStore
-      .collection('loans', (ref) => ref
-        .where('$investorId', '==', userId)
-        .where('status', '==', StatusENUM.current))
+      .collection('loans', ref =>
+        ref
+          .where('$investorId', '==', userId)
+          .where('status', '==', StatusENUM.current)
+      )
       .valueChanges();
   }
 
@@ -43,9 +64,11 @@ export class InvestorService {
 
   public getPayments(suggestionId: string, userId: string) {
     return this.angularFireStore
-      .collection('paymentsHistory', (ref) => ref
-        .where('$suggestionId', '==', suggestionId)
-        .where('$userId', '==', userId))
+      .collection('paymentsHistory', ref =>
+        ref
+          .where('$suggestionId', '==', suggestionId)
+          .where('$userId', '==', userId)
+      )
       .valueChanges();
   }
 }

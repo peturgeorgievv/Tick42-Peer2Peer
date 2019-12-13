@@ -10,6 +10,7 @@ body {
 }
 
 .btn-modal-close {
+  font-weight: bold !important;
   background-color: #ef9b8b !important;
 }
 
@@ -18,6 +19,7 @@ body {
 }
 
 .btn-modal {
+  font-weight: bold !important;
   background-color: #8b728e !important;
   color: white !important;
 }

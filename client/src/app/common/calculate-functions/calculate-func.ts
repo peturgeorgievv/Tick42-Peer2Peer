@@ -35,7 +35,10 @@ export const overallAmount = (
   return amount * (1 + (interestRate / 100 / 12) * period);
 };
 
-export const calculateOverdueDays = (nextDueDate: string, currDate: string) => {
+export const calculateOverdueDays = (
+  nextDueDate: string,
+  currDate: string
+): number => {
   return moment(currDate).diff(moment(nextDueDate), 'days');
 };
 
@@ -43,7 +46,7 @@ export const calculatePenaltyAmount = (
   days: number,
   amount: number,
   penaltyInterest: number
-) => {
+): number => {
   const penalty = Math.pow(1 + penaltyInterest / 100 / 360, days);
   const penaltyAmountPerDay = (penalty - 1) * amount;
 
