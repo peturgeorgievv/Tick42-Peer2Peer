@@ -61,7 +61,7 @@ describe('BorrowerComponent', () => {
         return of();
       },
       createLoanRequest() {
-        return {};
+        return of();
       },
       addRequestIdToLoan() {
         return of();
@@ -215,6 +215,10 @@ describe('BorrowerComponent', () => {
       // Arrange
       const mockedLoanRequest = new LoanRequestDTO();
 
+      const spyUserLoanRequests = jest
+        .spyOn(borrowerService, 'createLoanRequest')
+        .mockImplementation(() => of(mockedLoanRequest));
+
       const spyModal = jest
         .spyOn(modalService, 'open')
         .mockImplementation(() => ({
@@ -230,30 +234,6 @@ describe('BorrowerComponent', () => {
 
       expect(spyModal).toBeCalledTimes(1);
     });
-
-    // it('should call borrowerService.createLoanRequest once', done => {
-    //   // Arrange
-    //   const mockedLoanRequest = new LoanRequestDTO();
-
-    //   const spyUserLoanRequests = jest
-    //     .spyOn(borrowerService, 'createLoanRequest')
-    //     .mockImplementation(() => of(mockedLoanRequest));
-
-    //   const spyModal = jest
-    //     .spyOn(modalService, 'open')
-    //     .mockImplementation(() => ({
-    //       componentInstance: {
-    //         createLoanRequest: of(mockedLoanRequest)
-    //       }
-    //     }));
-
-    //   // Act
-    //   fixture.detectChanges();
-    //   component.createLoanRequestModal();
-
-    //   // Assert
-    //   expect(spyUserLoanRequests).toBeCalledTimes(1);
-    // });
   });
 
   describe('orderLoansAsc()', () => {
