@@ -13,7 +13,10 @@ https://github.com/peturgeorgievv/Tick42-Peer2Peer.git
 - Install with ```npm```:          
     ```npm install```
 - Run ```ng serve --open``` to run the application and open it in your default browser.<br/> If you want to run it in another just run ```ng serve```
-- To run the tests run ```TO BE ADDED```
+- To run the tests run ```npm run test```
+- It's possible to use your own Database - Go to: https://console.firebase.google.com/ <br/>
+    Register and make create your own FirebaseCloud Project. Go to settings -> General -> YourApps -> Config and copy all this code in your: environments/environment.prod.ts and environments/environment.ts
+- We are leaving our ApiKey public so you can use our database for training purposes.
 - Feel free to navigate through the app and explore the different functionalities.
 
 Or you can just follow this link: <br/>
