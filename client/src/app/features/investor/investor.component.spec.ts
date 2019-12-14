@@ -1,10 +1,12 @@
 import { of } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from './../../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { LoanRequestDTO } from './../../common/models/loan-request.dto';
 import { InvestorService } from './../../core/services/investor.service';
 import { InvestorComponent } from './investor.component';
 import { AuthenticationService } from './../../core/services/authentication.service';
+import { CurrentInvestmentsDTO } from './../../common/models/current-investments.dto';
 import { ShowInvestmentComponent } from './show-investment/show-investment.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActiveLoanRequestsComponent } from './active-loan-requests/active-loan-requests.component';
@@ -12,6 +14,7 @@ import { ActiveLoanRequestsComponent } from './active-loan-requests/active-loan-
 describe('InvestorComponent', () => {
   let authService;
   let investorService;
+  let modalService;
 
   let testUser;
 
@@ -23,6 +26,10 @@ describe('InvestorComponent', () => {
 
     testUser = {
       uid: '1'
+    };
+
+    modalService = {
+      open() { }
     };
 
     authService = {
@@ -39,7 +46,7 @@ describe('InvestorComponent', () => {
         return of([]);
       },
       getUserInvestments() {
-        return of();
+        return of([]);
       }
     };
 
@@ -57,6 +64,7 @@ describe('InvestorComponent', () => {
     })
       .overrideProvider(InvestorService, { useValue: investorService })
       .overrideProvider(AuthenticationService, { useValue: authService })
+      .overrideProvider(NgbModal, { useValue: modalService })
       .compileComponents();
 
     jest
@@ -96,6 +104,51 @@ describe('InvestorComponent', () => {
       expect(spyGetAllRequests).toBeCalledTimes(1);
       expect(component.loanRequests[0]).toBe(testLoanRequests);
       done();
+    });
+
+    it('should subscribe to investor.Service.getUserInvestments() once with the correct data', done => {
+
+      const testCurrentInvestment: CurrentInvestmentsDTO = {
+        $investorDocId: 'test',
+        $investorId: 'test',
+        $requestId: 'test',
+        $suggestionId: 'test',
+        $userDocId: 'test',
+        $userId: 'test',
+        amount: 1,
+        date: 'test',
+        dateSubmited: 'test',
+        installment: 'test',
+        interestRate: 1,
+        penalty: 1,
+        period: 1,
+        status: 'test'
+      };
+
+      const spyGetUserInvestments = jest.spyOn(investorService, 'getUserInvestments')
+        .mockImplementation(() => of([testCurrentInvestment]));
+
+      component.ngOnInit();
+
+      expect(spyGetUserInvestments).toBeCalledTimes(1);
+      expect(component.currentInvestments[0]).toBe(testCurrentInvestment);
+      done();
+    });
+  });
+
+  describe('createShowProposalsModal()', () => {
+    it('should call modalService.open() once', () => {
+
+
+      const testModal = jest
+        .spyOn(modalService, 'open')
+        .mockImplementation(() => ({
+          componentInstance: {createShowProposalsModal: of(testUser)}
+        }));
+
+      component.createShowProposalsModal();
+
+      expect(testModal).toBeCalledTimes(1);
     });
   });
 });
