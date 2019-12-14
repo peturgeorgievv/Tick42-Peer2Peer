@@ -153,6 +153,7 @@ describe('BorrowerComponent', () => {
         $investorDocId: '1',
         $suggestionId: '1',
         $userId: '1',
+        dateSubmited: '12-12-2020',
         amount: 1,
         interestRate: 1,
         penalty: 1,

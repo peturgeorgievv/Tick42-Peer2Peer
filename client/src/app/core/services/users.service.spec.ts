@@ -7,12 +7,6 @@ describe('UsersService', () => {
     getAllUsers() {
       return of();
     },
-    getUserDoc() {
-      return of();
-    },
-    getUserPayments() {
-      return of();
-    },
     getUserLoans() {
       return of();
     }
@@ -45,40 +39,6 @@ describe('UsersService', () => {
     // Assert
     expect(spyAllUsers).toHaveBeenCalledTimes(1);
     expect(spyAllUsers).toReturnWith(of());
-  });
-
-  it('getUserDoc should be called once and return observebale', () => {
-    // Arrange
-    const userDocId = '1';
-    const spyOneUser = jest
-      .spyOn(userService, 'getUserDoc')
-      .mockImplementation(() => {
-        return of();
-      });
-
-    // Act
-    service.getUserDoc(userDocId);
-
-    // Assert
-    expect(spyOneUser).toHaveBeenCalledTimes(1);
-    expect(spyOneUser).toReturnWith(of());
-  });
-
-  it('getUserPayments should be called once and return observebale', () => {
-    // Arrange
-    const userId = '1';
-    const spyUserPayments = jest
-      .spyOn(userService, 'getUserPayments')
-      .mockImplementation(() => {
-        return of();
-      });
-
-    // Act
-    service.getUserPayments(userId);
-
-    // Assert
-    expect(spyUserPayments).toHaveBeenCalledTimes(1);
-    expect(spyUserPayments).toReturnWith(of());
   });
 
   it('getUserLoans should be called once and return observebale', () => {

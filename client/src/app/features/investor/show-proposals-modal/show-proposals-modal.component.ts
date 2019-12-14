@@ -27,7 +27,6 @@ export class ShowProposalsModalComponent implements OnInit, OnDestroy {
       .getUserProposals(this.user.uid)
       .subscribe((suggestionData: LoanSuggestionDTO[]) => {
         this.allSuggestions = suggestionData;
-        console.log(this.allSuggestions);
       });
   }
 
