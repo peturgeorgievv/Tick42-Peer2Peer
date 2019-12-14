@@ -89,7 +89,7 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  openAddPaymentsModal() {
+  public openAddPaymentsModal(): void {
     const addPaymentsModal = this.modalService.open(AddPaymentModalComponent);
     addPaymentsModal.componentInstance.loanFullData = this.loanData;
     addPaymentsModal.componentInstance.overdueAmount = this.overdueAmount();
@@ -147,7 +147,7 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
     });
   }
 
-  openShowPaymentsModal() {
+  public openShowPaymentsModal(): void {
     const showPaymentsModal = this.modalService.open(ShowPaymentsComponent);
     showPaymentsModal.componentInstance.loanPayments = this.currentLoanPayments();
     showPaymentsModal.componentInstance.loanSuggestionId = this.loanData.$suggestionId;

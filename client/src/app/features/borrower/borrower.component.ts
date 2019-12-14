@@ -91,7 +91,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  createLoanRequestModal(): void {
+  public createLoanRequestModal(): void {
     const createLoanRequestModal = this.modalService.open(
       CreateLoanModalComponent
     );

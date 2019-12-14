@@ -276,7 +276,7 @@ export class AuthenticationService {
             this.router.navigate(['/dashboard']);
           })
           .catch(error => {
-            console.log('Something is wrong:', error.message);
+            this.notificatorService.error('Something is wrong:');
           });
       });
   }

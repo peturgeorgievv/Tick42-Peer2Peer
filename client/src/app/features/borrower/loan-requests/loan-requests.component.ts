@@ -20,8 +20,8 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 	@Input() loanRequestData: LoanRequestDTO;
 	@Input() loanSuggestions: LoanRequestDTO;
 	@Input() user: User;
-	public userBalanceData: UserDTO;
 	private subscriptions: Subscription[] = [];
+	public userBalanceData: UserDTO;
 
 	public amount: number;
 	public period: number;
@@ -40,7 +40,7 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 		private readonly authService: AuthenticationService
 	) {}
 
-	ngOnInit() {
+	public ngOnInit(): void {
 		this.amount = this.loanRequestData.amount;
 		this.period = this.loanRequestData.period;
 		this.partial = this.loanRequestData.partial;
@@ -74,15 +74,15 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 		);
 	}
 
-	ngOnDestroy() {
+	public ngOnDestroy(): void {
 		this.subscriptions.forEach((subscription) => subscription.unsubscribe());
 	}
 
-	public calculateTotalAmount(amount: number, interestRate: number, period: number) {
+	public calculateTotalAmount(amount: number, interestRate: number, period: number): number {
 		return (this.totalAmount = overallAmount(amount, interestRate, period));
 	}
 
-	public editFormValidation() {
+	public editFormValidation(): void {
 		const validateAmount = this.amount - this.amountLeftToInvest;
 		if (this.partial && this.amountLeftToInvest > 0) {
 			return this.editLoanForm.controls['amount'].setValidators([ Validators.min(validateAmount) ]);
@@ -90,7 +90,7 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
 		return this.editLoanForm.controls['amount'].setValidators([ Validators.min(0) ]);
 	}
 
-	public resetForm() {
+	public resetForm(): void {
 		this.edit = !this.edit;
 		this.editLoanForm.setValue({ amount: this.amount });
 	}

@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     thirdSize: { width: '480px', height: '360px' }
   };
   public styleObj: object;
-  public chartObj;
+  public chartObj: object;
 
   private subscriptions: Subscription[] = [];
 
@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private readonly modalService: NgbModal
   ) {
     this.subscriptions.push(
-      this.authService.loggedUser$.subscribe(res => {
+      this.authService.loggedUser$.subscribe((res: User) => {
         return (this.user = res);
       })
     );
@@ -149,14 +149,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.styleObj = this.allSizes[this.size];
   }
 
-  getStyle() {
+  getStyle(): object {
     return this.styleObj;
   }
 
-  initialized($event) {
+  initialized($event): void {
     this.chartObj = $event.chart;
   }
-  onSelectionChange(size) {
+  onSelectionChange(size: string): void {
     this.size = size;
     this.styleObj = this.allSizes[this.size];
   }

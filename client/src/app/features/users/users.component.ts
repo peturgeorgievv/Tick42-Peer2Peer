@@ -8,35 +8,42 @@ import { UserDTO } from './../../common/models/users/user-data.dto';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-	selector: 'app-users',
-	templateUrl: './users.component.html',
-	styleUrls: [ './users.component.css' ]
+  selector: 'app-users',
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
-	public users: UserDTO[];
+  public users: UserDTO[];
 
-	constructor(
-		private readonly usersService: UsersService,
-		private readonly authService: AuthenticationService,
-		private readonly modalService: NgbModal
-	) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthenticationService,
+    private readonly modalService: NgbModal
+  ) {}
 
-	public ngOnInit(): void {
-		this.usersService.getAllUsers().subscribe((userData: UserDTO[]) => {
-			this.users = userData;
-		});
-	}
+  public ngOnInit(): void {
+    this.usersService.getAllUsers().subscribe((userData: UserDTO[]) => {
+      this.users = userData;
+    });
+  }
 
-	public openCreateAdminModal(): void {
-		const createAdminModal = this.modalService.open(CreateAdminModalComponent);
-		createAdminModal.componentInstance.createAdmin.subscribe((data: RegisterUserDTO) => {
-			console.log(data);
-			this.authService.signUp(data.email, data.password, data.firstName, data.lastName, 'admin');
-		});
-	}
+  public openCreateAdminModal(): void {
+    const createAdminModal = this.modalService.open(CreateAdminModalComponent);
+    createAdminModal.componentInstance.createAdmin.subscribe(
+      (data: RegisterUserDTO) => {
+        this.authService.signUp(
+          data.email,
+          data.password,
+          data.firstName,
+          data.lastName,
+          'admin'
+        );
+      }
+    );
+  }
 
-	public openShowDetailsModal(userId: string): void {
-		const showDetailsModal = this.modalService.open(ShowDetailsModalComponent);
-		showDetailsModal.componentInstance.userId = userId;
-	}
+  public openShowDetailsModal(userId: string): void {
+    const showDetailsModal = this.modalService.open(ShowDetailsModalComponent);
+    showDetailsModal.componentInstance.userId = userId;
+  }
 }
