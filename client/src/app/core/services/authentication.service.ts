@@ -270,10 +270,10 @@ export class AuthenticationService {
               .set({ $userDocId: ref.id }, { merge: true });
           })
           .then(() => {
+            this.router.navigate(['/dashboard']);
+            this.notificatorService.success('Successful login!');
             this.userBalanceData$.next(null);
             this.userBalanceData$.next(this.userBalanceDataCalculation());
-            this.notificatorService.success('Successful login!');
-            this.router.navigate(['/dashboard']);
           })
           .catch(error => {
             this.notificatorService.error('Something is wrong:');
@@ -286,10 +286,10 @@ export class AuthenticationService {
       .signInWithEmailAndPassword(email, password)
       .then(res => {
         this.user$.next(res.user);
+        this.router.navigate(['/dashboard']);
+        this.notificatorService.success('Successful login!');
         this.userBalanceData$.next(null);
         this.userBalanceData$.next(this.userBalanceDataCalculation());
-        this.notificatorService.success('Successful login!');
-        this.router.navigate(['/dashboard']);
       })
       .catch(err => {
         this.notificatorService.error('Invalid Username or Password!');
