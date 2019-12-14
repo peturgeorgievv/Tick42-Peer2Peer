@@ -1,3 +1,4 @@
+import { StatusENUM } from './../../common/enums/status.enum';
 import { NotificatorService } from 'src/app/core/services/notificator.service';
 import { calculateNextDueDate } from './../../common/calculate-functions/calculate-func';
 import { UserDTO } from './../../common/models/users/user-data.dto';
@@ -50,7 +51,11 @@ export class AuthenticationService {
     let payments = [];
     let nextDueDate = [];
     return this.angularFireStore
-      .collection('loans', ref => ref.where('$userId', '==', userId))
+      .collection('loans', ref =>
+        ref
+          .where('$userId', '==', userId)
+          .where('status', '==', StatusENUM.current)
+      )
       .valueChanges()
       .pipe(
         switchMap(loansData => {

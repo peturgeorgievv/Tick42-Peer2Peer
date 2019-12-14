@@ -9,6 +9,7 @@ import { AuthenticationService } from './../../core/services/authentication.serv
 import { CreateDepositComponent } from './create-deposit/create-deposit.component';
 import { CreateWithdrawComponent } from './create-withdraw/create-withdraw.component';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,9 +24,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public filterForBorrowers: string[] = [];
   public filteredForInvestors: string[] = [];
   public isGraphShowed = false;
+  public nextDueDate: string;
+  public overdueDebts = 0;
 
   public dataSource;
-  public innerWidth;
+  public innerWidth: number;
   public size = 'third';
   public allSizes = {
     firstSize: { width: '360px', height: '220px' },
@@ -74,6 +77,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.authService.userBalanceDataSubject$.subscribe((res: UserDTO) => {
         this.userData = res;
       })
+    );
+
+    this.subscriptions.push(
+      this.authService
+        .getNextDueDate(this.user.uid)
+        .subscribe((nextDate: string[]) => {
+          this.nextDueDate = nextDate[0];
+          nextDate.forEach(date => {
+            if (moment(date).isBefore(new Date())) {
+              this.overdueDebts += 1;
+            }
+          });
+        })
     );
 
     this.subscriptions.push(
