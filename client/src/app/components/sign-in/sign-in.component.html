@@ -1,9 +1,5 @@
-<div class="header">
-  <h6 class="modal-title" id="basic-title">
-    Please enter your details:
-  </h6>
-</div>
-
+<div class="header"></div>
+<br />
 <div class="container mt-2 mb-4">
   <div class="col-sm-8 ml-auto mr-auto">
     <div class="col-sm-12 border shadow rounded pt-2">
@@ -19,6 +15,12 @@
             placeholder="Enter your E-mail"
             formControlName="email"
           />
+          <span
+            class="font-italic font-weight-bold text-danger"
+            *ngIf="signinForm.controls.email?.errors?.email"
+          >
+            Please enter a valid email!
+          </span>
         </div>
         <div class="form-group">
           <label class="font-weight-bold"
@@ -31,13 +33,19 @@
             placeholder="Enter your password"
             formControlName="password"
           />
+          <span
+            class="font-italic font-weight-bold text-danger"
+            *ngIf="signinForm.controls.password?.errors?.minlength"
+          >
+            Minimum length 6 characters!
+          </span>
         </div>
         <div class="form-group">
           <input
             type="submit"
             name="submit"
             value="Sign In"
-            class="btn btn-block btn-primary btn-modal"
+            class="btn btn-block btn-modal"
             [disabled]="!this.signinForm.valid"
             (click)="signIn()"
           />
