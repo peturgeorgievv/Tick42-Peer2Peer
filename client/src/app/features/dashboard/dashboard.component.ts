@@ -167,7 +167,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe(userData => {
         const currUserData = userData.data();
         const balance: number = currUserData.currentBalance + data.amount;
-        this.dataSource.data[0].value += data.amount;
+        if (this.dataSource) {
+          this.dataSource.data[0].value += data.amount;
+        }
 
         this.dashboardService
           .addOrRemoveMoney(this.userData.$userDocId)
@@ -181,7 +183,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe(userData => {
         const currUserData = userData.data();
         const balance = currUserData.currentBalance - data.amount;
-        this.dataSource.data[0].value -= data.amount;
+        if (this.dataSource) {
+          this.dataSource.data[0].value -= data.amount;
+        }
 
         this.dashboardService
           .addOrRemoveMoney(this.userData.$userDocId)
