@@ -1,3 +1,4 @@
+import { AllPaymentsDTO } from './../../common/models/all-payments.dto';
 import { StatusENUM } from './../../common/enums/status.enum';
 import { LoanSuggestionDTO } from './../../common/models/loan-suggestion.dto';
 import { Subscription, Observable } from 'rxjs';
@@ -94,7 +95,7 @@ export class BorrowerService {
       .set({ amount }, { merge: true });
   }
 
-  public createPayment(data) {
+  public createPayment(data: AllPaymentsDTO) {
     return this.angularFireStore.collection('paymentsHistory').add(data);
   }
 

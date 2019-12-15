@@ -94,57 +94,61 @@ export class CurrentLoanComponent implements OnInit, OnDestroy {
     addPaymentsModal.componentInstance.loanFullData = this.loanData;
     addPaymentsModal.componentInstance.overdueAmount = this.overdueAmount();
     addPaymentsModal.componentInstance.userCurrentBalance = this.userBalanceData.currentBalance;
-    addPaymentsModal.componentInstance.createPayment.subscribe(data => {
-      this.subscriptions.push(
-        this.borrowerService
-          .getOneLoan(this.user.uid, this.loanData.$suggestionId)
-          .subscribe(loanData => {
-            if (loanData[0]) {
-              const loanId = loanData[0].payload.doc.id;
-              if (this.amountLeft <= data.amount) {
-                this.borrowerService.payFullyLoan(loanId);
+    addPaymentsModal.componentInstance.createPayment.subscribe(
+      (data: AllPaymentsDTO) => {
+        this.subscriptions.push(
+          this.borrowerService
+            .getOneLoan(this.user.uid, this.loanData.$suggestionId)
+            .subscribe(loanData => {
+              if (loanData[0]) {
+                const loanId = loanData[0].payload.doc.id;
+                if (this.amountLeft <= data.amount) {
+                  this.borrowerService.payFullyLoan(loanId);
+                }
               }
-            }
-            this.borrowerService
-              .createPayment({
-                ...data
-              })
-              .then(() => {
-                const balance = (this.userBalanceData.currentBalance -=
-                  data.amount);
-                this.borrowerService
-                  .getUserDocData(this.userBalanceData.$userDocId)
-                  .set(
-                    {
-                      currentBalance: Number(balance.toFixed(2))
-                    },
-                    { merge: true }
-                  );
-                this.borrowerService
-                  .getUserDocData(data.$investorDocId)
-                  .get()
-                  .subscribe(userData => {
-                    const userBalanceData = userData.data();
-                    const investorBalance = (userBalanceData.currentBalance +=
-                      data.amount);
-                    this.borrowerService
-                      .getUserDocData(data.$investorDocId)
-                      .set(
-                        {
-                          currentBalance: Number(investorBalance.toFixed(2))
-                        },
-                        { merge: true }
-                      );
-                  });
+              this.borrowerService
+                .createPayment({
+                  ...data
+                })
+                .then(() => {
+                  const balance = (this.userBalanceData.currentBalance -=
+                    data.amount + data.overdue);
+                  this.borrowerService
+                    .getUserDocData(this.userBalanceData.$userDocId)
+                    .set(
+                      {
+                        currentBalance: Number(balance.toFixed(2))
+                      },
+                      { merge: true }
+                    );
+                  this.borrowerService
+                    .getUserDocData(data.$investorDocId)
+                    .get()
+                    .subscribe(userData => {
+                      const userBalanceData = userData.data();
+                      const investorBalance = (userBalanceData.currentBalance +=
+                        data.amount + data.overdue);
+                      this.borrowerService
+                        .getUserDocData(data.$investorDocId)
+                        .set(
+                          {
+                            currentBalance: Number(investorBalance.toFixed(2))
+                          },
+                          { merge: true }
+                        );
+                    });
 
-                this.notificatorService.success('You have paid successefully!');
-              })
-              .catch(() =>
-                this.notificatorService.error('Oops, something went wrong!')
-              );
-          })
-      );
-    });
+                  this.notificatorService.success(
+                    'You have paid successefully!'
+                  );
+                })
+                .catch(() =>
+                  this.notificatorService.error('Oops, something went wrong!')
+                );
+            })
+        );
+      }
+    );
   }
 
   public openShowPaymentsModal(): void {

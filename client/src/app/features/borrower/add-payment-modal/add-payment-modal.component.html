@@ -9,7 +9,7 @@
       <div class="form-group col-6">
         <label for="exampleInputEmail1">Amount: </label>
         <div>
-          <b>{{ this.loanFullData.installment }} $</b>
+          <b>{{ this.loanFullData.installment | number: '1.2-2' }} $</b>
         </div>
       </div>
       <div class="form-group col-12" *ngIf="!this.enoughMoney">
@@ -23,13 +23,19 @@
       <div class="form-group col-6" *ngIf="this.overdueAmount">
         <label for="exampleInputEmail1">Overdue: </label>
         <div>
-          <b>{{ this.overdueAmount }}</b>
+          <b>{{ this.overdueAmount | number: '1.2-2' }} $</b>
         </div>
       </div>
       <div class="form-group col-12" *ngIf="this.overdueAmount">
         <label for="exampleInputEmail1">Total: </label>
         <div>
-          <b>{{ this.loanFullData.installment + this.overdueAmount }}</b>
+          <b
+            >{{
+              +this.loanFullData.installment + this.overdueAmount
+                | number: '1.2-2'
+            }}
+            $</b
+          >
         </div>
       </div>
     </div>

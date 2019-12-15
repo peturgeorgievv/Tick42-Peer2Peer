@@ -1,3 +1,4 @@
+import { EditLoanDTO } from './../../../common/models/edit-loan.dto';
 import { AuthenticationService } from './../../../core/services/authentication.service';
 import { UserDTO } from './../../../common/models/users/user-data.dto';
 import { StatusENUM } from './../../../common/enums/status.enum';
@@ -24,7 +25,6 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
   @Input() loanSuggestions: LoanRequestDTO;
   @Input() user: User;
   private subscriptions: Subscription[] = [];
-  private rejectLoansSubscription: Subscription;
   public userBalanceData: UserDTO;
 
   public amount: number;
@@ -107,7 +107,7 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
     this.editLoanForm.setValue({ amount: this.amount });
   }
 
-  public editLoanRequest(data): void {
+  public editLoanRequest(data: EditLoanDTO): void {
     this.edit = false;
     if (this.partial) {
       this.amountLeftToInvest =
@@ -118,9 +118,11 @@ export class LoanRequestsComponent implements OnInit, OnDestroy {
     this.borrowerService
       .editRequestAmount(this.$requestId, data.amount)
       .then(() => {
-        this.rejectLoansSubscription = this.borrowerService.rejectBiggerLoanSuggestions(
-          this.$requestId,
-          this.amountLeftToInvest
+        this.subscriptions.push(
+          this.borrowerService.rejectBiggerLoanSuggestions(
+            this.$requestId,
+            this.amountLeftToInvest
+          )
         );
       });
   }
