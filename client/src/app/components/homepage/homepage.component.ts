@@ -14,7 +14,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-
   constructor(private readonly homepageService: HomepageService) { }
 
   ngOnInit() {
@@ -34,5 +33,4 @@ export class HomepageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
-
 }

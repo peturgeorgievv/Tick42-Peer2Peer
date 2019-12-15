@@ -4,7 +4,6 @@ import { RequestDataDTO } from './../../../common/models/request-data.dto';
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { ProposeSuggestionDTO } from './../../../common/models/propose-suggestion.dto';
 
-
 @Component({
   selector: 'app-propose-modal',
   templateUrl: './propose-modal.component.html',

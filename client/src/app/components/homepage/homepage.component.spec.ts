@@ -5,7 +5,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
-
 describe('HomepageComponent', () => {
   let homepageService;
 
@@ -28,7 +27,6 @@ describe('HomepageComponent', () => {
       }
     };
 
-
     await TestBed.configureTestingModule({
       imports: [CommonModule, SharedModule],
       declarations: [HomepageComponent],
@@ -38,9 +36,6 @@ describe('HomepageComponent', () => {
     })
       .overrideProvider(HomepageService, { useValue: homepageService })
       .compileComponents();
-
-
-
   });
 
   beforeEach(() => {

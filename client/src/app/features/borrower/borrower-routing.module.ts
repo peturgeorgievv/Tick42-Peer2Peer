@@ -12,7 +12,6 @@ const borrowerRoutes: Routes = [
 		pathMatch: 'full'
 	}
 ];
-
 @NgModule({
 	declarations: [],
 	imports: [ CommonModule, RouterModule.forChild(borrowerRoutes) ],

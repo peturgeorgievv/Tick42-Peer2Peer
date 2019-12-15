@@ -1,7 +1,6 @@
 import { StatusENUM } from './../../common/enums/status.enum';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

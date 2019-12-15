@@ -45,6 +45,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 		SharedModule,
 		CoreModule,
 		NgxSpinnerModule,
+		// tslint:disable-next-line: deprecation
 		NgbModule.forRoot()
 	],
 	providers: [],

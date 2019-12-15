@@ -124,5 +124,4 @@ describe('InvestorService', () => {
     expect(spyGetPayments).toHaveBeenCalledTimes(1);
     expect(spyGetPayments).toReturnWith(of());
   });
-
 });

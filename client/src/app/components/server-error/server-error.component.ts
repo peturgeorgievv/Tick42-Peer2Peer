@@ -11,5 +11,4 @@ export class ServerErrorComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

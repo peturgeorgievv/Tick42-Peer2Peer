@@ -1,4 +1,3 @@
-import { CurrentLoanDTO } from './../../common/models/current-loan.dto';
 import { StatusENUM } from './../../common/enums/status.enum';
 import { LoanSuggestionDTO } from './../../common/models/loan-suggestion.dto';
 import { Subscription, Observable } from 'rxjs';

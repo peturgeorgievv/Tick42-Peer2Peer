@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { NotificatorService } from './notificator.service';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 
