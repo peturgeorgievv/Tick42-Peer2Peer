@@ -4,6 +4,7 @@ import { HomepageComponent } from './homepage.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { FusionChartsModule } from 'angular-fusioncharts';
 
 describe('HomepageComponent', () => {
   let homepageService;
@@ -28,7 +29,7 @@ describe('HomepageComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [CommonModule, SharedModule],
+      imports: [CommonModule, SharedModule, FusionChartsModule],
       declarations: [HomepageComponent],
       providers: [
         HomepageService,
@@ -51,7 +52,7 @@ describe('HomepageComponent', () => {
   describe('ngOnInit()', () => {
     it('should subscribe to HomepageService.getAllUsers once with the correct data', done => {
 
-      const testLength = { docs: [{}, {}] };
+      const testLength = [{}, {}];
 
       const spyGetAllUsers = jest
         .spyOn(homepageService, 'getAllUsers')
@@ -67,7 +68,7 @@ describe('HomepageComponent', () => {
 
     it('should subscribe to HomepageService.getAllLoans once with the correct data', done => {
 
-      const testLength = { docs: [{}, {}] };
+      const testLength = [{}, {}];
 
       const spyGetAllLoans = jest
         .spyOn(homepageService, 'getAllLoans')
@@ -83,7 +84,7 @@ describe('HomepageComponent', () => {
 
     it('should subscribe to HomepageService.getAllRequests once with the correct data', done => {
 
-      const testLength = { docs: [{}, {}] };
+      const testLength = [{}, {}];
 
       const spyGetAllRequests = jest
         .spyOn(homepageService, 'getAllRequests')
