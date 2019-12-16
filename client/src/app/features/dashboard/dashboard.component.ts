@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public innerWidth: number;
   public size = 'third';
   public allSizes = {
-    firstSize: { width: '360px', height: '220px' },
+    firstSize: { width: '340px', height: '220px' },
     secondSize: { width: '400px', height: '280px' },
     thirdSize: { width: '480px', height: '360px' }
   };
@@ -129,7 +129,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         showPercentInTooltip: '0',
         numberPrefix: '$',
         enableMultiSlicing: '1',
-        theme: 'gammel'
+        theme: 'gammel',
+        baseFontSize: '11',
       },
       data: [
         {

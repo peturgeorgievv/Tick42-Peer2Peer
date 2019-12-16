@@ -12,18 +12,18 @@ export class HomepageService {
   public getAllUsers() {
     return this.angularFireStore
       .collection('users')
-      .get();
+      .valueChanges();
   }
 
   public getAllLoans() {
     return this.angularFireStore
       .collection('loans')
-      .get();
+      .valueChanges();
   }
 
   public getAllRequests() {
     return this.angularFireStore
       .collection('requests', (ref) => ref.where('status', '==', StatusENUM.requestOpen))
-      .get();
+      .valueChanges();
   }
 }

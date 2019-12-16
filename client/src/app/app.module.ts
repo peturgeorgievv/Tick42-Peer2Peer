@@ -21,7 +21,13 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ServerErrorComponent } from './components/server-error/server-error.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FusionChartsModule } from 'angular-fusioncharts';
 
+import * as FusionCharts from 'fusioncharts';
+import * as Charts from 'fusioncharts/fusioncharts.charts';
+import * as FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
+
+FusionChartsModule.fcRoot(FusionCharts, Charts, FusionTheme)
 @NgModule({
 	declarations: [
 		NavbarComponent,
@@ -34,6 +40,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 		ServerErrorComponent
 	],
 	imports: [
+		FusionChartsModule,
 		AppRoutingModule,
 		BrowserModule,
 		BrowserAnimationsModule,
