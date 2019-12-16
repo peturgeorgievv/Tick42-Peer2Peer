@@ -5,14 +5,14 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: 'AIzaSyDtx7KhpZ3zk_TDIlka4b3Efl9hXHLWI7w',
-    authDomain: 'tick42p2p.firebaseapp.com',
-    databaseURL: 'https://tick42p2p.firebaseio.com',
-    projectId: 'tick42p2p',
-    storageBucket: 'tick42p2p.appspot.com',
-    messagingSenderId: '744857795647',
-    appId: '1:744857795647:web:05dfff403d4183c6e80c8a',
-    measurementId: 'G-KNZXLHWS4E'
+    apiKey: 'AIzaSyBUz4Ew3nl90cgQP9aXEJn_X5V3bdJ81N4',
+    authDomain: 'lendit-76d32.firebaseapp.com',
+    databaseURL: 'https://lendit-76d32.firebaseio.com',
+    projectId: 'lendit-76d32',
+    storageBucket: 'lendit-76d32.appspot.com',
+    messagingSenderId: '974521080103',
+    appId: '1:974521080103:web:f10a740a0ba7a98e98f102',
+    measurementId: 'G-4PMYCJJRRS'
   }
 };
 

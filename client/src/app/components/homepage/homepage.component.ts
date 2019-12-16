@@ -111,7 +111,6 @@ export class HomepageComponent implements OnInit, OnDestroy {
   }
 
   initialized($event): void {
-    console.log($event.chart);
     this.chartObj = $event.chart;
   }
   onSelectionChange(size: string): void {
