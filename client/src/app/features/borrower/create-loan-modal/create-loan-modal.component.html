@@ -18,7 +18,7 @@
             type="number"
             class="form-control"
             id="loan-period"
-            placeholder=" Enter your prefered period of months"
+            placeholder=" Enter period of months"
             formControlName="period"
           />
           <span
@@ -27,6 +27,12 @@
           >
             Minimum period 1 month!
           </span>
+          <span
+            class="font-italic font-weight-bold text-danger"
+            *ngIf="createLoan.controls.period?.errors?.max"
+          >
+            Maximum period 20 years (240 months)!
+          </span>
         </div>
         <div class="form-group col-6">
           <label for="exampleInputEmail1">Amount: </label>
@@ -34,7 +40,7 @@
             type="number"
             class="form-control"
             id="loan-amount"
-            placeholder=" Enter your prefered amount"
+            placeholder=" Enter prefered amount"
             formControlName="amount"
           />
           <span
@@ -42,6 +48,12 @@
             *ngIf="createLoan.controls.amount?.errors?.min"
           >
             Minimum Amount $1!
+          </span>
+          <span
+            class="font-italic font-weight-bold text-danger"
+            *ngIf="createLoan.controls.amount?.errors?.max"
+          >
+            Maximum Amount $1 000 000!
           </span>
         </div>
         <div class="form-group form-check-inline col-6 checkbox-form">
