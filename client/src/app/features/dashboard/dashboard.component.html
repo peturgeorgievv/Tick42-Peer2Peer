@@ -100,12 +100,10 @@
               <div class="card-body">
                 <div class="d-flex justify-content-between">
                   <div>
-                    <p *ngIf="this.curLoans[0]">
+                    <p >
                       Total period of all debts:
-                      <b>{{ this.curLoans[0].period }} months</b>
-                    </p>
-                    <p *ngIf="!this.curLoans[0]">
-                      No debts at the moment!
+                      <b *ngIf="this.curLoans[0]">{{ this.curLoans[0].period }} months</b>
+                      <b *ngIf="!this.curLoans[0]">No debts at the moment!</b>
                     </p>
                     <p>
                       Number of investors:
@@ -115,7 +113,7 @@
                       Overdue Debts:
                       <b>{{ this.overdueDebts }}</b>
                     </p>
-                    <p>
+                    <p *ngIf="this.nextDueDate">
                       Next Due Date:
                       <b>{{ this.nextDueDate }}</b>
                     </p>
