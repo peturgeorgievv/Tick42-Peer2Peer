@@ -10,32 +10,49 @@ import { ProposeSuggestionDTO } from './../../../common/models/propose-suggestio
   templateUrl: './partial-propose-modal.component.html',
   styleUrls: ['./partial-propose-modal.component.css']
 })
-
 export class PartialProposeModalComponent implements OnInit {
   @Input() requestData: RequestDataDTO;
   @Input() userBalanceData: BalanceDataDTO;
-  @Output() public readonly createPartialSuggestion: EventEmitter<any> = new EventEmitter();
+  @Output() public readonly createPartialSuggestion: EventEmitter<
+    any
+  > = new EventEmitter();
 
   public addPartialLoanSuggestion: FormGroup;
 
   constructor(
     public activeModal: NgbActiveModal,
-    private readonly formBuilder: FormBuilder,
-  ) { }
+    private readonly formBuilder: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.addPartialLoanSuggestion = this.formBuilder.group({
-      interestRate: ['', [Validators.required, Validators.min(1)]],
-      penalty: ['', [Validators.required, Validators.min(1)]],
-      period: [{ value: this.requestData.period, disabled: true }, [Validators.required]],
-      amount: ['', [Validators.required, Validators.min(1), Validators.max(this.requestData.amount)]]
+      interestRate: [
+        '',
+        [Validators.required, Validators.min(1), Validators.max(1000)]
+      ],
+      penalty: [
+        '',
+        [Validators.required, Validators.min(1), Validators.max(100)]
+      ],
+      period: [
+        { value: this.requestData.period, disabled: true },
+        [Validators.required]
+      ],
+      amount: [
+        '',
+        [
+          Validators.required,
+          Validators.min(1),
+          Validators.max(this.requestData.amount)
+        ]
+      ]
     });
   }
 
   public emitPartialSuggestion(suggestion: ProposeSuggestionDTO) {
     const suggestionToAdd = {
       ...suggestion,
-      period: this.requestData.period,
+      period: this.requestData.period
     };
 
     this.createPartialSuggestion.emit(suggestionToAdd);

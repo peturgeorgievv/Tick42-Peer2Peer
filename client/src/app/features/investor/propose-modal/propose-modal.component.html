@@ -25,6 +25,12 @@
         >
           Invalid interest rate!
         </span>
+        <span
+          class="font-italic font-weight-bold text-danger"
+          *ngIf="addLoanSuggestion.controls.interestRate?.errors?.max"
+        >
+          Invalid interest rate!
+        </span>
       </div>
       <div class="form-group col-6">
         <label for="exampleInputEmail1">Penalty Per Day</label>
@@ -38,6 +44,12 @@
         <span
           class="font-italic font-weight-bold text-danger"
           *ngIf="addLoanSuggestion.controls.penalty?.errors?.min"
+        >
+          Invalid penalty rate!
+        </span>
+        <span
+          class="font-italic font-weight-bold text-danger"
+          *ngIf="addLoanSuggestion.controls.penalty?.errors?.max"
         >
           Invalid penalty rate!
         </span>

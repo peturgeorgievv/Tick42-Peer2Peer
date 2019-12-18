@@ -24,6 +24,12 @@
         >
           Invalid interest rate!
         </span>
+        <span
+          class="font-italic font-weight-bold text-danger"
+          *ngIf="addPartialLoanSuggestion.controls.interestRate?.errors?.max"
+        >
+          Invalid interest rate!
+        </span>
       </div>
       <div class="form-group col-6">
         <label for="penalty-per-day" class="col-form-label"
@@ -38,6 +44,12 @@
         <span
           class="font-italic font-weight-bold text-danger"
           *ngIf="addPartialLoanSuggestion.controls.penalty?.errors?.min"
+        >
+          Invalid penalty rate!
+        </span>
+        <span
+          class="font-italic font-weight-bold text-danger"
+          *ngIf="addPartialLoanSuggestion.controls.penalty?.errors?.max"
         >
           Invalid penalty rate!
         </span>
