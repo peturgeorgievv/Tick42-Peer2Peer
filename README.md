@@ -19,7 +19,7 @@ https://github.com/peturgeorgievv/Tick42-Peer2Peer.git
 - Feel free to navigate through the app and explore the different functionalities.
 
 Or you can just follow this link: <br/>
-( Will be valid after 20.12.2019 )
+https://lendit-76d32.firebaseapp.com/
 
 ## Technologies used
 
