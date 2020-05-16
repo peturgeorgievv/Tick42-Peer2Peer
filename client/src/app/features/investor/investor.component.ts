@@ -8,6 +8,7 @@ import { InvestorService } from './../../core/services/investor.service';
 import { AuthenticationService } from './../../core/services/authentication.service';
 import { CurrentInvestmentsDTO } from './../../common/models/current-investments.dto';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-investor',
@@ -25,7 +26,8 @@ export class InvestorComponent implements OnInit, OnDestroy {
   constructor(
     private readonly investorService: InvestorService,
     private readonly authService: AuthenticationService,
-    private readonly modalService: NgbModal
+    private readonly modalService: NgbModal,
+    private readonly spinner: NgxSpinnerService,
   ) {
     this.subscriptions.push(
       this.authService.loggedUser$.subscribe((res: User) => {
@@ -35,6 +37,7 @@ export class InvestorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.spinner.show();
     this.authService.userBalanceDataSubject$.subscribe((res: UserDTO) => {
       this.userBalanceData = res;
     });
@@ -48,6 +51,7 @@ export class InvestorComponent implements OnInit, OnDestroy {
           this.loanRequests = this.loanRequests.filter(
             loan => loan.$userId !== this.user.uid
           );
+          this.spinner.hide();
         })
     );
 
@@ -67,7 +71,7 @@ export class InvestorComponent implements OnInit, OnDestroy {
     createShowProposalsModal.componentInstance.user = this.user;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.forEach((subscription: Subscription) =>
       subscription.unsubscribe()
     );

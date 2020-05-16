@@ -13,6 +13,7 @@ import { User } from 'firebase';
 import { Subscription, merge } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { switchMap, tap } from 'rxjs/operators';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-borrower',
@@ -36,10 +37,12 @@ export class BorrowerComponent implements OnInit, OnDestroy {
     private readonly borrowerService: BorrowerService,
     private readonly notificatorService: NotificatorService,
     private readonly authService: AuthenticationService,
-    private readonly modalService: NgbModal
+    private readonly modalService: NgbModal,
+    private readonly spinner: NgxSpinnerService,
   ) {}
 
   public ngOnInit(): void {
+    this.spinner.show();
     this.subscriptions.push(
       this.authService.loggedUser$
         .pipe(
@@ -52,7 +55,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
                   .pipe(
                     tap(
                       (userLoans: CurrentLoanDTO[]) =>
-                        (this.currentLoans = userLoans)
+                        this.currentLoans = userLoans
                     )
                   ),
                 this.borrowerService
@@ -60,7 +63,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
                   .pipe(
                     tap(
                       (userSuggestions: LoanSuggestionDTO[]) =>
-                        (this.loanSuggestions = userSuggestions)
+                        this.loanSuggestions = userSuggestions
                     )
                   ),
                 this.borrowerService
@@ -68,7 +71,16 @@ export class BorrowerComponent implements OnInit, OnDestroy {
                   .pipe(
                     tap(
                       (allPayment: AllPaymentsDTO[]) =>
-                        (this.allPayments = allPayment)
+                        this.allPayments = allPayment
+                    )
+                  ),
+                this.borrowerService
+                  .getUserRequestsAsc(this.user.uid, 'amount')
+                  .pipe(
+                    tap((querySnapshot: LoanRequestDTO[]) => {
+                      this.loanRequests = querySnapshot;
+                      this.spinner.hide();
+                      }
                     )
                   )
               );
@@ -76,9 +88,7 @@ export class BorrowerComponent implements OnInit, OnDestroy {
             return [];
           })
         )
-        .subscribe(() => {
-          this.orderLoansAsc('amount');
-        })
+        .subscribe(() => true)
     );
     this.subscriptions.push(
       this.authService.userBalanceDataSubject$.subscribe(res => {
@@ -121,8 +131,8 @@ export class BorrowerComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.borrowerService
         .getUserRequestsAsc(this.user.uid, property)
-        .subscribe((querySnapshot: LoanRequestDTO[]): LoanRequestDTO[] => {
-          return (this.loanRequests = querySnapshot);
+        .subscribe((querySnapshot: LoanRequestDTO[]) => {
+          this.loanRequests = querySnapshot;
         })
     );
   }
@@ -131,8 +141,8 @@ export class BorrowerComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.borrowerService
         .getUserRequestsDesc(this.user.uid, property)
-        .subscribe((querySnapshot: LoanRequestDTO[]): LoanRequestDTO[] => {
-          return (this.loanRequests = querySnapshot);
+        .subscribe((querySnapshot: LoanRequestDTO[]) => {
+          this.loanRequests = querySnapshot;
         })
     );
   }

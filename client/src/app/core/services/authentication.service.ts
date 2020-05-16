@@ -5,11 +5,11 @@ import { UserDTO } from './../../common/models/users/user-data.dto';
 import { CurrentLoanDTO } from './../../common/models/current-loan.dto';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Observable, BehaviorSubject, Subscription } from 'rxjs';
+import { Observable, BehaviorSubject, Subscription, merge } from 'rxjs';
 import { User } from 'firebase';
 import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -31,17 +31,19 @@ export class AuthenticationService {
     private readonly router: Router,
     private readonly notificatorService: NotificatorService
   ) {
-    this.angularFireAuth.authState.subscribe(user => {
-      if (user) {
-        this.user$.next(user);
-        localStorage.setItem('user', JSON.stringify(user));
-        this.userBalanceData$.next(this.userBalanceDataCalculation());
-        JSON.parse(localStorage.getItem('user'));
-      } else {
-        this.user$.next(null);
-        this.userBalanceData$.next(null);
-        localStorage.setItem('user', null);
-        JSON.parse(localStorage.getItem('user'));
+    this.angularFireAuth.authState.subscribe((user: User) => {
+      try {
+        if (user) {
+          this.user$.next(user);
+          localStorage.setItem('user', JSON.stringify(user));
+          this.userBalanceData$.next(this.userBalanceDataCalculation());
+        } else {
+          this.user$.next(null);
+          this.userBalanceData$.next(null);
+          localStorage.setItem('user', null);
+        }
+      } catch (error) {
+        return null;
       }
     });
   }
@@ -98,101 +100,80 @@ export class AuthenticationService {
       );
   }
 
-  private userBalanceDataCalculation() {
+  private userBalanceDataCalculation(): void {
     try {
-      const userData = {
-        $userDocId: '',
-        $userId: '',
-        email: '',
-        firstName: '',
-        lastName: '',
-        currentBalance: 0,
-        totalInvestment: 0,
+      let userData = {
         totalDebt: 0,
-        status: ''
+        totalInvestment: 0
       };
-      this.angularFireAuth.user.subscribe((res: User) => {
-        if (res) {
+      let userDebts = 0;
+      let userInvestments = 0;
+      this.angularFireAuth.user.subscribe((user: User) => {
+        if (user) {
           this.subscriptions.push(
             this.angularFireStore
-              .collection('users', ref => ref.where('$userId', '==', res.uid))
+              .collection('users', ref => ref.where('$userId', '==', user.uid))
               .valueChanges()
-              .subscribe((querySnapshot: UserDTO[]) => {
-                this.userBalanceData$.next(userData);
-                if (querySnapshot[0]) {
-                  userData.$userDocId = querySnapshot[0].$userDocId;
-                  userData.$userId = querySnapshot[0].$userId;
-                  userData.email = querySnapshot[0].email;
-                  userData.currentBalance = querySnapshot[0].currentBalance;
-                  userData.firstName = querySnapshot[0].firstName;
-                  userData.lastName = querySnapshot[0].lastName;
-                  userData.status = querySnapshot[0].status;
-                  this.subscriptions.push(
-                    this.getUserLoans(res.uid).subscribe(debts => {
-                      const userDebts = debts.reduce(
-                        (acc: number, curValue: CurrentLoanDTO) => {
-                          return (acc += curValue.amount);
-                        },
-                        0
-                      );
-                      this.subscriptions.push(
-                        this.getUserPayments(res.uid).subscribe(
-                          (payments: CurrentLoanDTO[]) => {
-                            const paymentsAmount = payments.reduce(
-                              (acc: number, curValue: CurrentLoanDTO) => {
-                                return (acc += curValue.amount);
-                              },
-                              0
-                            );
-                            const totalDebt =
-                              Number(userDebts) - Number(paymentsAmount);
-                            return (userData.totalDebt = totalDebt);
+              .pipe(
+                switchMap(
+                  (userDataSnapshot: Partial<UserDTO[]>) => {
+                    if (!userDataSnapshot[0]) {
+                      return;
+                    }
+                    userData = {
+                      ...userDataSnapshot[0],
+                      ...userData
+                    };
+                    return merge(
+                      this.getUserLoans(user.uid).pipe(
+                        tap(
+                          (debts: CurrentLoanDTO[]) => {
+                            userDebts = this.reduceLoanAmount(debts);
                           }
                         )
-                      );
-                    })
-                  );
-
-                  this.subscriptions.push(
-                    this.getUserInvestments(res.uid).subscribe(
-                      (debts: CurrentLoanDTO[]) => {
-                        const userInvestments = debts.reduce(
-                          (acc: number, curValue: CurrentLoanDTO) => {
-                            return (acc += curValue.amount);
-                          },
-                          0
-                        );
-
-                        this.subscriptions.push(
-                          this.getInvestorPayments(res.uid).subscribe(
-                            (payments: CurrentLoanDTO[]) => {
-                              const paymentsAmount = payments.reduce(
-                                (acc: number, curValue: CurrentLoanDTO) => {
-                                  return (acc += curValue.amount);
-                                },
-                                0
-                              );
-                              const totalInvestment =
-                                Number(userInvestments) -
-                                Number(paymentsAmount);
-                              return (userData.totalInvestment = totalInvestment);
-                            }
-                          )
-                        );
-                      }
+                      ),
+                      this.getUserPayments(user.uid).pipe(
+                        tap(
+                          (payments: CurrentLoanDTO[]) => {
+                            const paymentsAmount = this.reduceLoanAmount(payments);
+                            userData.totalDebt = Number(userDebts) - Number(paymentsAmount);
+                          }
+                        )
+                      ),
+                      this.getUserInvestments(user.uid).pipe(
+                        tap(
+                          (debts: CurrentLoanDTO[]) => {
+                            userInvestments = this.reduceLoanAmount(debts);
+                          }
+                        )
+                      ),
+                      this.getInvestorPayments(user.uid).pipe(
+                        tap(
+                          (payments: CurrentLoanDTO[]) => {
+                            const investPaymentsAmount = this.reduceLoanAmount(payments);
+                            userData.totalInvestment = Number(userInvestments) - Number(investPaymentsAmount);
+                          }
+                        )
+                      )
                     )
-                  );
-                }
+                  }
+                )
+              ).subscribe(() => {
+                this.userBalanceData$.next(userData);
               })
           );
-          return userData;
         }
-        this.subscriptions.forEach(subscription => subscription.unsubscribe());
       });
     } catch (error) {
       this.userBalanceData$.next(false);
       return null;
     }
+  }
+
+  private reduceLoanAmount(element: CurrentLoanDTO[]): number {
+    return element.reduce((acc: number, curValue: CurrentLoanDTO) => {
+      return acc += curValue.amount;
+    }, 0);
   }
 
   private getUserLoans(userId: string) {
@@ -230,13 +211,17 @@ export class AuthenticationService {
     }
   }
 
-  public get userBalanceDataSubject$() {
+  public get userBalanceDataSubject$(): Observable<UserDTO> {
     return this.userBalanceData$.asObservable();
   }
 
   public get isLoggedIn(): boolean {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return user !== null ? true : false;
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      return user !== null;
+    } catch (error) {
+      return null;
+    }
   }
 
   public get loggedUser$(): Observable<User> {
@@ -272,7 +257,6 @@ export class AuthenticationService {
           .then(() => {
             this.router.navigate(['/dashboard']);
             this.notificatorService.success('Successful login!');
-            this.userBalanceData$.next(null);
             this.userBalanceData$.next(this.userBalanceDataCalculation());
           })
           .catch(error => {
@@ -288,7 +272,6 @@ export class AuthenticationService {
         this.user$.next(res.user);
         this.router.navigate(['/dashboard']);
         this.notificatorService.success('Successful login!');
-        this.userBalanceData$.next(null);
         this.userBalanceData$.next(this.userBalanceDataCalculation());
       })
       .catch(err => {
@@ -300,6 +283,7 @@ export class AuthenticationService {
     this.angularFireAuth.auth.signOut().then(res => {
       this.user$.next(null);
       localStorage.removeItem('user');
+      this.subscriptions.forEach(subscription => subscription.unsubscribe());
       this.userBalanceData$.next(null);
       this.router.navigate(['/']);
     });

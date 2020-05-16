@@ -10,6 +10,7 @@ import { CreateDepositComponent } from './create-deposit/create-deposit.componen
 import { CreateWithdrawComponent } from './create-withdraw/create-withdraw.component';
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import * as moment from 'moment';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-dashboard',
@@ -55,7 +56,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private readonly dashboardService: DashboardService,
     private readonly authService: AuthenticationService,
-    private readonly modalService: NgbModal
+    private readonly modalService: NgbModal,
+    private readonly spinner: NgxSpinnerService,
   ) {
     this.subscriptions.push(
       this.authService.loggedUser$.subscribe((res: User) => {
@@ -65,6 +67,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.spinner.show();
     this.innerWidth = window.innerWidth;
     if (this.innerWidth < 1100) {
       this.size = 'firstSize';
@@ -111,6 +114,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.filterForBorrowers = [
             ...new Set(this.curInvestments.map(loan => loan.$userId))
           ];
+          this.spinner.hide();
         })
     );
   }
