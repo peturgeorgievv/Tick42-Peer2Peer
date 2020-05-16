@@ -155,7 +155,7 @@ export class AuthenticationService {
                           }
                         )
                       )
-                    )
+                    );
                   }
                 )
               ).subscribe(() => {
